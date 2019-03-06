@@ -18,13 +18,9 @@ typedef struct{
 
 
 int main() {
-<<<<<<< HEAD
-  setlocale(LC_ALL,"");//acentos
-=======
   setlocale(LC_ALL,"");
-  
+
   int colors,keySize; //número de cores em jogo/tamanho da chave
->>>>>>> f20c405c8026772a48946039a7958c609bab9eb5
 
   jogadores jogador[4];//estrura dos jogadores
 
@@ -35,11 +31,7 @@ int main() {
 
 //numero de jogadores?
   while (jog<1 || jog>4) {
-<<<<<<< HEAD
     printf("Insira o numero de jogadores (1 a 4):  ");
-=======
-    printf("Insira o numero de jogadores (1-4):  ");
->>>>>>> f20c405c8026772a48946039a7958c609bab9eb5
     if (scanf("%d", &jog)==0) {
       fflush(stdin);
       scanf("%s", err);
@@ -57,7 +49,6 @@ int main() {
 
 //tempo de jogo por jogador?
   for (int i = 0; i < jog; i++) {
-<<<<<<< HEAD
     while (jogador[i].temp<60 || jogador[i].temp>300) {
       printf("Insira o tempo maximo por jogo (em segundos) do jogador %s", jogador[i].name);
       if (scanf("%d", &jogador[i].temp)==0) {
@@ -67,11 +58,8 @@ int main() {
         continue;
       }
     }
-=======
-    printf("Insira o tempo maximo por jogo do jogador %s", );
->>>>>>> f20c405c8026772a48946039a7958c609bab9eb5
   }
-  
+
 //numero de cores em jogo?
   while (colors<6 || colors>12) {
     printf("Insira o número de cores com que deseja jogar (6-12): ");
@@ -82,7 +70,7 @@ int main() {
       continue;
     }
   }
-  
+
 //dimensao da chave?
   while (keySize<4 || keySize>8) {
     printf("Insira a dimensão da chave com que deseja jogar (6-12): ");
@@ -93,6 +81,6 @@ int main() {
       continue;
     }
   }
-  
+
   return 0;
 }

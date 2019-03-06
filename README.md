@@ -10,13 +10,4 @@ Inicialização a fazer!
 •Dimensão da chave secreta(4 a 8) -- CONFIRMATION NEEDED
 •Indicar se a chave pode ter repetições de cores (S/N) -- TO DO
 •Número de máximo de tentativas(10 a 20) -- TO DO
-<<<<<<< HEAD
 •Tempo máximo por jogo para cada jogador(60 a 300s) -- DONE
-=======
-•Tempo máximo por jogo para cada jogador(60 a 300s) -- IN PROGRESS
-
-
-
-Notas:
- - cores e chave iguais para todos os jogadores???
->>>>>>> f20c405c8026772a48946039a7958c609bab9eb5
