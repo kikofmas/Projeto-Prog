@@ -31,8 +31,15 @@ int main() {
 
 //numero de jogadores?
   while (jog<1 || jog>4) {
+
     printf("Insira o numero de jogadores (1 a 4):  ");
-    if (scanf("%d", &jog)==0) {
+    int aux;
+    printf("Insira o número de cores com que deseja jogar (6-12): ");
+    aux=scanf("%d", &colors);
+    if (jog<1 || jog>4) {
+    printf("Erro: numero de jogadores inválido\n");
+    }
+    if (aux==0) {
       fflush(stdin);
       scanf("%s", err);
       printf("Erro: numero de jogadores inválido\n");
@@ -43,14 +50,21 @@ int main() {
 //nome dos jogadores?
   for (int i = 0; i < jog; i++) {
     printf("Insira nome do jogador %d (maximo de 20 caracteres):  ", i+1);
-    scanf("%20s", &jogador[i].name);
+    scanf("%20s", jogador[i].name);
   }
+
+
 
 //tempo de jogo por jogador?
   for (int i = 0; i < jog; i++) {
+    int aux;
     while (jogador[i].temp<60 || jogador[i].temp>300) {
       printf("Insira o tempo maximo por jogo (em segundos) do jogador %s:  ", jogador[i].name);
-      if (scanf("%d", &jogador[i].temp)==0) {
+      aux=scanf("%d", &jogador[i].temp);
+      if (jogador[i].temp<60 || jogador[i].temp>300) {
+        printf("Erro: tempo de jogo invalido\n");
+      }
+      if (aux==0) {
         fflush(stdin);
         scanf("%s", err);
         printf("Erro: tempo de jogo invalido\n");
@@ -61,8 +75,13 @@ int main() {
 
 //numero de cores em jogo?
   while (colors<6 || colors>12) {
+    int aux;
     printf("Insira o número de cores com que deseja jogar (6-12): ");
-    if (scanf("%d", &colors)==0) {
+    aux=scanf("%d", &colors);
+    if (colors<6 || colors>12) {
+      printf("Erro: numero de cores inválido\n");
+    }
+    if (aux==0) {
       fflush(stdin);
       scanf("%s", err);
       printf("Erro: numero de cores inválido\n");
