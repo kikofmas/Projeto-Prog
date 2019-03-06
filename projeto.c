@@ -24,6 +24,7 @@ int main() {
   jogadores jogador[4];//definir 4 jogadores a partir da estrutura
   int jog;//numero de jogadores
   int colors, keySize; //número de cores em jogo, tamanho da chave
+  char repet;//variavel que permite ou nao a existencia de repetições na chave
 
   char err[1];//variavel para flush do scanf quando input inesperado
   int err1;//variavel para flush do scanf quando input inesperado
@@ -109,6 +110,41 @@ int main() {
       fflush(stdin);
       scanf("%s", err);
       printf("Erro: tamaho da chave inválido\n");
+      continue;
+    }
+  }
+
+
+//numero de jogos por jogador?
+  for (int i = 0; i < jog; i++) {
+    int aux;
+    while (jogador[i].numJog<1 || jogador[i].numJog>5) {
+      printf("Insira o numero de jogos a realizar pelo jogador %s (1 a 5):  ", jogador[i].name);
+      aux=scanf("%d", &jogador[i].numJog);
+      if (jogador[i].numJog<1 || jogador[i].numJog>5) {
+        printf("Erro: numero de jogos invalido\n");
+      }
+      if (aux==0) {
+        fflush(stdin);
+        scanf("%s", err);
+        printf("Erro: numero de jogos invalido\n");
+        continue;
+      }
+    }
+  }
+
+//repetiçao de cores na chave?
+  while ((repet!="s" || repet!="S") && (repet!="n" || repet!="N")) {
+    int aux;
+    printf("A chave pode ter cores repetidas? [S/N]:  ");
+    aux=scanf("%c", &repet);
+    if ((repet!="s" || repet!="S") && (repet!="n" || repet!="N")) {
+      printf("Erro: input invalido\n");
+    }
+    if (aux==0) {
+      fflush(stdin);
+      scanf("%s", err);
+      printf("Erro: input invalido\n");
       continue;
     }
   }
