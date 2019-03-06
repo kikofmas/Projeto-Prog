@@ -11,21 +11,23 @@
 
 
 typedef struct{
-  char name[21];
-  int numjog;
-  int t;
+  char name[21];//nome do jogador
+  int numjog;//numero de jogos
+  int t;//tempo de jogo
 }jogadores;
 
 
 int main() {
   setlocale(LC_ALL,"");
 
-  jogadores jogador[4];
+  jogadores jogador[4];//estrura dos jogadores
 
   char err[1];
-  int jog;
+  int jog;//numero de jogadores
   printf("Vamos jogar um jogo de mastermind!\n");
 
+
+//numero de jogadores?
   while (jog<1 || jog>4) {
     printf("Insira o numero de jogadores:  ");
     if (scanf("%d", &jog)==0) {
@@ -35,11 +37,13 @@ int main() {
       continue;
     }
   }
+  //nome dos jogadores?
   for (int i = 0; i < jog; i++) {
+    printf("Insira nome do jogador %d:  ", i);
     fgets(jogador[i].name, 20, stdin);
   }
   for (int i = 0; i < jog; i++) {
-
+    
   }
 
   return 0;
