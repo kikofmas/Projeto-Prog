@@ -9,7 +9,7 @@
 #include <string.h>
 #include <time.h>
 
-
+//estrutura para os jogadores
 typedef struct{
   char name[21];//nome do jogador
   int numjog;//numero de jogos
@@ -18,24 +18,26 @@ typedef struct{
 
 
 int main() {
-  setlocale(LC_ALL,"");
+  setlocale(LC_ALL,""); //aceita caracteres espiciais e acentos
 
-  int colors,keySize; //número de cores em jogo/tamanho da chave
+//declaração das variaveis
+  int colors, keySize; //número de cores em jogo, tamanho da chave
 
-  jogadores jogador[4];//estrura dos jogadores
+  jogadores jogador[4];//definir 4 jogadores a partir da estrutura
 
   char err[1];//variavel para flush do scanf quando input inesperado
   int jog;//numero de jogadores
+
+
+//INICIO
   printf("Vamos jogar um jogo de mastermind!\n");
 
 
 //numero de jogadores?
   while (jog<1 || jog>4) {
-
-    printf("Insira o numero de jogadores (1 a 4):  ");
     int aux;
-    printf("Insira o número de cores com que deseja jogar (6-12): ");
-    aux=scanf("%d", &colors);
+    printf("Insira o numero de jogadores (1 a 4):  ");
+    aux=scanf("%d", &jog);
     if (jog<1 || jog>4) {
     printf("Erro: numero de jogadores inválido\n");
     }
@@ -91,8 +93,13 @@ int main() {
 
 //dimensao da chave?
   while (keySize<4 || keySize>8) {
-    printf("Insira a dimensão da chave com que deseja jogar (6-12): ");
-    if (scanf("%d", &keySize)==0) {
+    int aux;
+    printf("Insira a dimensão da chave com que deseja jogar (6-12):  ");
+    aux=scanf("%d", &keySize);
+    if (keySize<4 || keySize>8) {
+      printf("Erro: tamaho da chave inválido\n");
+    }
+    if (aux==0) {
       fflush(stdin);
       scanf("%s", err);
       printf("Erro: tamaho da chave inválido\n");
