@@ -19,6 +19,8 @@ typedef struct{
 
 int main() {
   setlocale(LC_ALL,"");
+  
+  int colors,keySize; //número de cores em jogo/tamanho da chave
 
   jogadores jogador[4];//estrura dos jogadores
 
@@ -29,11 +31,11 @@ int main() {
 
 //numero de jogadores?
   while (jog<1 || jog>4) {
-    printf("Insira o numero de jogadores:  ");
+    printf("Insira o numero de jogadores (1-4):  ");
     if (scanf("%d", &jog)==0) {
       fflush(stdin);
       scanf("%s", err);
-      printf("Erro: numero de jogadores invalido\n");
+      printf("Erro: numero de jogadores inválido\n");
       continue;
     }
   }
@@ -45,8 +47,30 @@ int main() {
 
 //tempo de jogo por jogador?
   for (int i = 0; i < jog; i++) {
-    printf("Insira o tempo maximo por jogo do jogdaor %s", );
+    printf("Insira o tempo maximo por jogo do jogador %s", );
   }
-
+  
+//numero de cores em jogo?
+  while (colors<6 || colors>12) {
+    printf("Insira o número de cores com que deseja jogar (6-12): ");
+    if (scanf("%d", &colors)==0) {
+      fflush(stdin);
+      scanf("%s", err);
+      printf("Erro: numero de cores inválido\n");
+      continue;
+    }
+  }
+  
+//dimensao da chave?
+  while (keySize<4 || keySize>8) {
+    printf("Insira a dimensão da chave com que deseja jogar (6-12): ");
+    if (scanf("%d", &keySize)==0) {
+      fflush(stdin);
+      scanf("%s", err);
+      printf("Erro: tamaho da chave inválido\n");
+      continue;
+    }
+  }
+  
   return 0;
 }
