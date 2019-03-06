@@ -43,14 +43,13 @@ int main() {
 //nome dos jogadores?
   for (int i = 0; i < jog; i++) {
     printf("Insira nome do jogador %d (maximo de 20 caracteres):  ", i+1);
-    fgets(jogador[i].name, 20, stdin);
-    printf("%s", jogador[i].name);
+    scanf("%20s", &jogador[i].name);
   }
 
 //tempo de jogo por jogador?
   for (int i = 0; i < jog; i++) {
     while (jogador[i].temp<60 || jogador[i].temp>300) {
-      printf("Insira o tempo maximo por jogo (em segundos) do jogador %s", jogador[i].name);
+      printf("Insira o tempo maximo por jogo (em segundos) do jogador %s:  ", jogador[i].name);
       if (scanf("%d", &jogador[i].temp)==0) {
         fflush(stdin);
         scanf("%s", err);
