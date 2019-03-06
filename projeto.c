@@ -37,13 +37,15 @@ int main() {
       continue;
     }
   }
-  //nome dos jogadores?
+//nome dos jogadores?
   for (int i = 0; i < jog; i++) {
     printf("Insira nome do jogador %d:  ", i);
     fgets(jogador[i].name, 20, stdin);
   }
+
+//tempo de jogo por jogador?
   for (int i = 0; i < jog; i++) {
-    
+    printf("Insira o tempo maximo por jogo do jogdaor %s", );
   }
 
   return 0;
