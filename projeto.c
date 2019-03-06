@@ -12,7 +12,7 @@
 //estrutura para os jogadores
 typedef struct{
   char name[21];//nome do jogador
-  int numjog;//numero de jogos
+  int numJog;//numero de jogos
   int temp;//tempo de jogo
 }jogadores;
 
@@ -21,12 +21,15 @@ int main() {
   setlocale(LC_ALL,""); //aceita caracteres espiciais e acentos
 
 //declaração das variaveis
+  jogadores jogador[4];//definir 4 jogadores a partir da estrutura
+  int jog;//numero de jogadores
   int colors, keySize; //número de cores em jogo, tamanho da chave
 
-  jogadores jogador[4];//definir 4 jogadores a partir da estrutura
-
   char err[1];//variavel para flush do scanf quando input inesperado
-  int jog;//numero de jogadores
+  int err1;//variavel para flush do scanf quando input inesperado
+
+
+
 
 
 //INICIO
@@ -53,8 +56,11 @@ int main() {
   for (int i = 0; i < jog; i++) {
     printf("Insira nome do jogador %d (maximo de 20 caracteres):  ", i+1);
     scanf("%20s", jogador[i].name);
+    while(1) { //loop para eliminar o input extra do utilizador
+      err1 = getchar();
+      if (err1 == ' ' || err1 == '\n' || err1 == EOF) break;
+    }
   }
-
 
 
 //tempo de jogo por jogador?
