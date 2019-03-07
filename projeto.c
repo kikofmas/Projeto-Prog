@@ -101,7 +101,7 @@ int main() {
 //dimensao da chave?
   while (keySize<4 || keySize>8) {
     int aux;
-    printf("Insira a dimensão da chave com que deseja jogar (6-12):  ");
+    printf("Insira a dimensão da chave com que deseja jogar (4-8):  ");
     aux=scanf("%d", &keySize);
     if (keySize<4 || keySize>8) {
       printf("Erro: tamaho da chave inválido\n");
@@ -134,11 +134,11 @@ int main() {
   }
 
 //repetiçao de cores na chave?
-  while ((repet!="s" || repet!="S") && (repet!="n" || repet!="N")) {
+  while ((repet!='s' || repet!='S') && (repet!='n' || repet!='N')) {
     int aux;
     printf("A chave pode ter cores repetidas? [S/N]:  ");
     aux=scanf("%c", &repet);
-    if ((repet!="s" || repet!="S") && (repet!="n" || repet!="N")) {
+    if ((repet!='s' || repet!='S') && (repet!='n' || repet!='N')) {
       printf("Erro: input invalido\n");
     }
     if (aux==0) {
