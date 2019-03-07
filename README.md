@@ -9,10 +9,8 @@ Inicialização
 •Número de cores (6 a 12) -- DONE
 •Dimensão da chave secreta(4 a 8) -- DONE
 •Indicar se a chave pode ter repetições de cores (S/N) -- DONE
-•Número de máximo de tentativas(10 a 20) -- IN PROGRESS
+•Número de máximo de tentativas(10 a 20) -- DONE
 •Tempo máximo por jogo para cada jogador(60 a 300s) -- DONE
-
-
 
 
 

@@ -23,7 +23,7 @@ int main() {
 //declaração das variaveis
   jogadores jogador[4];//definir 4 jogadores a partir da estrutura
   int jog;//numero de jogadores
-  int colors, keySize; //número de cores em jogo, tamanho da chave
+  int colors, keySize, tent; //número de cores em jogo, tamanho da chave, numero de tentativas
   char repet;//variavel que permite ou nao a existencia de repetições na chave
 
   char err[1];//variavel para flush do scanf quando input inesperado
@@ -45,7 +45,7 @@ int main() {
     if (jog<1 || jog>4) {
     printf("Erro: numero de jogadores inválido\n");
     }
-    if (aux==0) {
+    else if (aux==0) {
       fflush(stdin);
       scanf("%s", err);
       printf("Erro: numero de jogadores inválido\n");
@@ -73,7 +73,7 @@ int main() {
       if (jogador[i].temp<60 || jogador[i].temp>300) {
         printf("Erro: tempo de jogo invalido\n");
       }
-      if (aux==0) {
+      else if (aux==0) {
         fflush(stdin);
         scanf("%s", err);
         printf("Erro: tempo de jogo invalido\n");
@@ -90,7 +90,7 @@ int main() {
     if (colors<6 || colors>12) {
       printf("Erro: numero de cores inválido\n");
     }
-    if (aux==0) {
+    else if (aux==0) {
       fflush(stdin);
       scanf("%s", err);
       printf("Erro: numero de cores inválido\n");
@@ -106,7 +106,7 @@ int main() {
     if (keySize<4 || keySize>8) {
       printf("Erro: tamaho da chave inválido\n");
     }
-    if (aux==0) {
+    else if (aux==0) {
       fflush(stdin);
       scanf("%s", err);
       printf("Erro: tamaho da chave inválido\n");
@@ -124,7 +124,7 @@ int main() {
       if (jogador[i].numJog<1 || jogador[i].numJog>5) {
         printf("Erro: numero de jogos invalido\n");
       }
-      if (aux==0) {
+      else if (aux==0) {
         fflush(stdin);
         scanf("%s", err);
         printf("Erro: numero de jogos invalido\n");
@@ -134,20 +134,34 @@ int main() {
   }
 
 //repetiçao de cores na chave?
-  do {
+  while (repet!='s' && repet!='n' && repet!='S' && repet!='N') {
     int aux;
     printf("A chave pode ter cores repetidas? [S/N]:  ");
     aux=scanf(" %c", &repet);
-
-    if (repet!='s' && repet!='s' && repet!='s' && repet!='s') {
+    while(1) { //loop para eliminar o input extra do utilizador
+      err1 = getchar();
+      if (err1 == ' ' || err1 == '\n' || err1 == EOF) break;
+    }
+    if (repet!='s' && repet!='n' && repet!='S' && repet!='N') {
       printf("Erro: input invalido 1\n");
     }
-
-  }while (repet!='s' && repet!='s' && repet!='s' && repet!='s');
+  }
 
 //numero maximo de tentivas por jogo?
-  
-
+  while (tent<10 || tent>20) {
+    int aux;
+    printf("Insira o numero maximo de tentativas (10 a 20):  ");
+    aux=scanf("%d", &tent);
+    if (tent<10 || tent>20) {
+      printf("Erro: numero de tentativas invalido\n");
+    }
+    else if (aux==0) {
+      fflush(stdin);
+      scanf("%s", err);
+      printf("Erro: numero de tentativas invalido\n");
+      continue;
+    }
+  }
 
   return 0;
 }
