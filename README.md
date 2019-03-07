@@ -1,7 +1,7 @@
 # Projeto-Prog
 Projeto de programação
 
-Inicialização
+Inicialização -- ALL DONE
 
 •Número de jogadores (1 a 4)  -- DONE
 •Nome de cada jogador (max. 20 caracteres) -- DONE
@@ -19,7 +19,9 @@ KNOWN ISSUES!!!
 2) temos problemas com espaços
 
 
-
+A FAZER:
+1) mudar mensagens de erro
+2) tipo tudo o resto
 
 
 IMPORTANTE --- NOTAS:
