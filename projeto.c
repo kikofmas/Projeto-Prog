@@ -134,20 +134,6 @@ int main() {
   }
 
 //repetiçao de cores na chave?
-<<<<<<< HEAD
-  while ((repet!='s' || repet!='S') && (repet!='n' || repet!='N')) {
-    int aux;
-    printf("A chave pode ter cores repetidas? [S/N]:  ");
-    aux=scanf("%c", &repet);
-    if ((repet!='s' || repet!='S') && (repet!='n' || repet!='N')) {
-      printf("Erro: input invalido\n");
-    }
-    if (aux==0) {
-      fflush(stdin);
-      scanf("%s", err);
-      printf("Erro: input invalido\n");
-      continue;
-=======
   do {
     int aux;
     printf("A chave pode ter cores repetidas? [S/N]:  ");
@@ -155,13 +141,12 @@ int main() {
 
     if (repet!='s' && repet!='s' && repet!='s' && repet!='s') {
       printf("Erro: input invalido 1\n");
->>>>>>> 28057e2afae3f7ed05d92105ef5e52475f208d49
     }
 
   }while (repet!='s' && repet!='s' && repet!='s' && repet!='s');
 
 //numero maximo de tentivas por jogo?
-  
+
 
 
   return 0;
