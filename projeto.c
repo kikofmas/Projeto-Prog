@@ -139,11 +139,11 @@ int main() {
     printf("A chave pode ter cores repetidas? [S/N]:  ");
     aux=scanf(" %c", &repet);
 
-    if (repet!='s' && repet!='s' && repet!='s' && repet!='s') {
+    if (repet!='s' && repet!='S' && repet!='n' && repet!='N') {
       printf("Erro: input invalido 1\n");
     }
 
-  }while (repet!='s' && repet!='s' && repet!='s' && repet!='s');
+  }while (repet!='s' && repet!='S' && repet!='n' && repet!='N');
 
 //numero maximo de tentivas por jogo?
 
