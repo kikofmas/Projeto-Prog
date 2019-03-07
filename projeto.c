@@ -39,14 +39,13 @@ int main() {
     int aux;
     printf("Insira o numero de jogadores (1 a 4):  ");
     aux=scanf("%d", &jog);
-    if (jog<1 || jog>4) {
-    printf("Erro: numero de jogadores inválido\n");
-    }
     if (aux==0) {
       fflush(stdin);
-      scanf("%s", err);
       printf("Erro: numero de jogadores inválido\n");
       continue;
+    }
+    else if (jog<1 || jog>4) {
+    printf("Erro: numero de jogadores inválido\n");
     }
   }
 
