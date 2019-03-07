@@ -68,7 +68,7 @@ int main() {
   for (int i = 0; i < jog; i++) {
     int aux;
     while (jogador[i].temp<60 || jogador[i].temp>300) {
-      printf("Insira o tempo maximo por jogo (em segundos) do jogador %s:  ", jogador[i].name);
+      printf("Insira o tempo maximo por jogo (em segundos) do jogador %s (60 a 300):  ", jogador[i].name);
       aux=scanf("%d", &jogador[i].temp);
       if (jogador[i].temp<60 || jogador[i].temp>300) {
         printf("Erro: tempo de jogo invalido\n");
@@ -134,21 +134,16 @@ int main() {
   }
 
 //repetiçao de cores na chave?
-  while (!(repet=="s" || repet=="S" || repet=="n" || repet=="N")) {
+  do {
     int aux;
     printf("A chave pode ter cores repetidas? [S/N]:  ");
-    scanf("%s", &repet);
-    aux=scanf("%s", &repet);
-    if (!(repet=="s" || repet=="S" || repet=="n" || repet=="N")) {
-      printf("Erro: input invalido\n");
+    aux=scanf(" %c", &repet);
+
+    if (repet!='s' && repet!='s' && repet!='s' && repet!='s') {
+      printf("Erro: input invalido 1\n");
     }
-    if (aux==0) {
-      fflush(stdin);
-      scanf("%s", err);
-      printf("Erro: input invalido\n");
-      continue;
-    }
-  }
+
+  }while (repet!='s' && repet!='s' && repet!='s' && repet!='s');
 
   return 0;
 }

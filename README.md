@@ -8,6 +8,6 @@ Inicialização a fazer!
 •Número de jogos a realizar por cada jogador(1 a 5) -- DONE
 •Número de cores (6 a 12) -- DONE
 •Dimensão da chave secreta(4 a 8) -- DONE
-•Indicar se a chave pode ter repetições de cores (S/N) -- TO DO
+•Indicar se a chave pode ter repetições de cores (S/N) -- DONE
 •Número de máximo de tentativas(10 a 20) -- TO DO
 •Tempo máximo por jogo para cada jogador(60 a 300s) -- DONE
