@@ -30,9 +30,6 @@ int main() {
   int err1;//variavel para flush do scanf quando input inesperado
 
 
-
-
-
 //INICIO
   printf("Vamos jogar um jogo de mastermind!\n");
 
