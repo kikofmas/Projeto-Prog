@@ -134,11 +134,11 @@ int main() {
   }
 
 //repetiçao de cores na chave?
-  while ((repet!="s" || repet!="S") && (repet!="n" || repet!="N")) {
+  while ((repet!='s' || repet!='S') && (repet!='n' || repet!='N')) {
     int aux;
     printf("A chave pode ter cores repetidas? [S/N]:  ");
     aux=scanf("%c", &repet);
-    if ((repet!="s" || repet!="S") && (repet!="n" || repet!="N")) {
+    if ((repet!='s' || repet!='S') && (repet!='n' || repet!='N')) {
       printf("Erro: input invalido\n");
     }
     if (aux==0) {
