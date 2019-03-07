@@ -68,7 +68,7 @@ int main() {
   for (int i = 0; i < jog; i++) {
     int aux;
     while (jogador[i].temp<60 || jogador[i].temp>300) {
-      printf("Insira o tempo maximo por jogo (em segundos) do jogador %s:  ", jogador[i].name);
+      printf("Insira o tempo maximo por jogo (em segundos) do jogador %s (60 a 300):  ", jogador[i].name);
       aux=scanf("%d", &jogador[i].temp);
       if (jogador[i].temp<60 || jogador[i].temp>300) {
         printf("Erro: tempo de jogo invalido\n");
@@ -101,7 +101,7 @@ int main() {
 //dimensao da chave?
   while (keySize<4 || keySize>8) {
     int aux;
-    printf("Insira a dimensão da chave com que deseja jogar (6-12):  ");
+    printf("Insira a dimensão da chave com que deseja jogar (4-8):  ");
     aux=scanf("%d", &keySize);
     if (keySize<4 || keySize>8) {
       printf("Erro: tamaho da chave inválido\n");
@@ -134,6 +134,7 @@ int main() {
   }
 
 //repetiçao de cores na chave?
+<<<<<<< HEAD
   while ((repet!='s' || repet!='S') && (repet!='n' || repet!='N')) {
     int aux;
     printf("A chave pode ter cores repetidas? [S/N]:  ");
@@ -146,8 +147,22 @@ int main() {
       scanf("%s", err);
       printf("Erro: input invalido\n");
       continue;
+=======
+  do {
+    int aux;
+    printf("A chave pode ter cores repetidas? [S/N]:  ");
+    aux=scanf(" %c", &repet);
+
+    if (repet!='s' && repet!='s' && repet!='s' && repet!='s') {
+      printf("Erro: input invalido 1\n");
+>>>>>>> 28057e2afae3f7ed05d92105ef5e52475f208d49
     }
-  }
+
+  }while (repet!='s' && repet!='s' && repet!='s' && repet!='s');
+
+//numero maximo de tentivas por jogo?
+  
+
 
   return 0;
 }
