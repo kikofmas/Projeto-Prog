@@ -69,11 +69,11 @@ int main() {
       aux=scanf("%d", &jogador[i].temp);
       if (aux==0) {
         fflush(stdin);
-        scanf(" %s", &err);
+        scanf("%s", &err);
         printf("Erro: tempo de jogo invalido\n");
         continue;
       }
-      if (jogador[i].temp<60 || jogador[i].temp>300) {
+      else if (jogador[i].temp<60 || jogador[i].temp>300) {
         printf("Erro: tempo de jogo invalido\n");
       }
     }
