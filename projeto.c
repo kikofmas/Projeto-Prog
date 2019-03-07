@@ -140,7 +140,7 @@ int main() {
       if (err1 == ' ' || err1 == '\n' || err1 == EOF) break;
     }
     if (repet!='s' && repet!='n' && repet!='S' && repet!='N') {
-      printf("Erro: input invalido 1\n");
+      printf("Erro: input invalido\n");
     }
   }
 
