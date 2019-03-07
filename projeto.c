@@ -145,7 +145,7 @@ int main() {
     printf("Insira o numero maximo de tentativas (10 a 20):  ");
     aux=scanf("%d", &tent);
     if (aux==0) {
-      fflush(stdin)
+      fflush(stdin);
       printf("Erro: numero de tentativas invalido\n");
       continue;
     }
