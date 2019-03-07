@@ -14,6 +14,13 @@ Inicialização
 
 
 
+KNOWN ISSUES!!!
+1) a parte tempo tem problemas ao inserir letras --> inventa jogadores???
+2) temos problemas com espaços
+3)
+
+
+
 
 
 IMPORTANTE --- NOTAS:
