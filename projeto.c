@@ -66,14 +66,13 @@ int main() {
     while (jogador[i].temp<60 || jogador[i].temp>300) {
       printf("Insira o tempo maximo por jogo (em segundos) do jogador %s (60 a 300):  ", jogador[i].name);
       aux=scanf("%d", &jogador[i].temp);
-      if (jogador[i].temp<60 || jogador[i].temp>300) {
-        printf("Erro: tempo de jogo invalido\n");
-      }
       if (aux==0) {
         fflush(stdin);
-        scanf("%s", err);
         printf("Erro: tempo de jogo invalido\n");
         continue;
+      }
+      else if (jogador[i].temp<60 || jogador[i].temp>300) {
+        printf("Erro: tempo de jogo invalido\n");
       }
     }
   }
@@ -83,14 +82,13 @@ int main() {
     int aux;
     printf("Insira o número de cores com que deseja jogar (6-12): ");
     aux=scanf("%d", &colors);
-    if (colors<6 || colors>12) {
-      printf("Erro: numero de cores inválido\n");
-    }
     if (aux==0) {
       fflush(stdin);
-      scanf("%s", err);
       printf("Erro: numero de cores inválido\n");
       continue;
+    }
+    else if (colors<6 || colors>12) {
+      printf("Erro: numero de cores inválido\n");
     }
   }
 
@@ -99,14 +97,13 @@ int main() {
     int aux;
     printf("Insira a dimensão da chave com que deseja jogar (4-8):  ");
     aux=scanf("%d", &keySize);
-    if (keySize<4 || keySize>8) {
-      printf("Erro: tamaho da chave inválido\n");
-    }
     if (aux==0) {
       fflush(stdin);
-      scanf("%s", err);
       printf("Erro: tamaho da chave inválido\n");
       continue;
+    }
+    else if (keySize<4 || keySize>8) {
+      printf("Erro: tamaho da chave inválido\n");
     }
   }
 
@@ -117,14 +114,13 @@ int main() {
     while (jogador[i].numJog<1 || jogador[i].numJog>5) {
       printf("Insira o numero de jogos a realizar pelo jogador %s (1 a 5):  ", jogador[i].name);
       aux=scanf("%d", &jogador[i].numJog);
-      if (jogador[i].numJog<1 || jogador[i].numJog>5) {
-        printf("Erro: numero de jogos invalido\n");
-      }
       if (aux==0) {
         fflush(stdin);
-        scanf("%s", err);
         printf("Erro: numero de jogos invalido\n");
         continue;
+      }
+      else if (jogador[i].numJog<1 || jogador[i].numJog>5) {
+        printf("Erro: numero de jogos invalido\n");
       }
     }
   }
@@ -148,14 +144,13 @@ int main() {
     int aux;
     printf("Insira o numero maximo de tentativas (10 a 20):  ");
     aux=scanf("%d", &tent);
-    if (tent<10 || tent>20) {
-      printf("Erro: numero de tentativas invalido\n");
-    }
     if (aux==0) {
-      fflush(stdin);
-      scanf("%s", err);
+      fflush(stdin)
       printf("Erro: numero de tentativas invalido\n");
       continue;
+    }
+    else if (tent<10 || tent>20) {
+      printf("Erro: numero de tentativas invalido\n");
     }
   }
 
