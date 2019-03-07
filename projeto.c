@@ -135,18 +135,6 @@ int main() {
     int aux;
     printf("A chave pode ter cores repetidas? [S/N]:  ");
     aux=scanf(" %c", &repet);
-<<<<<<< HEAD
-
-    if (repet!='s' && repet!='S' && repet!='n' && repet!='N') {
-      printf("Erro: input invalido 1\n");
-    }
-
-  }while (repet!='s' && repet!='S' && repet!='n' && repet!='N');
-
-//numero maximo de tentivas por jogo?
-
-
-=======
     while(1) { //loop para eliminar o input extra do utilizador
       err1 = getchar();
       if (err1 == ' ' || err1 == '\n' || err1 == EOF) break;
@@ -171,7 +159,6 @@ int main() {
       continue;
     }
   }
->>>>>>> 453653e3b9193d36c773ef33b5a6e08c576a9104
 
   return 0;
 }
