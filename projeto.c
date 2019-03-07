@@ -145,5 +145,9 @@ int main() {
 
   }while (repet!='s' && repet!='s' && repet!='s' && repet!='s');
 
+//numero maximo de tentivas por jogo?
+  
+
+
   return 0;
 }

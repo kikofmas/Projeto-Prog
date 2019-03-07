@@ -1,7 +1,7 @@
 # Projeto-Prog
 Projeto de programação
 
-Inicialização a fazer!
+Inicialização
 
 •Número de jogadores (1 a 4)  -- DONE
 •Nome de cada jogador (max. 20 caracteres) -- DONE
@@ -9,5 +9,12 @@ Inicialização a fazer!
 •Número de cores (6 a 12) -- DONE
 •Dimensão da chave secreta(4 a 8) -- DONE
 •Indicar se a chave pode ter repetições de cores (S/N) -- DONE
-•Número de máximo de tentativas(10 a 20) -- TO DO
+•Número de máximo de tentativas(10 a 20) -- IN PROGRESS
 •Tempo máximo por jogo para cada jogador(60 a 300s) -- DONE
+
+
+
+
+
+IMPORTANTE --- NOTAS:
+Número de máximo de tentativas(10 a 20) -- por jogador??
