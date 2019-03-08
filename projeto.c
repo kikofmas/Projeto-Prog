@@ -70,12 +70,12 @@ int main() {
       printf("Insira o tempo maximo por jogo (em segundos) do jogador %s (60 a 300):  ", jogador[i].name);
       fgets(buffer, "%s", stdin);
       sscanf(buffer, "%d", &jogador[i].temp);
-      if (jogador[i].temp<60 || jogador[i].temp>300) {
+      /*if (jogador[i].temp<60 || jogador[i].temp>300) {
         fflush(stdin);
         scanf("%s", &err);
         printf("Erro: numero de jogadores inválido\n");
         continue;
-      }
+      }*/
     }
   }
 
