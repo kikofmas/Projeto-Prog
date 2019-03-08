@@ -44,7 +44,7 @@ int main() {
   cleanslate();
 
 //numero de cores em jogo?
-  initialization(&colors, 60, 300, "o número de cores com que deseja jogar");
+  initialization(&colors, 6, 12, "o número de cores com que deseja jogar");
   cleanslate();
 
 //dimensao da chave?
@@ -64,6 +64,7 @@ int main() {
     cleanslate();
     if (repet!='s' && repet!='n' && repet!='S' && repet!='N') {
       printf("Erro: input invalido\n");
+      cleanslate();
     }
   }
   cleanslate();
