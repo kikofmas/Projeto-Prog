@@ -23,7 +23,7 @@ int main() {
   int jog, tempo, games;//numero de jogadores, tempo de jogo, numero de jogos
   int colors, keySize, tent; //número de cores em jogo, tamanho da chave, numero de tentativas
   char repet;//variavel que permite ou nao a existencia de repetições na chave
-  char err[1];
+  char err[1];//variavel para o loop cleanslate
 
 //INICIO
   printf("Vamos jogar um jogo de mastermind!\n");
