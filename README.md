@@ -21,8 +21,6 @@ KNOWN ISSUES!!!
 
 A FAZER:
 1) mudar mensagens de erro
-2) tipo tudo o resto
-
-
-IMPORTANTE --- NOTAS:
-Número de máximo de tentativas(10 a 20) -- por jogador??
+2) inicializar todas as variaveis
+3)comentarios ftw
+4) tipo tudo o resto
