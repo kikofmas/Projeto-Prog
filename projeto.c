@@ -61,7 +61,7 @@ int main() {
     char buffer[100];
     printf("A chave pode ter cores repetidas? [S/N]:  ");
     fgets(buffer, 1, stdin);
-    sscanf(buffer, "%s", repet);
+    sscanf(buffer, "%s", &repet);
     if (repet!='s' && repet!='n' && repet!='S' && repet!='N') {
       cleanslate();
       printf("Erro: input invalido\n");
