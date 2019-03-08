@@ -15,8 +15,7 @@ Inicialização -- ALL DONE
 
 
 KNOWN ISSUES!!!
-1) a parte tempo e num de jogos tem problemas ao inserir letras --> inventa jogadores??? --> problemas com a estrutura???
-2) temos problemas com espaços(+/-, muito mitigados)
+none (yet)
 
 
 A FAZER:
