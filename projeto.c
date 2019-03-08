@@ -39,8 +39,6 @@ int main() {
     cleanslate();
   }
 
-  cleanslate();
-
 //tempo de jogo por jogador?
   initialization(&tempo, 60, 300, "o tempo de jogo");
   cleanslate();
