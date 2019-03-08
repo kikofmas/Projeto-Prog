@@ -25,13 +25,11 @@ int main() {
   char repet;//variavel que permite ou nao a existencia de repetições na chave
   char err[1];
 
-
 //INICIO
   printf("Vamos jogar um jogo de mastermind!\n");
 
 //numero de jogadores?
   initialization(&jog, 1, 4, "o numero de jogadores");
-
   cleanslate();
 
 //nome dos jogadores?
@@ -45,25 +43,19 @@ int main() {
 
 //tempo de jogo por jogador?
   initialization(&tempo, 60, 300, "o tempo de jogo");
-
-
   cleanslate();
 
 //numero de cores em jogo?
   initialization(&colors, 60, 300, "o número de cores com que deseja jogar");
-
-
   cleanslate();
 
 //dimensao da chave?
   initialization(&keySize, 4, 8, "a dimensão da chave com que deseja jogar");
-
   cleanslate();
 
 
 //numero de jogos por jogador?
   initialization(&games, 1, 4, "o numero de jogos");
-
   cleanslate();
 
 //repetiçao de cores na chave?
@@ -76,12 +68,10 @@ int main() {
       printf("Erro: input invalido\n");
     }
   }
-
   cleanslate();
 
 //numero maximo de tentivas por jogo?
   initialization(&tent, 10, 20, "o numero maximo de tentativas");
-
   cleanslate();
 
   return 0;
