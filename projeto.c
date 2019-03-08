@@ -9,20 +9,13 @@
 #include <string.h>
 #include <time.h>
 
-//estrutura para os jogadores
-typedef struct{
-  char name[21];//nome do jogador
-  int numJog;//numero de jogos
-  int temp;//tempo de jogo
-}jogadores;
-
 
 int main() {
   setlocale(LC_ALL,""); //aceita caracteres espiciais e acentos
 
 //declaração das variaveis
-  jogadores jogador[4];//definir 4 jogadores a partir da estrutura
-  int jog;//numero de jogadores
+  char name[4][21];//definir 4 jogadores a partir da estrutura
+  int jog, tempo, game;//numero de jogadores, tempo de jogo, numero de jogos
   int colors, keySize, tent; //número de cores em jogo, tamanho da chave, numero de tentativas
   char repet;//variavel que permite ou nao a existencia de repetições na chave
 
@@ -53,7 +46,7 @@ int main() {
 //nome dos jogadores?
   for (int i = 0; i < jog; i++) {
     printf("Insira nome do jogador %d (maximo de 20 caracteres):  ", i+1);
-    scanf("%20s", jogador[i].name);
+    scanf("%20s", &name[i]);
     while(1) { //loop para eliminar o input extra do utilizador
       err1 = getchar();
       if (err1 == ' ' || err1 == '\n' || err1 == EOF) break;
@@ -62,22 +55,21 @@ int main() {
 
 
 //tempo de jogo por jogador?
-  for (int i = 0; i < jog; i++) {
-    jogador[i].temp=0;
-    char buffer[100]={"\0"};
+  while (tempo<60 || tempo>300) {
     int aux;
-    while (jogador[i].temp<60 || jogador[i].temp>300) {
-      printf("Insira o tempo maximo por jogo (em segundos) do jogador %s (60 a 300):  ", jogador[i].name);
-      fgets(buffer, "%s", stdin);
-      sscanf(buffer, "%d", &jogador[i].temp);
-      /*if (jogador[i].temp<60 || jogador[i].temp>300) {
-        fflush(stdin);
-        scanf("%s", &err);
-        printf("Erro: numero de jogadores inválido\n");
-        continue;
-      }*/
+    printf("Insira o tempo de jogo (60 a 300):  ");
+    aux=scanf("%d", &tempo);
+    if (aux==0) {
+      fflush(stdin);
+      scanf("%s", &err);
+      printf("Erro: numero de jogadores inválido\n");
+      continue;
+    }
+    if (tempo<60 || tempo>300) {
+    printf("Erro: tempo de jogo inválido\n");
     }
   }
+
 
 //numero de cores em jogo?
   while (colors<6 || colors>12) {
@@ -113,20 +105,18 @@ int main() {
 
 
 //numero de jogos por jogador?
-  for (int i = 0; i < jog; i++) {
+  while (game<1 || game>4) {
     int aux;
-    while (jogador[i].numJog<1 || jogador[i].numJog>5) {
-      printf("Insira o numero de jogos a realizar pelo jogador %s (1 a 5):  ", jogador[i].name);
-      aux=scanf("%d", &jogador[i].numJog);
-      if (aux==0) {
-        fflush(stdin);
-        scanf("%s", &err);
-        printf("Erro: numero de jogos invalido\n");
-        continue;
-      }
-      if (jogador[i].numJog<1 || jogador[i].numJog>5) {
-        printf("Erro: numero de jogos invalido\n");
-      }
+    printf("Insira o numero de jogos (1 a 5):  ");
+    aux=scanf("%d", &game);
+    if (aux==0) {
+      fflush(stdin);
+      scanf("%s", &err);
+      printf("Erro: numero de jogadores inválido\n");
+      continue;
+    }
+    if (game<1 || game>5) {
+    printf("Erro: numero de jogos inválido\n");
     }
   }
 
