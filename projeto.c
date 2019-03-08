@@ -58,13 +58,14 @@ int main() {
 
 //repetiçao de cores na chave?
   while (repet!='s' && repet!='n' && repet!='S' && repet!='N') {
-    int aux;
+    char buffer[100];
     printf("A chave pode ter cores repetidas? [S/N]:  ");
-    aux=scanf(" %c", &repet);
-    cleanslate();
+    fgets(buffer, 1, stdin);
+    sscanf(buffer, "%s", repet);
     if (repet!='s' && repet!='n' && repet!='S' && repet!='N') {
-      printf("Erro: input invalido\n");
       cleanslate();
+      printf("Erro: input invalido\n");
+
     }
   }
   cleanslate();
@@ -98,6 +99,6 @@ void cleanslate(void){
   int err1;
   while(1) {
     err1 = getchar();
-    if (err1 == ' ' || err1 == '\n' || err1 == EOF) break;
+    if (err1 == '\n' || err1 == EOF) break;
   }
 }
