@@ -46,7 +46,7 @@ int main() {
 //nome dos jogadores?
   for (int i = 0; i < jog; i++) {
     printf("Insira nome do jogador %d (maximo de 20 caracteres):  ", i+1);
-    scanf("%20s", &name[i]);
+    scanf("%20s", name[i]);
     while(1) { //loop para eliminar o input extra do utilizador
       err1 = getchar();
       if (err1 == ' ' || err1 == '\n' || err1 == EOF) break;
