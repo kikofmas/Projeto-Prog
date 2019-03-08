@@ -63,18 +63,18 @@ int main() {
 
 //tempo de jogo por jogador?
   for (int i = 0; i < jog; i++) {
+    jogador[i].temp=0;
+    char buffer[100]={"\0"};
+    int aux;
     while (jogador[i].temp<60 || jogador[i].temp>300) {
-      int aux;
       printf("Insira o tempo maximo por jogo (em segundos) do jogador %s (60 a 300):  ", jogador[i].name);
-      aux=scanf("%d", &jogador[i].temp);
-      if (aux==0) {
+      fgets(buffer, "%s", stdin);
+      sscanf(buffer, "%d", &jogador[i].temp);
+      if (jogador[i].temp<60 || jogador[i].temp>300) {
         fflush(stdin);
         scanf("%s", &err);
-        printf("Erro: tempo de jogo invalido\n");
+        printf("Erro: numero de jogadores inválido\n");
         continue;
-      }
-      else if (jogador[i].temp<60 || jogador[i].temp>300) {
-        printf("Erro: tempo de jogo invalido\n");
       }
     }
   }
