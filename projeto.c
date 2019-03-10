@@ -23,7 +23,7 @@ int main() {
   int jog = NULL, tempo, games;//numero de jogadores, tempo de jogo, numero de jogos
   int colors, keySize, tent; //número de cores em jogo, tamanho da chave, numero de tentativas
   char repet;//variavel que permite ou nao a existencia de repetições na chave
-  char err[1];
+  char err[1];//variavel para o loop cleanslate
 
 //INICIO
   printf("Vamos jogar um jogo de mastermind!\n");
@@ -61,7 +61,7 @@ int main() {
     char buffer[100];
     printf("A chave pode ter cores repetidas? [S/N]:  ");
     fgets(buffer, 1, stdin);
-    sscanf(buffer, "%s", repet);
+    sscanf(buffer, "%s", &repet);
     if (repet!='s' && repet!='n' && repet!='S' && repet!='N') {
       cleanslate();
       printf("Erro: valor introduzido inválido\n");
