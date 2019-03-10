@@ -11,7 +11,7 @@ none (yet)
 
 A FAZER:
 1) inicializar todas as variaveis
-2) comentarios ftw
+2) comentarios ftw (acho q já não falta nenhum)
 3) tipo tudo o resto
 
 
