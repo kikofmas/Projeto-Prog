@@ -20,7 +20,7 @@ int main() {
 
 //declaração das variaveis
   char name[4][21];//definir 4 jogadores a partir da estrutura
-  int jog, tempo, games;//numero de jogadores, tempo de jogo, numero de jogos
+  int jog = NULL, tempo, games;//numero de jogadores, tempo de jogo, numero de jogos
   int colors, keySize, tent; //número de cores em jogo, tamanho da chave, numero de tentativas
   char repet;//variavel que permite ou nao a existencia de repetições na chave
   char err[1];
@@ -64,7 +64,7 @@ int main() {
     sscanf(buffer, "%s", repet);
     if (repet!='s' && repet!='n' && repet!='S' && repet!='N') {
       cleanslate();
-      printf("Erro: input invalido\n");
+      printf("Erro: valor introduzido inválido\n");
 
     }
   }
