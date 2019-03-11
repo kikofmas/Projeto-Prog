@@ -13,17 +13,14 @@
 void cleanslate(void); //limpa o buffer = loop para eliminar o input extra do utilizador
 void initialization(int *var, int min, int max, char frase[10]); //inicializações efetuadas com while
 
-
-
 int main() {
   setlocale(LC_ALL,""); //aceita caracteres especiais e acentos
 
 //declaração das variaveis
-  char name[4][21]; //array para armazenar o nome do jogadores
-  int jog, tempo, games; //numero de jogadores, tempo de jogo, numero de jogos
-  int colors, keySize, attempt; //número de cores em jogo, tamanho da chave, numero de tentativas
-  char repeat;//variavel que permite ou nao a existencia de repetições na chave
-  char err[1];//variavel para o loop cleanslate
+  char name[4][21]={{""},{""},{""},{""}}; //array para armazenar o nome do jogadores
+  int jog=0, tempo=0, games=0; //numero de jogadores, tempo de jogo, numero de jogos
+  int colors=0, keySize=0, attempt=0; //número de cores em jogo, tamanho da chave, numero de tentativas
+  char repeat=0;//variavel que permite ou nao a existencia de repetições na chave
 
 //INICIO
   printf("Vamos jogar um jogo de mastermind!\n");
@@ -100,7 +97,7 @@ void initialization(int *var, int min, int max, char frase[30]){
 //definição da função para limpar o buffer
 
 void cleanslate(void){   //loop até se encontrar um nova linha ou o fim de o ficheiro
-  int err1;
+  char err1;
   while(1) {
     err1 = getchar();
     if (err1 == '\n' || err1 == EOF) break;
