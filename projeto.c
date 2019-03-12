@@ -20,7 +20,7 @@ int main() {
   char name[4][21]={{""},{""},{""},{""}}; //array para armazenar o nome do jogadores
   int jog=0, tempo=0, games=0; //numero de jogadores, tempo de jogo, numero de jogos
   int colors=0, keySize=0, attempt=0; //número de cores em jogo, tamanho da chave, numero de tentativas
-  char repeat=0;//variavel que permite ou nao a existencia de repetições na chave
+  char repet=0;//variavel que permite ou nao a existencia de repetições na chave
 
 //INICIO
   printf("Vamos jogar um jogo de mastermind!\n");
@@ -36,40 +36,48 @@ int main() {
     cleanslate();
   }
 
-//duração de cada jogo
-  initialization(&tempo, 60, 300, "o tempo de jogo");
-  cleanslate();
-
-//numero de cores em jogo
-  initialization(&colors, 6, 12, "o número de cores com que deseja jogar");
-  cleanslate();
-
-//dimensao da chave
-  initialization(&keySize, 4, 8, "a dimensão da chave com que deseja jogar");
-  cleanslate();
-
-
 //numero de jogos
   initialization(&games, 1, 4, "o numero de jogos");
   cleanslate();
 
-//existencia de repetiçao de cores na chave
-  while (repeat!='s' && repeat!='n' && repeat!='S' && repeat!='N') {
-    char buffer[100];
-    printf("A chave pode ter cores repetidas? [S/N]:  ");
-    fgets(buffer, 1, stdin);
-    sscanf(buffer, "%s", &repeat);
-    if (repeat!='s' && repeat!='n' && repeat!='S' && repeat!='N') {
-      cleanslate();
-      printf("Erro: valor introduzido inválido\n");
-
-    }
-  }
+//duração de cada jogo
+  initialization(&tempo, 60, 300, "o tempo de jogo");
   cleanslate();
 
 //numero maximo de tentivas por jogo
   initialization(&attempt, 10, 20, "o numero maximo de tentativas");
   cleanslate();
+
+  do {
+    //dimensao da chave
+      initialization(&keySize, 4, 8, "a dimensão da chave com que deseja jogar");
+      cleanslate();
+
+    //numero de cores em jogo
+      initialization(&colors, 6, 12, "o número de cores com que deseja jogar");
+      cleanslate();
+
+    //existencia de repetiçao de cores na chave
+      while (repet!='s' && repet!='n' && repet!='S' && repet!='N') {
+        char buffer[100];
+        printf("A chave pode ter cores repetidas? [S/N]:  ");
+        fgets(buffer, 1, stdin);
+        sscanf(buffer, "%s", &repet);
+        if (repet!='s' && repet!='n' && repet!='S' && repet!='N') {
+          cleanslate();
+          printf("Erro: valor introduzido inválido\n");
+
+        }
+      }
+      cleanslate();
+
+      if (colors<keySize && (repet=='n' || repet=='N')) {
+        printf("Erro: combinação de definições(cores, tamanho da chave, repetição de cores) impossivel");
+        cleanslate();
+      }
+  }while (colors<keySize && repet=='n');
+
+
 
   return 0;
 }
