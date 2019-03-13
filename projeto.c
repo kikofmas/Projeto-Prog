@@ -111,19 +111,6 @@ int main() {
           coresdisp[aux]='0';
         }
       }
-      /*for (int i = 0; i < keySize; i++) {
-        while (1) {
-          int aux=0;
-          aux=rand() % colors;
-          if (coresdisp[aux]!='0') {
-            *(keyptr+i)=*(coresdispptr+aux);
-            if (repet=='n' || repet=='N') {
-              *(coresdispptr+aux)='0';
-            }
-          break;
-          }
-        }
-      }*/
       printf("%s\n", key);
       for(int b=0;b<attempt;b++){
 
