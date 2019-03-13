@@ -85,8 +85,6 @@ void initialization(int *var, int min, int max, char frase[30]){
     aux=scanf("%d", var);
     if (aux==0) {         //deteção de input do tipo errado
       cleanslate();
-      fflush(stdin);      //limpeza do input errado
-      scanf("%s", &err);
       printf("Erro: valor introduzido inválido\n");
       continue;
     }
