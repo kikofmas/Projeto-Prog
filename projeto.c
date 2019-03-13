@@ -107,10 +107,10 @@ int main() {
           aux=rand() % colors;
           if (coresdisp[aux]!='0') {
             *(keyptr+i)=*(coresdispptr+aux);
-            break;
             if (repet=='n' || repet=='N') {
-              coresdisp[aux]=0;
+              *(coresdispptr+aux)='0';
             }
+          break;
           }
         }
       }
