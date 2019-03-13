@@ -102,6 +102,16 @@ int main() {
       char *coresdispptr=coresdisp;
   //criação
       for (int i = 0; i < keySize; i++) {
+        int aux;
+        do{
+          aux = rand() % colors;
+        } while(coresdisp[aux]=='0');
+        key[i]=coresdisp[aux];
+        if(repet=='n' || repet=='N'){
+          coresdisp[aux]='0';
+        }
+      }
+      /*for (int i = 0; i < keySize; i++) {
         while (1) {
           int aux=0;
           aux=rand() % colors;
@@ -113,8 +123,8 @@ int main() {
           break;
           }
         }
-      }
-      printf("%s\n",  key);
+      }*/
+      printf("%s\n", key);
       for(int b=0;b<attempt;b++){
 
       }
