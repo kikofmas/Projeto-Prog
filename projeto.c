@@ -89,8 +89,19 @@ int main() {
     }
   }while(1);
 
-  return 0;
-}
+  printf("Vamos lá começar o nosso jogo\n");
+
+  for(int i=0; i<games; i++){
+    for(int a=0; a<jog; a++){
+      printf("Jogador %s é a sua vez\n",name[a]);
+      //generateKey();
+      for(int b=0;b<attempt;b++){
+
+      }
+    }
+  }
+
+  return 0;}
 
 //definição da função para inicializar as variaveis do jogo
 
@@ -118,4 +129,8 @@ void cleanslate(void){   //loop até se encontrar um nova linha ou o fim de o fi
     err1 = getchar();
     if (err1 == '\n' || err1 == EOF) break;
   }
+}
+
+void generateKey(){
+  time_t t;
 }
