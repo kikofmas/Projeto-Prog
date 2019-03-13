@@ -48,30 +48,29 @@ int main() {
   initialization(&attempt, 10, 20, "o numero maximo de tentativas");
   cleanslate();
 
-//dimensao da chave
-  initialization(&keySize, 4, 8, "a dimensão da chave com que deseja jogar");
-  cleanslate();
+  do{
+  //dimensao da chave
+    initialization(&keySize, 4, 8, "a dimensão da chave com que deseja jogar");
+    cleanslate();
 
-//numero de cores em jogo
-  initialization(&colors, 6, 12, "o número de cores com que deseja jogar");
-  cleanslate();
+  //numero de cores em jogo
+    initialization(&colors, 6, 12, "o número de cores com que deseja jogar");
+    cleanslate();
 
-    //existencia de repetiçao de cores na chave
-      /*while (1) {
-        char buffer[100];
-        printf("A chave pode ter cores repetidas? [S/N]:  ");
-        fgets(buffer, 1, stdin);
-        sscanf(buffer, "%s", &repet);
-        printf("%c",repet);
-        if (strncmp(repet, name1, 1)!=0 && strncmp(repet, name2, 1)!=0) {
-          cleanslate();
-          printf("Erro: valor introduzido inválido\n");
-
-        }
-      }*/
-
-
-
+    while (repet!='s' && repet!='n' && repet!='S' && repet!='N') {
+      int aux;
+      char err1;
+      printf("A chave pode ter cores repetidas? [S/N]:  ");
+      aux=scanf(" %c", &repet);
+      while(1) { //loop para eliminar o input extra do utilizador
+        err1 = getchar();
+        if (err1 == ' ' || err1 == '\n' || err1 == EOF) break;
+      }
+      if (repet!='s' && repet!='n' && repet!='S' && repet!='N') {
+        printf("Erro: input invalido 1\n");
+      }
+    }
+  }while(1);
 
   return 0;
 }
@@ -85,6 +84,7 @@ void initialization(int *var, int min, int max, char frase[30]){
     printf("Insira %s (%d a %d):  ",frase,min,max);
     aux=scanf("%d", var);
     if (aux==0) {         //deteção de input do tipo errado
+      cleanslate();
       fflush(stdin);      //limpeza do input errado
       scanf("%s", &err);
       printf("Erro: valor introduzido inválido\n");
