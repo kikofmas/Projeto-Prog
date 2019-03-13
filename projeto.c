@@ -31,9 +31,20 @@ int main() {
 
 //nome dos jogadores
   for (int i = 0; i < jog; i++) {
+    while (1) {
+    char buffer[100];
     printf("Insira nome do jogador %d (maximo de 20 caracteres):  ", i+1);
-    scanf("%20s", name[i]);
-    cleanslate();
+    fgets(buffer, 100, stdin);
+    sscanf(buffer, "%20s", name[i]);
+    if (strlen(buffer)>20) {
+        if (strlen(buffer)>99) {
+          cleanslate();
+        }
+      printf("Erro: input incorreto. Verifique que o nome não excede 20 caracteres\n");
+    } else {
+      break;
+    }
+    }
   }
 
 //numero de jogos
