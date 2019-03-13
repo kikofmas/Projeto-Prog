@@ -62,13 +62,19 @@ int main() {
       char err1;
       printf("A chave pode ter cores repetidas? [S/N]:  ");
       aux=scanf(" %c", &repet);
-      while(1) { //loop para eliminar o input extra do utilizador
-        err1 = getchar();
-        if (err1 == ' ' || err1 == '\n' || err1 == EOF) break;
-      }
+      cleanslate();
       if (repet!='s' && repet!='n' && repet!='S' && repet!='N') {
         printf("Erro: input invalido 1\n");
       }
+    }
+
+    if (colors<keySize && (repet=='n' || repet=='N')) {
+      printf("A combinação dos parametros 'tamanho chave', 'numero cores' e 'repetição de cores' está invalida, tente outra vez.\n" );
+      colors=-1;
+      keySize=0;
+      repet='\0';
+    } else {
+      break;
     }
   }while(1);
 
