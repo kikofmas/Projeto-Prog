@@ -89,6 +89,16 @@ int main() {
     }
   }while(1);
 
+  for(int i=0; i<games; i++){
+    for(int a=0; a<jog; a++){
+      printf("Jogador %s é a sua vez\n",name[a]);
+      //generateKey();
+      for(int b=0;b<attempt;b++){
+
+      }
+    }
+  }
+
   time_t t;
   srand((unsigned) time(&t));
   char code[9];
