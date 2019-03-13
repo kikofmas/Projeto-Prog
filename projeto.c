@@ -22,6 +22,12 @@ int main() {
   int colors=-1, keySize=0, attempt=0; //número de cores em jogo, tamanho da chave, numero de tentativas
   char repet='\0';//variavel que permite ou nao a existencia de repetições na chave
 
+
+  char key[9];
+  char *keyptr=key;
+
+  time_t t;
+  srand((unsigned) time(&t));
 //INICIO
   printf("Vamos jogar um jogo de mastermind!\n");
 
@@ -89,36 +95,31 @@ int main() {
     }
   }while(1);
 
-  for(int i=0; i<games; i++){
-    for(int a=0; a<jog; a++){
-      printf("Jogador %s é a sua vez\n",name[a]);
-      //generateKey();
+  for(int i=0; i<jog; i++){
+    printf("Jogador %s é a sua vez\n",name[i]);
+    for(int a=0; a<games; a++){
+
+      //criação
+      for (int i = 0; i < keySize; i++) {
+        char coresdisp[13]={'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l'};
+        char *coresdispptr=coresdisp;
+        while (1) {
+          int aux=0;
+          aux=rand() % colors;
+          if (coresdisp[aux]!='0') {
+            *(keyptr+i)=*(coresdispptr+aux);
+            break;
+            if (repet=='n' || repet=='N') {coresdisp[aux]=0;}
+          }
+        }
+      }
+      printf("%s\n",  key);
       for(int b=0;b<attempt;b++){
 
       }
     }
   }
 
-  time_t t;
-  srand((unsigned) time(&t));
-  char code[9];
-  char *codeptr=code;
-  char coresdisp[13]={'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l'};
-  char *coresdispptr=coresdisp;
-  //criação
-  for (int i = 0; i < keySize; i++) {
-    while (1) {
-      int aux=0;
-      aux=rand() % colors;
-      if (coresdisp[aux]!='0') {
-        *(codeptr+i)=*(coresdispptr+aux);
-        break;
-        if (repet=='n' || repet=='N') {
-          coresdisp[aux]=0;
-        }
-      }
-    }
-  }
   return 0;
 }
 
@@ -148,8 +149,4 @@ void cleanslate(void){   //loop até se encontrar um nova linha ou o fim de o fi
     err1 = getchar();
     if (err1 == '\n' || err1 == EOF) break;
   }
-}
-
-void generateKey(){
-  time_t t;
 }
