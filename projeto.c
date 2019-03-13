@@ -69,7 +69,6 @@ int main() {
 
         }
       }
-      cleanslate();
 
       if (colors<keySize && (repet=='n' || repet=='N')) {
         printf("Erro: combinação de definições(cores, tamanho da chave, repetição de cores) impossivel");
