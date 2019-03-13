@@ -109,7 +109,6 @@ int main() {
       }
     }
   }
-  printf("%s", code);
   return 0;
 }
 
@@ -139,4 +138,8 @@ void cleanslate(void){   //loop até se encontrar um nova linha ou o fim de o fi
     err1 = getchar();
     if (err1 == '\n' || err1 == EOF) break;
   }
+}
+
+void generateKey(){
+  time_t t;
 }
