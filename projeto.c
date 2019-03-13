@@ -98,18 +98,19 @@ int main() {
   for(int i=0; i<jog; i++){
     printf("Jogador %s é a sua vez\n",name[i]);
     for(int a=0; a<games; a++){
-
-      //criação
+      char coresdisp[13]={'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l'};
+      char *coresdispptr=coresdisp;
+  //criação
       for (int i = 0; i < keySize; i++) {
-        char coresdisp[13]={'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l'};
-        char *coresdispptr=coresdisp;
         while (1) {
           int aux=0;
           aux=rand() % colors;
           if (coresdisp[aux]!='0') {
             *(keyptr+i)=*(coresdispptr+aux);
             break;
-            if (repet=='n' || repet=='N') {coresdisp[aux]=0;}
+            if (repet=='n' || repet=='N') {
+              coresdisp[aux]=0;
+            }
           }
         }
       }
