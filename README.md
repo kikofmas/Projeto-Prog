@@ -13,8 +13,3 @@ A FAZER:
 1) inicializar todas as variaveis (as de inicio de jogo ja estao)
 2) comentarios ftw (acho q já não falta nenhum)
 3) tipo tudo o resto
-
-
-PERGUNTAR PROF:
-- relatorio??
--jogos e tempo diferentes para cada jogador???
