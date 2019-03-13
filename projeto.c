@@ -89,6 +89,27 @@ int main() {
     }
   }while(1);
 
+  time_t t;
+  srand((unsigned) time(&t));
+  char code[9];
+  char *codeptr=code;
+  char coresdisp[13]={'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l'};
+  char *coresdispptr=coresdisp;
+  //criação
+  for (int i = 0; i < keySize; i++) {
+    while (1) {
+      int aux=0;
+      aux=rand() % colors;
+      if (coresdisp[aux]!='0') {
+        *(codeptr+i)=*(coresdispptr+aux);
+        break;
+        if (repet=='n' || repet=='N') {
+          coresdisp[aux]=0;
+        }
+      }
+    }
+  }
+  printf("%s", code);
   return 0;
 }
 
