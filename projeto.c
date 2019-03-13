@@ -19,8 +19,8 @@ int main() {
 //declaração das variaveis
   char name[4][21]={{""},{""},{""},{""}}; //array para armazenar o nome do jogadores
   int jog=0, tempo=0, games=0; //numero de jogadores, tempo de jogo, numero de jogos
-  int colors=0, keySize=0, attempt=0; //número de cores em jogo, tamanho da chave, numero de tentativas
-  char repet=0;//variavel que permite ou nao a existencia de repetições na chave
+  int colors=-1, keySize=0, attempt=0; //número de cores em jogo, tamanho da chave, numero de tentativas
+  char repet='\0';//variavel que permite ou nao a existencia de repetições na chave
 
 //INICIO
   printf("Vamos jogar um jogo de mastermind!\n");
@@ -48,33 +48,28 @@ int main() {
   initialization(&attempt, 10, 20, "o numero maximo de tentativas");
   cleanslate();
 
-  do {
-    //dimensao da chave
-      initialization(&keySize, 4, 8, "a dimensão da chave com que deseja jogar");
-      cleanslate();
+//dimensao da chave
+  initialization(&keySize, 4, 8, "a dimensão da chave com que deseja jogar");
+  cleanslate();
 
-    //numero de cores em jogo
-      initialization(&colors, 6, 12, "o número de cores com que deseja jogar");
-      cleanslate();
+//numero de cores em jogo
+  initialization(&colors, 6, 12, "o número de cores com que deseja jogar");
+  cleanslate();
 
     //existencia de repetiçao de cores na chave
-      while (repet!='s' && repet!='n' && repet!='S' && repet!='N') {
+      /*while (1) {
         char buffer[100];
         printf("A chave pode ter cores repetidas? [S/N]:  ");
         fgets(buffer, 1, stdin);
         sscanf(buffer, "%s", &repet);
-        if (repet!='s' && repet!='n' && repet!='S' && repet!='N') {
+        printf("%c",repet);
+        if (strncmp(repet, name1, 1)!=0 && strncmp(repet, name2, 1)!=0) {
           cleanslate();
           printf("Erro: valor introduzido inválido\n");
 
         }
-      }
+      }*/
 
-      if (colors<keySize && (repet=='n' || repet=='N')) {
-        printf("Erro: combinação de definições(cores, tamanho da chave, repetição de cores) impossivel");
-        cleanslate();
-      }
-  }while (colors<keySize && repet=='n');
 
 
 
