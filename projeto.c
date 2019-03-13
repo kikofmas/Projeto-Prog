@@ -78,7 +78,6 @@ int main() {
 //definição da função para inicializar as variaveis do jogo
 
 void initialization(int *var, int min, int max, char frase[30]){
-  char err;
   while (*var<min || *var>max) {  //loop ate um valor válido ser introduzido
     int aux;
     printf("Insira %s (%d a %d):  ",frase,min,max);
