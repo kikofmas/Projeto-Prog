@@ -21,10 +21,7 @@ int main() {
   int jog=0, tempo=0, games=0; //numero de jogadores, tempo de jogo, numero de jogos
   int colors=-1, keySize=0, attempt=0; //número de cores em jogo, tamanho da chave, numero de tentativas
   char repet='\0';//variavel que permite ou nao a existencia de repetições na chave
-
-
   char key[9];
-  char *keyptr=key;
 
   time_t t;
   srand((unsigned) time(&t));
@@ -95,12 +92,14 @@ int main() {
     }
   }while(1);
 
+  char try[keySize];
+
   for(int i=0; i<jog; i++){
     printf("Jogador %s é a sua vez\n",name[i]);
     for(int a=0; a<games; a++){
+    //criacao da chave
       char coresdisp[13]={'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l'};
-      char *coresdispptr=coresdisp;
-  //criação
+      char last = coresdisp[colors-1];
       for (int i = 0; i < keySize; i++) {
         int aux;
         do{
@@ -111,9 +110,13 @@ int main() {
           coresdisp[aux]='0';
         }
       }
-      printf("%s\n", key);
       for(int b=0;b<attempt;b++){
-
+        char buffer[100];
+        do{
+          printf("Insira uma combinação de cores (A a %c): ",last);
+          fgets(buffer, 100, stdin);
+          sscanf(buffer, "%*s",keySize, try);
+        }while(strlen(buffer)>colors);
       }
     }
   }
