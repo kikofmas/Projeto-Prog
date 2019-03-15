@@ -8,6 +8,7 @@
 #include <math.h>
 #include <string.h>
 #include <time.h>
+#include <ctype.h>
 
 
 void cleanslate(void); //limpa o buffer = loop para eliminar o input extra do utilizador
@@ -21,7 +22,7 @@ int main() {
   int jog=0, tempo=0, games=0; //numero de jogadores, tempo de jogo, numero de jogos
   int colors=-1, keySize=0, attempt=0; //número de cores em jogo, tamanho da chave, numero de tentativas
   char repet='\0';//variavel que permite ou nao a existencia de repetições na chave
-  char key[9];
+  int rp=0,wp=0;
 
   time_t t;
   srand((unsigned) time(&t));
@@ -35,18 +36,18 @@ int main() {
 //nome dos jogadores
   for (int i = 0; i < jog; i++) {
     while (1) {
-    char buffer[100];
-    printf("Insira nome do jogador %d (maximo de 20 caracteres):  ", i+1);
-    fgets(buffer, 100, stdin);
-    sscanf(buffer, "%20s", name[i]);
-    if (strlen(buffer)>20) {
-        if (strlen(buffer)>99) {
-          cleanslate();
-        }
-      printf("Erro: input incorreto. Verifique que o nome não excede 20 caracteres\n");
-    } else {
-      break;
-    }
+      char buffer[100];
+      printf("Insira nome do jogador %d (maximo de 20 caracteres):  ", i+1);
+      fgets(buffer, 100, stdin);
+      sscanf(buffer, "%20s", name[i]);
+      if (strlen(buffer)>20) {
+          if (strlen(buffer)>99) {
+            cleanslate();
+          }
+        printf("Erro: input incorreto. Verifique que o nome não excede 20 caracteres\n");
+      } else {
+        break;
+      }
     }
   }
 
@@ -54,12 +55,12 @@ int main() {
   initialization(&games, 1, 4, "o numero de jogos");
   cleanslate();
 
+  //numero maximo de tentivas por jogo
+    initialization(&attempt, 10, 20, "o numero maximo de tentativas");
+    cleanslate();
+
 //duração de cada jogo
   initialization(&tempo, 60, 300, "o tempo de jogo");
-  cleanslate();
-
-//numero maximo de tentivas por jogo
-  initialization(&attempt, 10, 20, "o numero maximo de tentativas");
   cleanslate();
 
   do{
@@ -92,7 +93,7 @@ int main() {
     }
   }while(1);
 
-  char try[keySize];
+  char key[keySize],key_copy[keySize],try[keySize];
 
   for(int i=0; i<jog; i++){
     printf("Jogador %s é a sua vez\n",name[i]);
@@ -110,14 +111,46 @@ int main() {
           coresdisp[aux]='0';
         }
       }
+
       for(int b=0;b<attempt;b++){
-        char buffer[100];
-        do{
-          printf("Insira uma combinação de cores (A a %c): ",last);
+        while (1) {
+          char buffer[100];
+          printf("Insira uma combinação de cores (A a %c): ",toupper(last));
           fgets(buffer, 100, stdin);
-          sscanf(buffer, "%*s",keySize, try);
-        }while(strlen(buffer)>colors);
+          strncpy(try, buffer, keySize+1);
+          if (strlen(buffer)!=keySize+1) {
+              if (strlen(buffer)>99) {
+                cleanslate();
+              }
+            printf("Erro: input incorreto. Verifique que a combinação não excede %d caracteres\n",keySize);
+          } else {
+            break;
+          }
+        }
+
+        for(int a=0;a<keySize;a++){
+          key_copy[a]=key[a];
+        }
+
+        for(int i=0;i<keySize;i++){
+          for(int a=0;a<keySize;a++){
+            if(try[i]==key_copy[a] && i==a){
+              rp++;
+              key_copy[a]='0';
+              break;
+            }
+            else if(try[i]==key_copy[a]){
+              wp++;
+              key_copy[a]='0';
+              break;
+            }
+          }
+        }
+
+        printf("%dP%dB\n", rp, wp);
+
       }
+
     }
   }
 
