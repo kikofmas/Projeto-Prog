@@ -16,14 +16,15 @@ int main (){
 
 
   for (int i = 0; i < jog; i++) {
-    mediaTempos[i]=
+    for (size_t u = 0; u < games; u++) {
+      mediaTempos[i]+=stats[i][u][0];
+    }
+    mediaTempos[i]/=games;
   }
-
+  int z=0, x, y;
   for (int i = 0; i < jog; i++) {
-    int z=0, x=0, y=0;
     y=x;
     x=0;
-
     for (int u = 0; u < games; u++) {
       x+=stats[i][u][2];
     }
@@ -31,12 +32,54 @@ int main (){
       z=i;
       y=x;
     } else if (x==y) {
-      if (/* condition */) {
-        /* code */
+      if (mediaTempos[z]<mediaTempos[i]) {
+        z=i;
+        y=x;
       }
     }
   }
-
-
+  printf("O vencedor do torneio é: o jogador %d, %s", z+1, name[z]);
+  z=0;
+  y=0;
+  x=301;
+  for (int i = 0; i < jog; i++) {
+    for (size_t u = 0; u < games; u++) {
+      if (stats[i][u][2]==1) {
+        if (stats[i][u][0]<x) {
+          z=i;
+          x=stats[i][u][0];
+          y=u;
+        } else if (stats[i][u][0]==x) {
+          if (stats[i][u][1]<stats[z][y][1]) {
+            x=stats[i][u][0];
+            y=u;
+            z=i;
+          }
+        }
+      }
+    }
+  }
+  z=0;
+  y=0;
+  x=301;
+  printf("O vencedor para o jogo mais rapido é: o jogador %d, %s", z+1, name[z]);
+  for (int i = 0; i < jog; i++) {
+    for (size_t u = 0; u < games; u++) {
+      if (stats[i][u][2]==1) {
+        if (stats[i][u][1]<x) {
+          z=i;
+          x=stats[i][u][1];
+          y=u;
+        } else if (stats[i][u][1]==x) {
+          if (stats[i][u][0]<stats[z][y][0]) {
+            x=stats[i][u][1];
+            y=u;
+            z=i;
+          }
+        }
+      }
+    }
+  }
+  printf("O vencedor para o jogo mais curto é: o jogador %d, %s", z+1, name[z]);
     return(0);
 }
