@@ -107,7 +107,7 @@ int main() {
     for(int a=0; a<games; a++){
       tempo_inicial = time(NULL);     //guarda o valor do tempo no inicio do jogo
       printf("Jogo numero %d\n",a+1);
-    //criacao da chave
+    //criacao da chave no inicio de cada jogo
       char coresdisp[13]={'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l'};
       char last = coresdisp[colors-1];  //ultima cor da lista que o utilizador pode inserir
       for (int i = 0; i < keySize; i++) {
@@ -159,7 +159,7 @@ int main() {
           key_copy[a]=key[a];
         }
 
-      //verificação de igualdade entre a chave e a tentativa do jogador
+      //verificação de igualdade entre a chave de jogo e a tentativa do jogador
 
         for(int i=0;i<keySize;i++){
           for(int a=0;a<keySize;a++){
