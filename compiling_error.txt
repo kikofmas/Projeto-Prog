@@ -1,0 +1,2 @@
+c:/mingw/bin/../lib/gcc/mingw32/8.2.0/../../../../mingw32/bin/ld.exe: cannot open output file C:\Users\BRUNOC~1\AppData\Local\Temp\projeto.exe: Permission denied
+collect2.exe: error: ld returned 1 exit status
