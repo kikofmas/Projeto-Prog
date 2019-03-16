@@ -1,15 +1,17 @@
 # Projeto-Prog
 Projeto de programação
 
-Inicialização -- ALL DONE
+I
 
 
+linha 149: n repetes essa funçao na linha 131?
+mensagem de erro das letras ta errado acho eu -->
 
-KNOWN ISSUES!!!
-none (yet)
 
 
 A FAZER:
-1) inicializar todas as variaveis (as de inicio de jogo ja estao)
-2) comentarios ftw (acho q já não falta nenhum)
-3) tipo tudo o resto
+1) inicializar todas as variaveis (verificar tudo)
+2) comentarios ftw, comentar tudo, verificar acentos e coisas mal explicadas
+3) meter tudo bonitinho com espaçamentos entre as funções, etc e tal
+4) FUNÇÃO PARA AS ESTATISTICAS
+5) verificar as mensagens de erro
