@@ -13,7 +13,7 @@
 
 void cleanslate(void); //limpa o buffer = loop para eliminar o input extra do utilizador
 void initialization(int *var, int min, int max, char frase[10]); //inicializações efetuadas com while
-int checkInput(char try[], int size);
+int checkInput(char try[], int size); //valida que a jogada é possivel
 
 int main() {
   setlocale(LC_ALL,""); //aceita caracteres especiais e acentos
@@ -22,12 +22,13 @@ int main() {
   char name[4][21]={{""},{""},{""},{""}}; //array para armazenar o nome do jogadores
   int jog=0, tempo=0, games=0; //numero de jogadores, tempo de jogo, numero de jogos
   int colors=-1, keySize=0, attempt=0; //número de cores em jogo, tamanho da chave, numero de tentativas
-  char repet='\0';//variavel que permite ou nao a existencia de repetições na chave
-  int rp=0,wp=0;
-  time_t tempo_inicial,tempo_atual,tempo_jogo;
+  char repet='\0'; //variavel que permite ou nao a existencia de repetições na chave
+  int rp=0,wp=0; //rp para posição correta e wp para cor correta na posição errada
+  time_t tempo_inicial,tempo_atual,tempo_jogo; // variavies para medir os tempos ao longo do jogo
 
   time_t t;
-  srand((unsigned) time(&t));
+  srand((unsigned) time(&t)); //inicializa o gerador aleatório
+
 //INICIO
   printf("Vamos jogar um jogo de mastermind!\n");
 
@@ -43,23 +44,19 @@ int main() {
       fgets(buffer, 100, stdin);
       sscanf(buffer, "%20s", name[i]);
       if (strlen(buffer)>20) {
-          if (strlen(buffer)>99) {
-            cleanslate();
-          }
+        if (strlen(buffer)>99) cleanslate();
         printf("Erro: input incorreto. Verifique que o nome não excede 20 caracteres\n");
-      } else {
-        break;
-      }
+      } else break;
     }
   }
 
 //numero de jogos
-  initialization(&games, 1, 4, "o numero de jogos");
+  initialization(&games, 1, 5, "o numero de jogos");
   cleanslate();
 
-  //numero maximo de tentivas por jogo
-    initialization(&attempt, 10, 20, "o numero maximo de tentativas");
-    cleanslate();
+//numero maximo de tentivas por jogo
+  initialization(&attempt, 10, 20, "o numero maximo de tentativas");
+  cleanslate();
 
 //duração de cada jogo
   initialization(&tempo, 60, 300, "o tempo de jogo");
@@ -90,52 +87,52 @@ int main() {
       colors=-1;
       keySize=0;
       repet='\0';
-    } else {
-      break;
-    }
+    } else break;
   }while(1);
 
+  //declaração de variaveis de jogo que dependem de dados introduzidos pelo user
+
   char key[keySize],key_copy[keySize],try[keySize];
+
+  //JOGO
 
   for(int i=0; i<jog; i++){
     printf("Jogador %s é a sua vez\n",name[i]);
     for(int a=0; a<games; a++){
-      tempo_inicial = time(NULL);
+      tempo_inicial = time(NULL);     //guarda o valor do tempo no inicio do jogo
       printf("Jogo numero %d\n",a+1);
-    //criacao da chave
+    //criacao da chave no inicio de cada jogo
       char coresdisp[13]={'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l'};
-      char last = coresdisp[colors-1];
+      char last = coresdisp[colors-1];  //ultima cor da lista que o utilizador pode inserir
       for (int i = 0; i < keySize; i++) {
         int aux;
+        //criação de numeros aleatorios ate a condição se verificar
         do{
           aux = rand() % colors;
         } while(coresdisp[aux]=='0');
         key[i]=coresdisp[aux];
-        if(repet=='n' || repet=='N'){
-          coresdisp[aux]='0';
-        }
+        //se n for possivel a repetição de cores elimina-se da  lista a cor inserida na chave
+        if(repet=='n' || repet=='N') coresdisp[aux]='0';
       }
 
       for(int b=0;b<attempt;b++){
-        rp=0;
+        rp=0;     //inicialização das variaveis com o vlor 0 no inicio de cada jogo
         wp=0;
         while (1) {
           char buffer[100];
           printf("Insira uma combinação de cores (A a %c): ",toupper(last));
           fgets(buffer, 100, stdin);
           strncpy(try, buffer, keySize+1);
-          tempo_atual=time(NULL);
-          tempo_jogo = tempo_atual-tempo_inicial;
-          if(tempo_jogo>=tempo){
+          tempo_atual=time(NULL);           //armazenamento do tempo atual
+          tempo_jogo = tempo_atual-tempo_inicial;     //calculo do tempo atual que o jogo tem
+          if(tempo_jogo>=tempo){    //se o limite de tempo for atingido sai do jogo
             printf("O tempo máximo de jogo foi atingido\n");
             break;
           }
           if (strlen(buffer)!=keySize+1) {
-              if (strlen(buffer)>99) {
-                cleanslate();
-              }
+            if (strlen(buffer)>99) cleanslate();
             printf("Erro: input incorreto. Verifique que a combinação tem %d caracteres\n",keySize);
-          } else {
+          } else {    //validação do input
             if(checkInput(try, keySize)==1){
               break;
             }
@@ -144,21 +141,26 @@ int main() {
             }
           }
         }
-        if(tempo_jogo>=tempo){
-          break;
-        }
-        for(int a=0;a<keySize;a++){
+
+        //se o limite de tempo for atingido sai do jogo
+        if(tempo_jogo>=tempo) break;
+
+        for(int a=0;a<keySize;a++){   //copia da chave para se fazer a comparação
           key_copy[a]=key[a];
         }
 
+      //verificação de igualdade entre a chave de jogo e a tentativa do jogador
+
         for(int i=0;i<keySize;i++){
           for(int a=0;a<keySize;a++){
-            if(try[i]==key_copy[a] && i==a){
+            //confirmação de cor certa na posição certa
+            if(tolower(try[i])==key_copy[a] && i==a){
               rp++;
               key_copy[a]='0';
               break;
             }
-            else if(try[i]==key_copy[a]){
+            //confirmação de cor certa na posição errada
+            else if(tolower(try[i])==key_copy[a]){
               wp++;
               key_copy[a]='0';
               break;
@@ -166,7 +168,7 @@ int main() {
           }
         }
 
-        printf("%dP%dB\n", rp, wp);
+        printf("P%dB%d\n", rp, wp);
         if(rp==keySize){
           printf("Parabens por ter conseguido acabar o jogo!\n");
           break;
@@ -175,7 +177,6 @@ int main() {
       if(rp!=keySize){
         printf("Lamentamos mas não conseguiu acabar o jogo...\n");
       }
-
     }
   }
 
@@ -210,16 +211,16 @@ void cleanslate(void){   //loop até se encontrar um nova linha ou o fim de o fi
   }
 }
 
-//definição da função para verificar o input correto dado pelo utilizdor durante o jogo
+//definição da função para verificar se o input dado pelo utilizdor durante o jogo é aceitavel
 
 int checkInput(char try[], int size){
   char cores[13]={'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l'};
   for(int i=0;i<size;i++){
+    int flag=0;
     for(int z=0;z<size;z++){
-      if(try[i]!=cores[z]){
-        return 0;
-      }
+      if(tolower(try[i])==cores[z]) flag=1;
     }
+    if (flag==0) return 0;
   }
-  return 0;
+  return 1;
 }
