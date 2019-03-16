@@ -8,7 +8,7 @@
 #include <math.h>
 #include <string.h>
 #include <time.h>
-#include <ctype.h>
+#include <ctype.h>    //toupper and tolower functions
 
 
 void cleanslate(void); //limpa o buffer = loop para eliminar o input extra do utilizador
@@ -23,6 +23,7 @@ int main() {
   int colors=-1, keySize=0, attempt=0; //número de cores em jogo, tamanho da chave, numero de tentativas
   char repet='\0';//variavel que permite ou nao a existencia de repetições na chave
   int rp=0,wp=0;
+  time_t tempo_inicial,tempo_atual,tempo_jogo;
 
   time_t t;
   srand((unsigned) time(&t));
@@ -98,6 +99,8 @@ int main() {
   for(int i=0; i<jog; i++){
     printf("Jogador %s é a sua vez\n",name[i]);
     for(int a=0; a<games; a++){
+      tempo_inicial = time(NULL);
+      printf("Jogo numero %d\n",a+1);
     //criacao da chave
       char coresdisp[13]={'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l'};
       char last = coresdisp[colors-1];
@@ -113,11 +116,19 @@ int main() {
       }
 
       for(int b=0;b<attempt;b++){
+        rp=0;
+        wp=0;
         while (1) {
           char buffer[100];
           printf("Insira uma combinação de cores (A a %c): ",toupper(last));
           fgets(buffer, 100, stdin);
           strncpy(try, buffer, keySize+1);
+          tempo_atual=time(NULL);
+          tempo_jogo = tempo_atual-tempo_inicial;
+          if(tempo_jogo>=tempo){
+            printf("O tempo máximo de jogo foi atingido\n");
+            break;
+          }
           if (strlen(buffer)!=keySize+1) {
               if (strlen(buffer)>99) {
                 cleanslate();
@@ -127,7 +138,9 @@ int main() {
             break;
           }
         }
-
+        if(tempo_jogo>=tempo){
+          break;
+        }
         for(int a=0;a<keySize;a++){
           key_copy[a]=key[a];
         }
@@ -148,7 +161,13 @@ int main() {
         }
 
         printf("%dP%dB\n", rp, wp);
-
+        if(rp==keySize){
+          printf("Parabens por ter conseguido acabar o jogo!\n");
+          break;
+        }
+      }
+      if(rp!=keySize){
+        printf("Lamentamos mas não conseguiu acabar o jogo...\n");
       }
 
     }

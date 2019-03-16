@@ -2,11 +2,17 @@
 // example of time() function.
 #include <stdio.h>
 #include <time.h>
+#include <unistd.h>
 
 int main ()
 {
-    char a[5]={"12"};
-    printf("%d\n", strlen(a));
+    time_t inicial,medio,final;
 
+    inicial = time(NULL);
+    sleep(3);
+    medio = time(NULL);
+    sleep(3);
+    medio = time(NULL);
+    printf("%d\n", medio-inicial);
     return(0);
 }
