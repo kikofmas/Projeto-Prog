@@ -168,7 +168,7 @@ int main() {
           }
         }
 
-        printf("%dP%dB\n", rp, wp);
+        printf("P%dB%d\n", rp, wp);
         if(rp==keySize){
           printf("Parabens por ter conseguido acabar o jogo!\n");
           break;
