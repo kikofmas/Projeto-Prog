@@ -16,14 +16,13 @@ int main (){
 
 
   for (int i = 0; i < jog; i++) {
-    for (size_t u = 0; u < games; u++) {
+    for (int u = 0; u < games; u++) {
       mediaTempos[i]+=stats[i][u][0];
     }
     mediaTempos[i]/=games;
   }
-  int z=0, x, y;
+  int z=0, x=0, y=0;
   for (int i = 0; i < jog; i++) {
-    y=x;
     x=0;
     for (int u = 0; u < games; u++) {
       x+=stats[i][u][2];
