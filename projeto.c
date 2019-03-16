@@ -44,13 +44,9 @@ int main() {
       fgets(buffer, 100, stdin);
       sscanf(buffer, "%20s", name[i]);
       if (strlen(buffer)>20) {
-          if (strlen(buffer)>99) {
-            cleanslate();
-          }
+        if (strlen(buffer)>99) cleanslate();
         printf("Erro: input incorreto. Verifique que o nome não excede 20 caracteres\n");
-      } else {
-        break;
-      }
+      } else break;
     }
   }
 
@@ -58,9 +54,9 @@ int main() {
   initialization(&games, 1, 5, "o numero de jogos");
   cleanslate();
 
-  //numero maximo de tentivas por jogo
-    initialization(&attempt, 10, 20, "o numero maximo de tentativas");
-    cleanslate();
+//numero maximo de tentivas por jogo
+  initialization(&attempt, 10, 20, "o numero maximo de tentativas");
+  cleanslate();
 
 //duração de cada jogo
   initialization(&tempo, 60, 300, "o tempo de jogo");
@@ -91,9 +87,7 @@ int main() {
       colors=-1;
       keySize=0;
       repet='\0';
-    } else {
-      break;
-    }
+    } else break;
   }while(1);
 
   //declaração de variaveis de jogo que dependem de dados introduzidos pelo user
@@ -118,9 +112,7 @@ int main() {
         } while(coresdisp[aux]=='0');
         key[i]=coresdisp[aux];
         //se n for possivel a repetição de cores elimina-se da  lista a cor inserida na chave
-        if(repet=='n' || repet=='N'){
-          coresdisp[aux]='0';
-        }
+        if(repet=='n' || repet=='N') coresdisp[aux]='0';
       }
 
       for(int b=0;b<attempt;b++){
@@ -138,9 +130,7 @@ int main() {
             break;
           }
           if (strlen(buffer)!=keySize+1) {
-              if (strlen(buffer)>99) {
-                cleanslate();
-              }
+            if (strlen(buffer)>99) cleanslate();
             printf("Erro: input incorreto. Verifique que a combinação tem %d caracteres\n",keySize);
           } else {    //validação do input
             if(checkInput(try, keySize)==1){
@@ -152,9 +142,9 @@ int main() {
           }
         }
 
-        if(tempo_jogo>=tempo){    //se o limite de tempo for atingido sai do jogo
-          break;
-        }
+        //se o limite de tempo for atingido sai do jogo
+        if(tempo_jogo>=tempo) break;
+
         for(int a=0;a<keySize;a++){   //copia da chave para se fazer a comparação
           key_copy[a]=key[a];
         }
@@ -228,13 +218,9 @@ int checkInput(char try[], int size){
   for(int i=0;i<size;i++){
     int flag=0;
     for(int z=0;z<size;z++){
-      if(tolower(try[i])==cores[z]){
-        flag=1;
-      }
+      if(tolower(try[i])==cores[z]) flag=1;
     }
-    if (flag==0) {
-      return 0;
-    }
+    if (flag==0) return 0;
   }
   return 1;
 }
