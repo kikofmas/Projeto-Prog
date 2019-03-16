@@ -13,6 +13,7 @@
 
 void cleanslate(void); //limpa o buffer = loop para eliminar o input extra do utilizador
 void initialization(int *var, int min, int max, char frase[10]); //inicializações efetuadas com while
+int checkInput(char try[], int size);
 
 int main() {
   setlocale(LC_ALL,""); //aceita caracteres especiais e acentos
@@ -133,9 +134,14 @@ int main() {
               if (strlen(buffer)>99) {
                 cleanslate();
               }
-            printf("Erro: input incorreto. Verifique que a combinação não excede %d caracteres\n",keySize);
+            printf("Erro: input incorreto. Verifique que a combinação tem %d caracteres\n",keySize);
           } else {
-            break;
+            if(checkInput(try, keySize)==1){
+              break;
+            }
+            else{
+              printf("Erro: input incorreto. A combinação de cores só pode ter caracteres de (A a %c)\n",toupper(last));
+            }
           }
         }
         if(tempo_jogo>=tempo){
@@ -202,4 +208,18 @@ void cleanslate(void){   //loop até se encontrar um nova linha ou o fim de o fi
     err1 = getchar();
     if (err1 == '\n' || err1 == EOF) break;
   }
+}
+
+//definição da função para verificar o input correto dado pelo utilizdor durante o jogo
+
+int checkInput(char try[], int size){
+  char cores[13]={'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l'};
+  for(int i=0;i<size;i++){
+    for(int z=0;z<size;z++){
+      if(try[i]!=cores[z]){
+        return 0;
+      }
+    }
+  }
+  return 0;
 }
