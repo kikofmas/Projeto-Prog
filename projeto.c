@@ -48,7 +48,7 @@ int main() {
       fgets(aux, 100, stdin);
       sscanf(aux, "%20s", name[i]);
       if (strlen(aux)>20) {
-        if (strlen(aux)>99) cleanslate();
+        if (strlen(aux)>90) cleanslate();
         printf("Erro: input incorreto. Verifique que o nome não excede 20 caracteres\n");
       } else break;
     }
