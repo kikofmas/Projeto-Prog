@@ -139,7 +139,7 @@ int main() {
             break;
           }
           if (strlen(buffer)!=keySize+1) {
-            if (strlen(buffer)>99) cleanslate();
+            if (strlen(buffer)>90) cleanslate();
             printf("Erro: input incorreto. Verifique que a combinação tem %d caracteres\n",keySize);
           } else {    //validação do input
             if(checkInput(try, keySize)==1){
