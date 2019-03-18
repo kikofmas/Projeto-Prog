@@ -15,8 +15,8 @@
 //DECLARAÇÃO DE FUNÇÕES
 void cleanslate(void); //limpa o buffer = loop para eliminar o input extra do utilizador
 void initialization(int *var, int min, int max, char frase[10]); //inicializações efetuadas com while
-int checkInput(char try[], int size); //valida que a jogada é possivel
-void resultados(int jog, int games, int stats[][][], int int g, int h, char frase[15]);//apresenta as estatisticas
+int checkInput(char try[], int keySize, int colors); //valida que a jogada é possivel
+void resultados(int jog, int games, int stats[][5][3], int g, int h, char frase[15], char name[][21]);//apresenta as estatisticas
 
 //MAIN
 int main() {
@@ -53,6 +53,7 @@ int main() {
       } else break;
     }
   }
+  printf("\n");
 
 //numero de jogos
   initialization(&games, 1, 5, "o numero de jogos");
@@ -122,6 +123,8 @@ int main() {
         if(repet=='n' || repet=='N') coresdisp[aux]='0';
       }
 
+      printf("%s\n", key);
+
       for(int b=0;b<attempt;b++){//ate maximo tentativa
         rp=0;     //inicialização das variaveis com o vlor 0 no inicio de cada jogo
         wp=0;
@@ -142,7 +145,7 @@ int main() {
             if (strlen(buffer)>90) cleanslate();
             printf("Erro: input incorreto. Verifique que a combinação tem %d caracteres\n",keySize);
           } else {    //validação do input
-            if(checkInput(try, keySize)==1){
+            if(checkInput(try, keySize, colors)==1){
               break;
             }
             else{
@@ -223,14 +226,13 @@ int main() {
   }
   printf("\n\n\nO vencedor do torneio é: o jogador %d, %s\n\n", z+1, name[z]);
 
-  resultados(jog, games, stats, 0, 1, "mais rápido");
-  resultados(jog, games, stats, 1, 0, "mais curto");
+  resultados(jog, games, stats, 0, 1, "mais rápido", name);
+  resultados(jog, games, stats, 1, 0, "mais curto", name);
 
   return 0;
 }
 
 //definição da função para inicializar as variaveis do jogo
-
 void initialization(int *var, int min, int max, char frase[30]){
   while (*var<min || *var>max) {  //loop ate um valor válido ser introduzido
     int aux;
@@ -245,11 +247,11 @@ void initialization(int *var, int min, int max, char frase[30]){
     printf("Erro: valor introduzido inválido\n");
     }
   }
+  printf("\n");
 }
 
 //definição da função para limpar o buffer
-
-void cleanslate(void){   //loop até se encontrar um nova linha ou o fim de o ficheiro
+void cleanslate(void){//loop até se encontrar um nova linha ou o fim de o ficheiro
   char err1;
   while(1) {
     err1 = getchar();
@@ -258,12 +260,11 @@ void cleanslate(void){   //loop até se encontrar um nova linha ou o fim de o fi
 }
 
 //definição da função para verificar se o input dado pelo utilizdor durante o jogo é aceitavel
-
-int checkInput(char try[], int size){
+int checkInput(char try[], int keySize, int colors){
   char cores[13]={'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l'};
-  for(int i=0;i<size;i++){
+  for(int i=0;i<keySize;i++){
     int flag=0;
-    for(int z=0;z<size;z++){
+    for(int z=0;z<colors;z++){
       if(tolower(try[i])==cores[z]) flag=1;
     }
     if (flag==0) return 0;
@@ -272,7 +273,7 @@ int checkInput(char try[], int size){
 }
 
 //fução para comparar os resultados e calcular o vencedor em cada categoria
-void resultados(int jog, int games, int stats[][][], int int g, int h, char frase[15]){
+void resultados(int jog, int games, int stats[][5][3], int g, int h, char frase[15], char name[][21]){
   int z=0;//guarda o numero do jogador vencedor atual
   int y=0;//guarda o jogo em que o parametro foi o melhor
   int x=301;//guarda o valor do parametro
