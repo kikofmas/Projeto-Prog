@@ -215,7 +215,7 @@ int main() {
       z=i;//z e o numero do jogador vencedor atual
       y=x;//y e o parametro vencedor atual
     } else if (x==y) {//em caso de empate compara-se a media de tempos dos jogadores
-      if (mediaTempos[z]<mediaTempos[i]) {
+      if (mediaTempos[i]<mediaTempos[z]) {
         z=i;
         y=x;
       }
