@@ -211,8 +211,8 @@ void cleanslate(void){
 void initialization(int *var, int min, int max, char frase[30]){
   while (*var<min || *var>max) {  //loop ate um valor válido ser introduzido
   printf("Insira %s (%d a %d):  ",frase,min,max);
-    char input[4];
-    fgets(input,4,stdin);
+    char input[5];
+    fgets(input,5,stdin);
     if((strlen(input)==2 && atoi(input)<10)||(strlen(input)==3 && atoi(input)>=10)){
       if(atoi(input)>=min && atoi(input)<=max){
         *var = atoi(input);
@@ -224,7 +224,9 @@ void initialization(int *var, int min, int max, char frase[30]){
     }
     else{
       printf("Erro1\n");
-      cleanslate();
+      if(strlen(input)>=4){
+        cleanslate();
+      }
     }
   }
 }
