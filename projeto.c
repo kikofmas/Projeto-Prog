@@ -53,24 +53,19 @@ int main() {
 
   //numero de jogos
   initialization(&num_jogos, 1, 5, "o numero de jogos");
-  cleanslate();
 
   //numero maximo de tentivas por jogo
   initialization(&tentativas, 10, 20, "o numero maximo de tentativas");
-  cleanslate();
 
   //duracao de cada jogo
   initialization(&duracao_jogo, 60, 300, "o tempo de jogo");
-  cleanslate();
 
   do{
   //dimensao da chave
     initialization(&tamanho_chave, 4, 8, "a dimensao da chave com que deseja jogar");
-    cleanslate();
 
   //numero de cores em jogo
     initialization(&num_cores, 6, 12, "o numero de cores com que deseja jogar");
-    cleanslate();
 
   //repeticao de cores
     initializationRepetitions(&repeticao_cores);
@@ -211,9 +206,9 @@ void cleanslate(void){
 void initialization(int *var, int min, int max, char frase[30]){
   while (*var<min || *var>max) {  //loop ate um valor válido ser introduzido
   printf("Insira %s (%d a %d):  ",frase,min,max);
-    char input[5];
-    fgets(input,5,stdin);
-    if((strlen(input)==2 && atoi(input)<10)||(strlen(input)==3 && atoi(input)>=10)){
+    char input[6];
+    fgets(input,6,stdin);
+    if((strlen(input)==2 && atoi(input)<10 && atoi(input)>0)||(strlen(input)==3 && atoi(input)>=10 && atoi(input)<100)||(strlen(input)==4 && atoi(input)>=100)){
       if(atoi(input)>=min && atoi(input)<=max){
         *var = atoi(input);
         printf("\n");
@@ -224,7 +219,7 @@ void initialization(int *var, int min, int max, char frase[30]){
     }
     else{
       printf("Erro1\n");
-      if(strlen(input)>=4){
+      if(strlen(input)>4 && input[4]!='\n'){
         cleanslate();
       }
     }
