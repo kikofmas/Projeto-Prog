@@ -27,15 +27,15 @@ int main() {
   setlocale(LC_ALL,""); //aceita caracteres especiais e acentos
 
 //declaracao das variaveis da inicializção:
-  char nome_jogadores[4][21]={{"\0"},{"\0"},{"\0"},{"\0"}}, repeticao_cores='\0';
+  char nome_jogadores[4][21]={"\0"}, repeticao_cores='\0';
   int num_jogadores=0, duracao_jogo=0, num_jogos=0, num_cores=0, tamanho_chave=0, tentativas=0;
 //declaracao das variaveis de jogo:
-  char chave[8], copia_chave[8], jogada[8], ultima_cor;
+  char chave[8]="\0", copia_chave[8]="\0", jogada[8]="\0", ultima_cor='\0';
   int lugar_certo=0, lugar_errado=0;
   time_t tempo_inicial=0, tempo_atual=0, tempo_jogo=0, tempo_restante=0;
 //declaracao das variaveis das estatisticas:
-  int dados[4][5][3]; //[][][0]=tempo, [][][1]=tentativas, [][][2]=vitoria
-  float mediaTempos[4];
+  int dados[4][5][3]={0}; //[][][0]=tempo, [][][1]=tentativas, [][][2]=vitoria
+  float mediaTempos[4]={0, 0, 0, 0};
 //inicializacao da funcao srand:
   time_t t;
   srand((unsigned) time(&t)); //inicializa o gerador aleatorio
@@ -95,8 +95,6 @@ int main() {
 
       createKey(chave, repeticao_cores, tamanho_chave, num_cores); //criacao da chave no inicio de cada jogo
       ultima_cor = 'A'+num_cores-1;
-
-      printf("%s\n", chave);
 
       for(int tentativa=0; tentativa<tentativas; tentativa++){//ate maximo tentativa
         lugar_certo=0;     //inicialização das variaveis com o valor 0 no inicio de cada jogo
@@ -160,11 +158,11 @@ int main() {
         if(lugar_certo==tamanho_chave){
           printf("Parabens por ter conseguido acabar o jogo!\n\n");
           dados[jogador][jogo][2]=1;//guarda se o jogador conseguiu completar a partida
-          printf("Acabou o jogo apos %ds\n", tempo_jogo);
+          printf("Acabou o jogo apos %li s\n", tempo_jogo);
           break;
         }
         else{
-          printf("Ainda tem %ds de jogo\n", tempo_restante);
+          printf("Ainda tem %li s de jogo\n", tempo_restante);
         }
       }
       if(lugar_certo!=tamanho_chave){
@@ -183,7 +181,6 @@ int main() {
       mediaTempos[jogador]+= (float)dados[jogador][jogo][0];
     }
     mediaTempos[jogador]/= (float)num_jogos;
-    printf("%f\n", mediaTempos[jogador]);
   }
 
   vencedor(dados, mediaTempos, nome_jogadores, num_jogadores, num_jogos);
@@ -308,7 +305,6 @@ void vencedor(int dados[4][5][3], float mediaTempos[4], char nome[4][21], int nu
 //funcao para comparar os resultados e calcular o vencedor em cada categoria
 void resultados(int num_jogadores, int num_jogos, int dados[4][5][3], int dado_principal, int dado_desempate, char frase[15], char nome[4][21]){
   int vencedor=0;//guarda o numero do jogador vencedor atual
-  int y=0;//guarda o jogo em que o parametro foi o melhor
   int x=301;//guarda o valor do parametro
   int z=301;
   for (int jogador = 0; jogador < num_jogadores; jogador++) {
@@ -317,16 +313,14 @@ void resultados(int num_jogadores, int num_jogos, int dados[4][5][3], int dado_p
           vencedor=jogador;
           x=dados[jogador][jogo][dado_principal];
           z=dados[jogador][jogo][dado_desempate];
-          y=jogo;
         } else if (dados[jogador][jogo][dado_principal]==x && dados[jogador][jogo][2]==1) {//em caso de empate compara-se o numero de jogadas e verifica se o jogo foi acabado
           if (dados[jogador][jogo][dado_desempate]<z) {
             x=dados[jogador][jogo][dado_principal];
             z=dados[jogador][jogo][dado_desempate];
-            y=jogo;
-            z=jogador;
+            vencedor=jogador;
           }
         }
       }
     }
-  printf("O vencedor para o jogo %s é: o jogador %d, %s\n", frase, z+1, nome[z]);
+  printf("O vencedor para o jogo %s é: o jogador %d, %s\n", frase, vencedor+1, nome[vencedor]);
 }
