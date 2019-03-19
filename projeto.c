@@ -161,8 +161,8 @@ int main() {
           printf("Acabou o jogo apos %li s\n", tempo_jogo);
           break;
         }
-        else{
-          printf("Ainda tem %li s de jogo\n", tempo_restante);
+        else if(tentativa+1!=tentativas){
+          printf("Ainda tem %li s de jogo e %d jogada(s) restante(s)\n", tempo_restante, tentativas-(tentativa+1));
         }
       }
       if(lugar_certo!=tamanho_chave){
