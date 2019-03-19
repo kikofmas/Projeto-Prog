@@ -160,11 +160,11 @@ int main() {
         if(lugar_certo==tamanho_chave){
           printf("Parabens por ter conseguido acabar o jogo!\n\n");
           dados[jogador][jogo][2]=1;//guarda se o jogador conseguiu completar a partida
-          printf("Acabou o jogo apos %ds\n", tempo_jogo);
+          printf("Acabou o jogo apos %lis\n", tempo_jogo);
           break;
         }
         else{
-          printf("Ainda tem %ds de jogo\n", tempo_restante);
+          printf("Ainda tem %lis de jogo\n", tempo_restante);
         }
       }
       if(lugar_certo!=tamanho_chave){
@@ -315,7 +315,6 @@ void vencedor(int dados[4][5][3], float mediaTempos[4], char nome[4][21], int nu
 //funcao para comparar os resultados e calcular o vencedor em cada categoria
 void resultados(int num_jogadores, int num_jogos, int dados[4][5][3], int dado_principal, int dado_desempate, char frase[15], char nome[4][21]){
   int vencedor=0;//guarda o numero do jogador vencedor atual
-  int y=0;//guarda o jogo em que o parametro foi o melhor
   int x=301;//guarda o valor do parametro
   int z=301;
   for (int jogador = 0; jogador < num_jogadores; jogador++) {
@@ -324,16 +323,14 @@ void resultados(int num_jogadores, int num_jogos, int dados[4][5][3], int dado_p
           vencedor=jogador;
           x=dados[jogador][jogo][dado_principal];
           z=dados[jogador][jogo][dado_desempate];
-          y=jogo;
         } else if (dados[jogador][jogo][dado_principal]==x && dados[jogador][jogo][2]==1) {//em caso de empate compara-se o numero de jogadas e verifica se o jogo foi acabado
           if (dados[jogador][jogo][dado_desempate]<z) {
             x=dados[jogador][jogo][dado_principal];
             z=dados[jogador][jogo][dado_desempate];
-            y=jogo;
             z=jogador;
           }
         }
       }
     }
-  printf("O vencedor para o jogo %s é: o jogador %d, %s\n", frase, z+1, nome[z]);
+  printf("O vencedor para o jogo %s é: o jogador %d, %s\n", frase, vencedor+1, nome[vencedor]);
 }
