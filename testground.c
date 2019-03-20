@@ -3,13 +3,10 @@
 #include <string.h>
 
 int main () {
-  char str[4];
-  char oi[10]="oi";
-
-   fgets(str,4,stdin);
-   printf("%s\n", str);
-   printf("%d\n", strlen(str));
-   printf("%d\n", atoi(str));
+  char a[2];
+  a[0]='a';
+  a[1]='b';
+  printf("%s\n", a);
 
    return(0);
 }
