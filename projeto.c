@@ -13,6 +13,7 @@
 #include <ctype.h>    //toupper and tolower functions
 
 //DECLARAÇÃO DE FUNÇÕES
+void introducao(void);
 void cleanslate(void); //limpa o input indesejado
 void initialization(int *var, int min, int max, char frase[10]); //inicializacao das variaveis tipo int
 void initializationNames(int num_jogadores, char nome[4][21]); //introducao dos nomes dos jogadores
@@ -42,8 +43,8 @@ int main() {
 
 
 //INICIALIZACAO DAS VARIAVEIS DE JOGO
-  printf("Vamos jogar um jogo de MASTERMIND!\n\n");
-  
+  introducao();
+
   //numero de jogadores
   initialization(&num_jogadores, 1, 4, "o numero de jogadores");
   //cleanslate();
@@ -192,6 +193,14 @@ int main() {
 
 
 //DEFINICAO DE FUNCOES
+
+//funcao para mostrar as regras e o objetivo do jogo
+void introducao(void){
+  printf("Vamos jogar um jogo de MASTERMIND!\n\n");
+  printf("Objetivo: Acertar na chave gerada aleatoriamente para cada jogo.\n");
+  printf("Regras:\n");
+  printf(" •\n");
+}
 
 //funcao para limpar input indesejado
 void cleanslate(void){
