@@ -213,8 +213,8 @@ void introducao(void){
   printf(" •Cada jogador tem um numero limite de tentativas para adivinhar a chave;\n");
   printf(" •Cada jogador tem um tempo para adivinhar a chave;\n");
   printf(" •Apos cada jogada o computador gera uma resposta com a forma PxBy,\n");
-  printf(" em que x corresponde ao numero de cores certas no lugar certo\n");
-  printf(" e y corresponde ao numero de cores certas no lugar errado\n\n");
+  printf("  em que x corresponde ao numero de cores certas no lugar certo\n");
+  printf("  e y corresponde ao numero de cores certas no lugar errado;\n\n");
 }
 
 //funcao para limpar input indesejado
@@ -238,11 +238,11 @@ void initialization(int *var, int min, int max, char frase[30]){
         printf("\n");
       }
       else{
-        printf("Erro0\n");
+        printf("Erro: Input invalido\n");
       }
     }
     else{
-      printf("Erro1\n");
+      printf("Erro: Input invalido\n");
       if(strlen(input)>4 && input[4]!='\n'){
         cleanslate();
       }
@@ -261,7 +261,7 @@ void initializationNames(int num_jogadores, char nome[4][21]){
       sscanf(aux, "%20s", nome[jogador]);
       if (strlen(aux)>20 || strlen(aux)<=1) {  //confirmação que o input tem apenas 20 caracteres
         if (strlen(aux)>90) cleanslate();
-        printf("Erro: input incorreto. Verifique que o nome tem entre 1 e 20 caracteres\n");
+        printf("Erro: Input invalido. Verifique que o nome tem entre 1 e 20 caracteres\n");
       } else break;
     }
   }
@@ -278,7 +278,7 @@ void initializationRepetitions(char *repeticao_cores){
       if(strlen(aux)>2 && aux[2]!='\n')cleanslate();
     }
     else if (aux[0]!='s' && aux[0]!='n' && aux[0]!='S' && aux[0]!='N' && aux[1]!='\n') {
-      printf("Erro: input invalido 1\n");
+      printf("Erro: Input invalido 1\n");
     }
     else{
       *repeticao_cores = aux[0];
