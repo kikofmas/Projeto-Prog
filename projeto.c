@@ -12,6 +12,15 @@
 #include <time.h>     //poder calcular o tempo
 #include <ctype.h>    //toupper and tolower functions
 
+/*O objectivo do Mastermind é descobrir uma combinação de cores determinada aleatoriamente pelo computador.
+
+Em cada jogada, o jogador apresenta uma combinação de pedras coloridas a que o computador responde, mostrando uma marca preta por cada pedra colorida na posição correcta e mostrando uma marca branca por cada pedra colorida presente na combinação, mas noutra posição.
+
+Face à resposta do computador, o jogador apresenta uma nova combinação, juntando cores que ainda não foram escolhidas, trocando a ordem das cores, ou ambos.
+
+O jogo progride até que a combinação seja descoberta ou que o número limite de jogadas seja atingido.*/
+
+
 //DECLARAÇÃO DE FUNÇÕES
 void introducao(void);
 void cleanslate(void); //limpa o input indesejado
