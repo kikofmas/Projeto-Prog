@@ -3,9 +3,7 @@
 #include <string.h>
 
 int main () {
-  char a[2];
-  a[0]='a';
-  a[1]='b';
+  char a[5];
   printf("%s\n", a);
 
    return(0);
