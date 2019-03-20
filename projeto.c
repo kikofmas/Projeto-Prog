@@ -43,7 +43,7 @@ int main() {
 
 //INICIALIZACAO DAS VARIAVEIS DE JOGO
   printf("Vamos jogar um jogo de MASTERMIND!\n\n");
-
+  
   //numero de jogadores
   initialization(&num_jogadores, 1, 4, "o numero de jogadores");
   //cleanslate();
@@ -246,12 +246,18 @@ void initializationNames(int num_jogadores, char nome[4][21]){
 
 //funcao para escolher se existe repticao de cores
 void initializationRepetitions(char *repeticao_cores){
+  char aux[4];
   while (*repeticao_cores!='s' && *repeticao_cores!='n' && *repeticao_cores!='S' && *repeticao_cores!='N') {
     printf("A chave pode ter cores repetidas? [S/N]:  ");
-    scanf(" %c", repeticao_cores);
-    cleanslate();
-    if (*repeticao_cores!='s' && *repeticao_cores!='n' && *repeticao_cores!='S' && *repeticao_cores!='N') {
+    fgets(aux,4,stdin);
+    if(strlen(aux)!=2){
+      if(strlen(aux)>2 && aux[2]!='\n')cleanslate();
+    }
+    else if (aux[0]!='s' && aux[0]!='n' && aux[0]!='S' && aux[0]!='N' && aux[1]!='\n') {
       printf("Erro: input invalido 1\n");
+    }
+    else{
+      *repeticao_cores = aux[0];
     }
   }
   printf("\n");
