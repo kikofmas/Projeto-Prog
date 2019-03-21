@@ -93,8 +93,6 @@ int main() {
       createKey(chave, repeticao_cores, tamanho_chave, num_cores); //criacao da chave no inicio de cada jogo
       ultima_cor = 'A'+num_cores-1;
 
-      printf("%s\n", chave);
-
       for(int tentativa=0; tentativa<tentativas; tentativa++){//ate maximo tentativa
         lugar_certo=0;     //inicialização das variaveis com o valor 0 no inicio de cada jogo
         lugar_errado=0;
@@ -136,7 +134,7 @@ int main() {
       //verificacao de igualdade entre a chave de jogo e a tentativa do jogador
         comparaChave(tamanho_chave, jogada, copia_chave, &lugar_certo, &lugar_errado);
 
-        printf("P%dB%d\n", lugar_certo, lugar_errado);
+        printf("P%dB%d\n\n", lugar_certo, lugar_errado);
 
         if(lugar_certo==tamanho_chave){
           printf("Parabens por ter conseguido acabar o jogo!\n\n");
@@ -164,7 +162,6 @@ int main() {
       mediaTempos[jogador]+= (float)dados[jogador][jogo][0];
     }
     mediaTempos[jogador]/= (float)num_jogos;
-    printf("%f\n", mediaTempos[jogador]);
   }
 
   vencedor(dados, mediaTempos, nome_jogadores, num_jogadores, num_jogos);
@@ -326,7 +323,9 @@ void vencedor(int dados[4][5][3], float mediaTempos[4], char nome[4][21], int nu
       }
     }
   }
-  printf("\n\n\nO vencedor do torneio é: o jogador %d, %s\n\n", vencedor+1, nome[vencedor]);
+  if(maximo_vitorias==0){
+    printf("\nNiguem consegiu acertar em nenhuma chave de jogo. Nao ha vencedores\n");
+  } else{printf("\nO vencedor do torneio é: o jogador %d, %s\n\n", vencedor+1, nome[vencedor]);}
 }
 
 //funcao para comparar os resultados e calcular o vencedor em cada categoria
@@ -334,20 +333,23 @@ void resultados(int num_jogadores, int num_jogos, int dados[4][5][3], int dado_p
   int vencedor=0;//guarda o numero do jogador vencedor atual
   int x=301;//guarda o valor do parametro
   int z=301;
+  int y=0; //verifica se ha pelo menos um jogo ganho por alguem
   for (int jogador = 0; jogador < num_jogadores; jogador++) {
     for (int jogo = 0; jogo < num_jogos; jogo++) {
-        if (dados[jogador][jogo][dado_principal]<x && dados[jogador][jogo][2]==1) { //compara com o tempo mais baixo atual e verifica se o jogo foi acabado
-          vencedor=jogador;
+      if (dados[jogador][jogo][dado_principal]<x && dados[jogador][jogo][2]==1) { //compara com o tempo mais baixo atual e verifica se o jogo foi acabado
+        vencedor=jogador;
+        y=1;
+        x=dados[jogador][jogo][dado_principal];
+        z=dados[jogador][jogo][dado_desempate];
+      } else if (dados[jogador][jogo][dado_principal]==x && dados[jogador][jogo][2]==1) {//em caso de empate compara-se o numero de jogadas e verifica se o jogo foi acabado
+        if (dados[jogador][jogo][dado_desempate]<z) {
+          y=1;
           x=dados[jogador][jogo][dado_principal];
           z=dados[jogador][jogo][dado_desempate];
-        } else if (dados[jogador][jogo][dado_principal]==x && dados[jogador][jogo][2]==1) {//em caso de empate compara-se o numero de jogadas e verifica se o jogo foi acabado
-          if (dados[jogador][jogo][dado_desempate]<z) {
-            x=dados[jogador][jogo][dado_principal];
-            z=dados[jogador][jogo][dado_desempate];
-            z=jogador;
-          }
+          z=jogador;
         }
       }
     }
-  printf("O vencedor para o jogo %s é: o jogador %d, %s\n", frase, vencedor+1, nome[vencedor]);
+  }
+  if(y!=0) printf("\nO vencedor do torneio é: o jogador %d, %s\n\n", vencedor+1, nome[vencedor]);
 }
