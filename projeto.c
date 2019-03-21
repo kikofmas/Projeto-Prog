@@ -182,9 +182,9 @@ void introducao(void){
   printf("Vamos jogar um jogo de MASTERMIND!\n\n");
   printf("Objetivo: Descobrir a combinacao de cores gerada aleatoriamente pelo computador em cada jogo.\n\n");
   printf("Regras:\n");
-  printf(" •Cada jogador tem um numero limite de tentativas para adivinhar a chave;\n");
-  printf(" •Cada jogador tem um tempo para adivinhar a chave;\n");
-  printf(" •Apos cada jogada o computador gera uma resposta com a forma PxBy,\n");
+  printf(" -Cada jogador tem um numero limite de tentativas para adivinhar a chave;\n");
+  printf(" -Cada jogador tem um tempo para adivinhar a chave;\n");
+  printf(" -Apos cada jogada o computador gera uma resposta com a forma PxBy,\n");
   printf("  em que x corresponde ao numero de cores certas no lugar certo\n");
   printf("  e y corresponde ao numero de cores certas no lugar errado;\n\n");
 }
