@@ -141,11 +141,11 @@ int main() {
         if(lugar_certo==tamanho_chave){
           printf("Parabens por ter conseguido acabar o jogo!\n\n");
           dados[jogador][jogo][2]=1;//guarda se o jogador conseguiu completar a partida
-          printf("Acabou o jogo apos %lis\n", tempo_jogo);
+          printf("Acabou o jogo apos %lis e em %d jogada(s)\n", tempo_jogo, tentativa);
           break;
         }
         else{
-          printf("Ainda tem %lis de jogo\n", tempo_restante);
+          printf("Ainda tem %lis de jogo e %d jogada(s) restante(s)\n", tempo_restante, tentativas-(tentativa +1));
         }
       }
       if(lugar_certo!=tamanho_chave){
