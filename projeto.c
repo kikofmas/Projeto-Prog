@@ -73,7 +73,7 @@ int main() {
     initializationRepetitions(&repeticao_cores);
 
   //verificacao de que a combinacao de parametros e possivel
-    if (num_cores<tamanho_chave && (repeticao_cores=='n' || repeticao_cores=='N')) {
+    if (num_cores<tamanho_chave && tolower(repeticao_cores)=='n') {
       printf("A combinacao dos parametros 'tamanho chave', 'numero cores' e 'repeticao de cores' esta invalida, tente outra vez.\n" );
       num_cores=-1;
       tamanho_chave=0;
@@ -119,7 +119,7 @@ int main() {
               break;
             }
             else{
-              printf("Erro: input incorreto. A combinação de cores só pode ter caracteres de (A a %c)\n",ultima_cor);
+              printf("Erro: input incorreto. A combinação de cores so pode ter caracteres de (A a %c)\n",ultima_cor);
             }
           }
         }
@@ -148,7 +148,7 @@ int main() {
       }
       if(lugar_certo!=tamanho_chave){
         dados[jogador][jogo][2]=0;//guarda se o jogador conseguiu completar a partida
-        printf("Lamentamos mas não conseguiu acabar o jogo...\n\n");
+        printf("Lamentamos mas nao conseguiu acabar o jogo...\n\n");
       }
     }
   }
@@ -244,7 +244,7 @@ void initializationNames(int num_jogadores, char nome[4][21]){
 //funcao para escolher se existe repticao de cores
 void initializationRepetitions(char *repeticao_cores){
   char aux[4];
-  while (*repeticao_cores!='s' && *repeticao_cores!='n' && *repeticao_cores!='S' && *repeticao_cores!='N') {
+  while (tolower(*repeticao_cores)!='s' && tolower(*repeticao_cores)!='n') {
     printf("A chave pode ter cores repetidas? [S/N]:  ");
     fgets(aux,4,stdin);
     if(strlen(aux)!=2){
@@ -253,7 +253,7 @@ void initializationRepetitions(char *repeticao_cores){
         printf("Erro: Input invalido 1\n");
       }
     }
-    else if (aux[0]!='s' && aux[0]!='n' && aux[0]!='S' && aux[0]!='N' && aux[1]!='\n') {
+    else if (tolower(aux[0])!='s' && tolower(aux[0])!='n' && aux[1]!='\n') {
       printf("Erro: Input invalido 1\n");
     }
     else{
