@@ -13,3 +13,4 @@ A FAZER:
 6) eu nao meto acentos.... sooo we gotta check that
 7) rever se podemos encurtar funções e otimiza-las
 8) vale a pena ter a library dos acentos?
+9) comentar a funcao initialization
