@@ -336,12 +336,15 @@ void resultados(int num_jogadores, int num_jogos, int dados[4][5][3], int dado_p
   int y=0; //verifica se ha pelo menos um jogo ganho por alguem
   for (int jogador = 0; jogador < num_jogadores; jogador++) {
     for (int jogo = 0; jogo < num_jogos; jogo++) {
-      if (dados[jogador][jogo][dado_principal]<x && dados[jogador][jogo][2]==1) { //compara com o tempo mais baixo atual e verifica se o jogo foi acabado
+      //compara com o tempo mais baixo atual e verifica se o jogo foi acabado
+      if (dados[jogador][jogo][dado_principal]<x && dados[jogador][jogo][2]==1) {
         vencedor=jogador;
         y=1;
         x=dados[jogador][jogo][dado_principal];
         z=dados[jogador][jogo][dado_desempate];
-      } else if (dados[jogador][jogo][dado_principal]==x && dados[jogador][jogo][2]==1) {//em caso de empate compara-se o numero de jogadas e verifica se o jogo foi acabado
+      }
+      //em caso de empate compara-se o numero de jogadas e verifica se o jogo foi acabado
+      else if (dados[jogador][jogo][dado_principal]==x && dados[jogador][jogo][2]==1) {
         if (dados[jogador][jogo][dado_desempate]<z) {
           y=1;
           x=dados[jogador][jogo][dado_principal];
