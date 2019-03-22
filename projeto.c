@@ -85,7 +85,7 @@ int main() {
 //JOGO
 
   for(int jogador=0; jogador<num_jogadores; jogador++){   //passagem por cada jogador
-    printf("Jogador %s é a sua vez\n",nome_jogadores[jogador]);
+    printf("Jogador %s e a sua vez\n",nome_jogadores[jogador]);
     for(int jogo=0; jogo<num_jogos; jogo++){   //passagem por cada jogo a fazer
       tempo_inicial = time(NULL);   //guarda o valor do tempo no inicio do jogo
       printf("Jogo numero %d\n",jogo+1);
@@ -228,11 +228,14 @@ void initializationNames(int num_jogadores, char nome[4][21]){
     while (1) {
       printf("Insira o nome do jogador %d (maximo de 20 caracteres):  ", jogador+1);
       fgets(aux, 100, stdin);
-      sscanf(aux, "%20s", nome[jogador]);
       if (strlen(aux)>20 || strlen(aux)<=1) {  //confirmação que o input tem apenas 20 caracteres
         if (strlen(aux)>90) cleanslate();
         printf("Erro: Input invalido. Verifique que o nome tem entre 1 e 20 caracteres\n");
-      } else break;
+      }
+      else{
+        sscanf(aux, "%20s", nome[jogador]);
+        break;
+      }
     }
   }
   printf("\n");
@@ -245,7 +248,10 @@ void initializationRepetitions(char *repeticao_cores){
     printf("A chave pode ter cores repetidas? [S/N]:  ");
     fgets(aux,4,stdin);
     if(strlen(aux)!=2){
-      if(strlen(aux)>2 && aux[2]!='\n')cleanslate();
+      if(strlen(aux)>2 && aux[2]!='\n'){
+        cleanslate();
+        printf("Erro: Input invalido 1\n");
+      }
     }
     else if (aux[0]!='s' && aux[0]!='n' && aux[0]!='S' && aux[0]!='N' && aux[1]!='\n') {
       printf("Erro: Input invalido 1\n");
