@@ -1,4 +1,4 @@
-/*Projeto intermedio de programação - Mastermind
+/*Projeto intermedio de programacao - Mastermind
 *
 *Bruno Miguel da Silva Cebola - 93030
 *Frederico Maria Almeida Santos - 93065*/
@@ -7,12 +7,12 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
-#include <string.h>   //funções de strings
+#include <string.h>   //funcoes de strings
 #include <time.h>     //poder calcular o tempo
 #include <ctype.h>    //toupper and tolower functions
 
-//DECLARAÇÃO DE FUNÇÕES
-void introducao(void);    //introducao ao jogo
+//DECLARACAO DE FUNCOES
+void introducao(void); //introducao ao jogo
 void cleanslate(void); //limpa o input indesejado
 void initialization(int *var, int min, int max, char frase[10]); //inicializacao das variaveis tipo int
 void initializationNames(int num_jogadores, char nome[4][21]); //introducao dos nomes dos jogadores
@@ -46,7 +46,6 @@ int main() {
 
   //numero de jogadores
   initialization(&num_jogadores, 1, 4, "o numero de jogadores");
-  //cleanslate();
 
   //nome dos jogadores
    initializationNames(num_jogadores, nome_jogadores);
@@ -91,33 +90,33 @@ int main() {
       createKey(chave, repeticao_cores, tamanho_chave, num_cores); //criacao da chave no inicio de cada jogo
       ultima_cor = 'A'+num_cores-1;
 
-      for(int tentativa=0; tentativa<tentativas; tentativa++){//ate maximo tentativa
+      for(int tentativa=0; tentativa<tentativas; tentativa++){  //ate maximo tentativas
         lugar_certo=0;     //inicialização das variaveis com o valor 0 no inicio de cada jogo
         lugar_errado=0;
-        dados[jogador][jogo][1]=tentativa+1;//grava o numero de jogadas efetuadas
+        dados[jogador][jogo][1]=tentativa+1;  //grava o numero de jogadas efetuadas
         while (1) {
           char buffer[100];
-          printf("Insira uma combinação de cores (A a %c): ", ultima_cor);
+          printf("Insira uma combinacao de cores (A a %c): ", ultima_cor);
           fgets(buffer, 100, stdin);
           strncpy(jogada, buffer, tamanho_chave+1);
           tempo_atual=time(NULL);       //armazenamento do tempo atual
           tempo_jogo = tempo_atual-tempo_inicial;    //calculo do tempo atual que o jogo tem
           tempo_restante = duracao_jogo - tempo_jogo;
-          dados[jogador][jogo][0]=tempo_jogo;//grava o tempo do jogo atual
+          dados[jogador][jogo][0]=tempo_jogo;   //grava o tempo do jogo atual
           if(tempo_jogo>duracao_jogo){    //se o limite de tempo for atingido sai do jogo
-            printf("O tempo máximo de jogo foi atingido\n");
+            printf("O tempo maximo de jogo foi atingido\n");
             break;
           }
           if (strlen(buffer)!=tamanho_chave+1) {
             if (strlen(buffer)>90) cleanslate();
-            printf("Erro: input incorreto. Verifique que a combinação tem %d caracteres\n",tamanho_chave);
+            printf("Erro: input incorreto. Verifique que a combinacao tem %d caracteres\n",tamanho_chave);
           }
-          else {    //validação do input
+          else {    //validacao do input
             if(checkInput(jogada, tamanho_chave, num_cores)==1){
               break;
             }
             else{
-              printf("Erro: input incorreto. A combinação de cores so pode ter caracteres de (A a %c)\n",ultima_cor);
+              printf("Erro: input incorreto. A combinacao de cores so pode ter caracteres de (A a %c)\n",ultima_cor);
             }
           }
         }
@@ -125,7 +124,7 @@ int main() {
         //se o limite de tempo for atingido sai do jogo
         if(tempo_jogo>duracao_jogo) break;
 
-        for(int index1=0; index1<tamanho_chave; index1++){   //copia da chave para se fazer a comparação
+        for(int index1=0; index1<tamanho_chave; index1++){   //copia da chave para se fazer a comparacao
           copia_chave[index1]=chave[index1];
         }
 
@@ -136,7 +135,7 @@ int main() {
 
         if(lugar_certo==tamanho_chave){
           printf("Parabens por ter conseguido acabar o jogo!\n\n");
-          dados[jogador][jogo][2]=1;//guarda se o jogador conseguiu completar a partida
+          dados[jogador][jogo][2]=1;  //guarda se o jogador conseguiu completar a partida
           printf("Acabou o jogo apos %lis e em %d jogada(s)\n", tempo_jogo, tentativa);
           break;
         }
@@ -145,7 +144,7 @@ int main() {
         }
       }
       if(lugar_certo!=tamanho_chave){
-        dados[jogador][jogo][2]=0;//guarda se o jogador conseguiu completar a partida
+        dados[jogador][jogo][2]=0;  //guarda se o jogador conseguiu completar a partida
         printf("Lamentamos mas nao conseguiu acabar o jogo...\n\n");
       }
     }
@@ -163,7 +162,7 @@ int main() {
   }
 
   vencedor(dados, mediaTempos, nome_jogadores, num_jogadores, num_jogos);
-  resultados(num_jogadores, num_jogos, dados, 0, 1, "mais rápido", nome_jogadores);
+  resultados(num_jogadores, num_jogos, dados, 0, 1, "mais rapido", nome_jogadores);
   resultados(num_jogadores, num_jogos, dados, 1, 0, "mais curto", nome_jogadores);
 
   return 0;
@@ -196,7 +195,7 @@ void cleanslate(void){
 
 //funcao para inicializar as variaveis do jogo do tipo int
 void initialization(int *var, int min, int max, char frase[30]){
-  while (*var<min || *var>max) {  //loop ate um valor válido ser introduzido
+  while (*var<min || *var>max) {  //loop ate um valor valido ser introduzido
   printf("Insira %s (%d a %d):  ",frase,min,max);
     char input[6];
     fgets(input,6,stdin);
@@ -226,7 +225,7 @@ void initializationNames(int num_jogadores, char nome[4][21]){
     while (1) {
       printf("Insira o nome do jogador %d (maximo de 20 caracteres):  ", jogador+1);
       fgets(aux, 100, stdin);
-      if (strlen(aux)>20 || strlen(aux)<=1) {  //confirmação que o input tem apenas 20 caracteres
+      if (strlen(aux)>20 || strlen(aux)<=1) {  //confirmacao que o input tem apenas 20 caracteres
         if (strlen(aux)>90) cleanslate();
         printf("Erro: Input invalido. Verifique que o nome tem entre 1 e 20 caracteres\n");
       }
@@ -271,7 +270,7 @@ void createKey(char chave[8], char repeticao_cores, int tamanho_chave, int num_c
       aux = rand() % num_cores;
     } while(coresdisp[aux]=='0');
     chave[i]=coresdisp[aux];
-    //se n for possivel a repetição de cores elimina-se da  lista a cor inserida na chave
+    //se n for possivel a repeticao de cores elimina-se da lista a cor inserida na chave
     if(repeticao_cores=='n' || repeticao_cores=='N') coresdisp[aux]='0';
   }
 }
@@ -329,13 +328,13 @@ void vencedor(int dados[4][5][3], float mediaTempos[4], char nome[4][21], int nu
   }
   if(maximo_vitorias==0){
     printf("\nNiguem consegiu acertar em nenhuma chave de jogo. Nao ha vencedores\n");
-  } else{printf("\nO vencedor do torneio é: o jogador %d, %s\n\n", vencedor+1, nome[vencedor]);}
+  } else{printf("\nO vencedor do torneio e: o jogador %d, %s\n\n", vencedor+1, nome[vencedor]);}
 }
 
 //funcao para comparar os resultados e calcular o vencedor em cada categoria
 void resultados(int num_jogadores, int num_jogos, int dados[4][5][3], int dado_principal, int dado_desempate, char frase[15], char nome[4][21]){
-  int vencedor=0;//guarda o numero do jogador vencedor atual
-  int x=301;//guarda o valor do parametro
+  int vencedor=0; //guarda o numero do jogador vencedor atual
+  int x=301;  //guarda o valor do parametro
   int z=301;
   int y=0; //verifica se ha pelo menos um jogo ganho por alguem
   for (int jogador = 0; jogador < num_jogadores; jogador++) {
@@ -358,5 +357,5 @@ void resultados(int num_jogadores, int num_jogos, int dados[4][5][3], int dado_p
       }
     }
   }
-  if(y!=0) printf("\nO vencedor do torneio é: o jogador %d, %s\n\n", vencedor+1, nome[vencedor]);
+  if(y!=0) printf("\nO vencedor do torneio e: o jogador %d, %s\n\n", vencedor+1, nome[vencedor]);
 }
