@@ -57,7 +57,7 @@ int main() {
   initialization(&tentativas, 10, 20, "o numero maximo de tentativas");
 
   //duracao de cada jogo
-  initialization(&duracao_jogo, 60, 300, "o tempo de jogo");
+  initialization(&duracao_jogo, 60, 300, "o tempo de jogo (em segundos)");
 
   do{
   //dimensao da chave
@@ -134,7 +134,7 @@ int main() {
         printf("P%dB%d\n\n", lugar_certo, lugar_errado);
 
         if(lugar_certo==tamanho_chave){
-          printf("Parabens por ter conseguido acabar o jogo!\n\n");
+          printf("PARABENS por ter conseguido acabar o jogo!\n");
           dados[jogador][jogo][2]=1;  //guarda se o jogador conseguiu completar a partida
           printf("Acabou o jogo apos %lis e em %d jogada(s)\n", tempo_jogo, tentativa);
           break;
@@ -174,7 +174,7 @@ int main() {
 //funcao para mostrar as regras e o objetivo do jogo
 void introducao(void){
   printf("Vamos jogar um jogo de MASTERMIND!\n\n");
-  printf("Objetivo do Mastermind: Descobrir uma chave (combinacao de cores gerada) aleatoriamente pelo computador em cada jogo.\n\n");
+  printf("Objetivo do Mastermind: Descobrir uma chave (combinacao de cores) gerada aleatoriamente pelo computador em cada jogo.\n\n");
   printf("Regras:\n");
   printf(" -Cada jogador tem um limite de tentativas e de tempo para adivinhar a chave;\n");
   printf(" -Cada jogador joga a vez todos os seus jogos;\n");
@@ -327,7 +327,7 @@ void vencedor(int dados[4][5][3], float mediaTempos[4], char nome[4][21], int nu
     }
   }
   if(maximo_vitorias==0){
-    printf("\nNiguem consegiu acertar em nenhuma chave de jogo. Nao ha vencedores\n");
+    printf("\nNinguem consegiu acertar em nenhuma chave de jogo. Nao ha vencedores\n");
   } else{printf("\nO vencedor do torneio e: o jogador %d, %s\n\n", vencedor+1, nome[vencedor]);}
 }
 
@@ -357,5 +357,5 @@ void resultados(int num_jogadores, int num_jogos, int dados[4][5][3], int dado_p
       }
     }
   }
-  if(y!=0) printf("\nO vencedor do torneio e: o jogador %d, %s\n\n", vencedor+1, nome[vencedor]);
+  if(y!=0) printf("\nO vencedor do jogo %s e: o jogador %d, %s\n\n", frase, vencedor+1, nome[vencedor]);
 }
