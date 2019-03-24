@@ -6,7 +6,6 @@
 //LIBRARIES
 #include <stdlib.h>
 #include <stdio.h>
-#include <math.h>
 #include <string.h>   //funcoes de strings
 #include <time.h>     //poder calcular o tempo
 #include <ctype.h>    //toupper and tolower functions
@@ -17,9 +16,11 @@ void cleanslate(void); //limpa o input indesejado
 void initialization(int *var, int min, int max, char frase[10]); //inicializacao das variaveis tipo int
 void initializationNames(int num_jogadores, char nome[4][21]); //introducao dos nomes dos jogadores
 void initializationRepetitions(char *repeticao_cores); //escolha da existencia repticao de cores
-void createKey(char chave[8], char repeticao_cores, int tamanho_chave, int num_cores); //criacao da chave de jogo
+int checkCombinacao(int *num_cores, int *tamanho_chave, char *repeticao_cores); //confirma os parametros da chave de jogo
+char createKey(char chave[8], char repeticao_cores, int tamanho_chave, int num_cores); //criacao da chave de jogo e retorna a ultima cor em jogo
 int checkInput(char jogada[8], int tamanho_chave, int num_cores); //valida que a jogada é possivel
 void comparaChave(int tamanho_chave, char jogada[8], char copia_chave[8], int *lugar_certo, int *lugar_errado); //comparacao com a chave de jogo
+void criaMediaJogo(int num_jogadores, int num_jogos, int dados[4][5][3], float mediaTempos[4]); //criacao da media de tempo de jogo de cada jogador
 void vencedor(int dados[4][5][3], float mediaTempos[4], char nome[4][21], int num_jogadores, int num_jogos); //definicao do vencedor do jogo
 void resultados(int num_jogadores, int num_jogos, int dados[4][5][3], int g, int h, char frase[15], char nome[4][21]); //apresenta as estatisticas
 
@@ -28,7 +29,7 @@ int main() {
 
 //declaracao das variaveis da inicializacao:
   char nome_jogadores[4][21]={{"\0"},{"\0"},{"\0"},{"\0"}}, repeticao_cores='\0';
-  int num_jogadores=0, duracao_jogo=0, num_jogos=0, num_cores=0, tamanho_chave=0, tentativas=0;
+  int num_jogadores=0, duracao_jogo=0, num_jogos=0, num_cores=0, tamanho_chave=0, tentativas=0, combo_possivel=0;
 //declaracao das variaveis de jogo:
   char chave[8], copia_chave[8], jogada[8], ultima_cor='\0';
   int lugar_certo=0, lugar_errado=0;
@@ -36,6 +37,7 @@ int main() {
 //declaracao das variaveis das estatisticas:
   int dados[4][5][3]={0}; //[][][0]=tempo, [][][1]=tentativas, [][][2]=vitoria
   float mediaTempos[4]={0};
+
 //inicializacao da funcao srand:
   time_t t;
   srand((unsigned) time(&t)); //inicializa o gerador aleatorio
@@ -70,13 +72,8 @@ int main() {
     initializationRepetitions(&repeticao_cores);
 
   //verificacao de que a combinacao de parametros e possivel
-    if (num_cores<tamanho_chave && tolower(repeticao_cores)=='n') {
-      printf("A combinacao dos parametros 'tamanho chave', 'numero cores' e 'repeticao de cores' esta invalida, tente outra vez.\n" );
-      num_cores=-1;
-      tamanho_chave=0;
-      repeticao_cores='\0';
-    } else break;
-  }while(1);
+    combo_possivel=checkCombinacao(&num_cores, &tamanho_chave, &repeticao_cores);
+  }while(combo_possivel==0);
 
 
 //JOGO
@@ -87,8 +84,8 @@ int main() {
       tempo_inicial = time(NULL);   //guarda o valor do tempo no inicio do jogo
       printf("Jogo numero %d\n",jogo+1);
 
-      createKey(chave, repeticao_cores, tamanho_chave, num_cores); //criacao da chave no inicio de cada jogo
-      ultima_cor = 'A'+num_cores-1;
+      //criacao da chave no inicio de cada jogo
+      ultima_cor = createKey(chave, repeticao_cores, tamanho_chave, num_cores);
 
       for(int tentativa=0; tentativa<tentativas; tentativa++){  //ate maximo tentativas
         lugar_certo=0;     //inicialização das variaveis com o valor 0 no inicio de cada jogo
@@ -128,7 +125,7 @@ int main() {
           copia_chave[index1]=chave[index1];
         }
 
-      //verificacao de igualdade entre a chave de jogo e a tentativa do jogador
+      //verificacao da igualdade entre a chave de jogo e a tentativa do jogador
         comparaChave(tamanho_chave, jogada, copia_chave, &lugar_certo, &lugar_errado);
 
         printf("P%dB%d\n\n", lugar_certo, lugar_errado);
@@ -153,20 +150,15 @@ int main() {
 
 //ESTATISTICAS: calculo dos resultados e apresentacao das estatisticas
 
-  //criacao da media de tempo de jogo para cada jogador
-  for (int jogador = 0; jogador < num_jogadores; jogador++) {
-    for (int jogo = 0; jogo < num_jogos; jogo++) {
-      mediaTempos[jogador]+= (float)dados[jogador][jogo][0];
-    }
-    mediaTempos[jogador]/= (float)num_jogos;
-  }
-
+  criaMediaJogo(num_jogadores, num_jogos, dados, mediaTempos);
   vencedor(dados, mediaTempos, nome_jogadores, num_jogadores, num_jogos);
   resultados(num_jogadores, num_jogos, dados, 0, 1, "mais rapido", nome_jogadores);
   resultados(num_jogadores, num_jogos, dados, 1, 0, "mais curto", nome_jogadores);
 
   return 0;
 }
+
+
 
 
 //DEFINICAO DE FUNCOES
@@ -183,7 +175,6 @@ void introducao(void){
   printf("  em que x corresponde ao numero de cores certas no lugar certo\n");
   printf("  e y corresponde ao numero de cores certas no lugar errado;\n\n");
 }
-
 
 //funcao para limpar input indesejado
 void cleanslate(void){
@@ -261,8 +252,20 @@ void initializationRepetitions(char *repeticao_cores){
   printf("\n");
 }
 
+//funcao para confirmar se a combinacao para a chave de jogo e possivel
+int checkCombinacao(int *num_cores, int *tamanho_chave, char *repeticao_cores){
+  if (*num_cores < *tamanho_chave && tolower(*repeticao_cores)=='n') {
+    printf("A combinacao dos parametros 'tamanho chave', 'numero cores' e\n 'repeticao de cores' esta invalida, tente outra vez.\n\n" );
+    *num_cores=-1;
+    *tamanho_chave=0;
+    *repeticao_cores='\0';
+    return 0;
+  }
+  return 1;
+}
+
 //funcao para criar a chave de jogo
-void createKey(char chave[8], char repeticao_cores, int tamanho_chave, int num_cores){
+char createKey(char chave[8], char repeticao_cores, int tamanho_chave, int num_cores){
   int i=0,aux=0;
   char coresdisp[13]={'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l'};
   for (i = 0; i < tamanho_chave; i++) {
@@ -274,6 +277,7 @@ void createKey(char chave[8], char repeticao_cores, int tamanho_chave, int num_c
     //se n for possivel a repeticao de cores elimina-se da lista a cor inserida na chave
     if(repeticao_cores=='n' || repeticao_cores=='N') coresdisp[aux]='0';
   }
+  return 'A'+num_cores-1;
 }
 
 //funcao para verificar se o input dado pelo utilizdor durante o jogo e aceitavel
@@ -306,6 +310,16 @@ void comparaChave(int tamanho_chave, char jogada[8], char copia_chave[8], int *l
         break;
       }
     }
+  }
+}
+
+//funcao para criar a media de tempo de jogo de cada jogador
+void criaMediaJogo(int num_jogadores, int num_jogos, int dados[4][5][3], float mediaTempos[4]){
+  for (int jogador = 0; jogador < num_jogadores; jogador++) {
+    for (int jogo = 0; jogo < num_jogos; jogo++) {
+      mediaTempos[jogador]+= (float)dados[jogador][jogo][0];
+    }
+    mediaTempos[jogador]/= (float)num_jogos;
   }
 }
 

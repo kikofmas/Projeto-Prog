@@ -3,11 +3,17 @@
 #include <string.h>
 #include <unistd.h>
 
+char *oi();
+
 int main () {
-  char a[5];
-  scanf("%s", a);
-  sleep(3);
-  printf("%s\n", a);
+  char ola[3];
+  char *adeus=oi();
+  printf("%s\n",adeus);
 
    return(0);
+}
+
+char *oi(){
+
+  return ola;
 }
