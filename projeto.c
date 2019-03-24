@@ -174,8 +174,9 @@ int main() {
 //funcao para mostrar as regras e o objetivo do jogo
 void introducao(void){
   printf("Vamos jogar um jogo de MASTERMIND!\n\n");
-  printf("Objetivo do Mastermind: Descobrir uma chave (combinacao de cores) gerada aleatoriamente pelo computador em cada jogo.\n\n");
-  printf("Regras:\n");
+  printf("Objetivo do Mastermind: Descobrir uma chave (combinacao de cores representada por letras)\n");
+  printf("                        que e gerada aleatoriamente pelo computador em cada jogo.\n\n");
+  printf("Indicacoes:\n");
   printf(" -Cada jogador tem um limite de tentativas e de tempo para adivinhar a chave;\n");
   printf(" -Cada jogador joga a vez todos os seus jogos;\n");
   printf(" -Apos cada jogada o computador gera uma resposta com a forma PxBy,\n");
