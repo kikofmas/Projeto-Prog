@@ -74,7 +74,7 @@ int main() {
 
   //repeticao de cores
     initializationRepetitions(&repeticao_cores);
-    
+
   //verificacao de que a combinacao de parametros e possivel
     combo_possivel=checkCombinacao(&num_cores, &tamanho_chave, &repeticao_cores);
   }while(combo_possivel==0);
@@ -351,7 +351,8 @@ int checkInput(char jogada[8], int tamanho_chave, int num_cores){
 * Return: none
 *
 * Descricao: funcao para comparar a chave de jogo com a jogada feita pelo jogador.
-*            Altera as variavies lugar_certo e lugar_errado de acordo com ..........................................
+*            Altera as variavies lugar_certo e lugar_errado de acordo com as
+*            comparacoes efetuadas
 *
 ******************************************************************************/
 void comparaChave(int tamanho_chave, char jogada[8], char copia_chave[8],  char copia_jogada[8], int *lugar_certo, int *lugar_errado){
