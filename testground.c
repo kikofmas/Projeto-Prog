@@ -1,4 +1,4 @@
-NAO MEXAS EM NADA DO QUE ESTA AQUI FEITO PLZ
+//NAO MEXAS EM NADA DO QUE ESTA AQUI FEITO PLZ
 
 #include <stdio.h>
 #include <stdlib.h>

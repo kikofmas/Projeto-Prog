@@ -74,7 +74,7 @@ int main() {
 
   //repeticao de cores
     initializationRepetitions(&repeticao_cores);
-
+    
   //verificacao de que a combinacao de parametros e possivel
     combo_possivel=checkCombinacao(&num_cores, &tamanho_chave, &repeticao_cores);
   }while(combo_possivel==0);
