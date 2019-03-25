@@ -103,7 +103,16 @@ int main() {
 
 //DEFINICAO DE FUNCOES
 
-//funcao para mostrar as regras e o objetivo do jogo
+/******************************************************************************
+* Nome da funcao: introducao()
+*
+* Argumentos: none
+*
+* Return: none
+*
+* Descricao: funcao para mostrar as regras e o objetivo do jogo
+*
+******************************************************************************/
 void introducao(void){
   printf("Vamos jogar um jogo de MASTERMIND!\n\n");
   printf("Objetivo do Mastermind: Descobrir uma chave (combinacao de cores representada por letras)\n");
@@ -116,7 +125,17 @@ void introducao(void){
   printf("  e y corresponde ao numero de cores certas no lugar errado;\n\n");
 }
 
-//funcao para limpar input indesejado
+
+/******************************************************************************
+* Nome da funcao: cleanslate()
+*
+* Argumentos: none
+*
+* Return: none
+*
+* Descricao: funcao para limpar input indesejado introduzido pelo utilizador
+*
+******************************************************************************/
 void cleanslate(void){
   char err1;
   while(1) {  //loop ate se encontrar um nova linha ou o fim de o ficheiro
@@ -125,7 +144,18 @@ void cleanslate(void){
   }
 }
 
-//funcao para inicializar as variaveis do jogo do tipo int
+
+/******************************************************************************
+* Nome da funcao: initialization()
+*
+* Argumentos: *var - localizaçao em memoria da variavel a inicializar
+*              min - valor minimo que a variavel a inicializar pode tomar
+*
+* Return: none
+*
+* Descricao: funcao para inicializar as variaveis do jogo do tipo int
+*
+******************************************************************************/
 void initialization(int *var, int min, int max, char frase[30]){
   while (*var<min || *var>max) {  //loop ate um valor valido ser introduzido
   printf("Insira %s (%d a %d):  ",frase,min,max);
