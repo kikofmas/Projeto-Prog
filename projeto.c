@@ -19,10 +19,11 @@ void initializationRepetitions(char *repeticao_cores); //escolha da existencia r
 int checkCombinacao(int *num_cores, int *tamanho_chave, char *repeticao_cores); //confirma os parametros da chave de jogo
 char createKey(char chave[8], char repeticao_cores, int tamanho_chave, int num_cores); //criacao da chave de jogo e retorna a ultima cor em jogo
 int checkInput(char jogada[8], int tamanho_chave, int num_cores); //valida que a jogada é possivel
-void comparaChave(int tamanho_chave, char jogada[8], char copia_chave[8], int *lugar_certo, int *lugar_errado); //comparacao com a chave de jogo
+void comparaChave(int tamanho_chave, char jogada[8], char copia_chave[8], char copia_jogada[8], int *lugar_certo, int *lugar_errado); //comparacao com a chave de jogo
 void jogo(int num_jogadores, int num_jogos, char nome_jogadores[4][21], time_t *tempo_inicial, char *ultima_cor, int *lugar_certo,
           int *lugar_errado, int dados[4][5][3], char jogada[8], int tamanho_chave, time_t *tempo_atual, time_t *tempo_restante,
-          time_t *tempo_jogo, int duracao_jogo, int num_cores, char repeticao_cores, char chave[8], char copia_chave[8], int tentativas);
+          time_t *tempo_jogo, int duracao_jogo, int num_cores, char repeticao_cores, char chave[8], char copia_chave[8],
+          int tentativas, char copia_jogada[8]);
 void criaMediaJogo(int num_jogadores, int num_jogos, int dados[4][5][3], float mediaTempos[4]); //criacao da media de tempo de jogo de cada jogador
 void vencedor(int dados[4][5][3], float mediaTempos[4], char nome[4][21], int num_jogadores, int num_jogos); //definicao do vencedor do jogo
 void resultados(int num_jogadores, int num_jogos, int dados[4][5][3], int g, int h, char frase[15], char nome[4][21]); //apresenta as estatisticas
@@ -34,7 +35,7 @@ int main() {
   char nome_jogadores[4][21]={{"\0"},{"\0"},{"\0"},{"\0"}}, repeticao_cores='\0';
   int num_jogadores=0, duracao_jogo=0, num_jogos=0, num_cores=0, tamanho_chave=0, tentativas=0, combo_possivel=0;
 //declaracao das variaveis de jogo:
-  char chave[8], copia_chave[8], jogada[8], ultima_cor='\0';
+  char chave[8], copia_chave[8], jogada[8], copia_jogada[8], ultima_cor='\0';
   int lugar_certo=0, lugar_errado=0;
   time_t tempo_inicial=0, tempo_atual=0, tempo_jogo=0, tempo_restante=0;
 //declaracao das variaveis das estatisticas:
@@ -83,7 +84,8 @@ int main() {
 
   jogo(num_jogadores, num_jogos, nome_jogadores, &tempo_inicial, &ultima_cor, &lugar_certo,
           &lugar_errado, dados, jogada, tamanho_chave, &tempo_atual, &tempo_restante,
-          &tempo_jogo, duracao_jogo, num_cores, repeticao_cores, chave, copia_chave, tentativas);
+          &tempo_jogo, duracao_jogo, num_cores, repeticao_cores, chave, copia_chave,
+          tentativas, copia_jogada);
 
 
 //ESTATISTICAS: calculo dos resultados e apresentacao das estatisticas
@@ -233,17 +235,18 @@ int checkInput(char jogada[8], int tamanho_chave, int num_cores){
 }
 
 //funcao para comparar as tentativas do jogador com a chave de jogo --- ESTA MAL FEITOOOOOOOO
-void comparaChave(int tamanho_chave, char jogada[8], char copia_chave[8], int *lugar_certo, int *lugar_errado){
+void comparaChave(int tamanho_chave, char jogada[8], char copia_chave[8],  char copia_jogada[8], int *lugar_certo, int *lugar_errado){
+  for(int index1=0; index1<tamanho_chave; index1++){
+    if(tolower(jogada[index1])==copia_chave[index1]){
+      *lugar_certo+=1;
+      copia_chave[index1]='0';
+      copia_jogada[index1]='1';
+    }
+  }
+
   for(int index1=0; index1<tamanho_chave; index1++){
     for(int index2=0; index2<tamanho_chave; index2++){
-      //confirmacao de cor certa na posicao certa
-      if(tolower(jogada[index1])==copia_chave[index2] && index1==index2){
-        *lugar_certo+=1;
-        copia_chave[index2]='0';
-        break;
-      }
-      //confirmacao de cor certa na posicao errada
-      else if(tolower(jogada[index1])==copia_chave[index2]){
+      if(tolower(jogada[index1])==copia_chave[index2]){
         *lugar_errado+=1;
         copia_chave[index2]='0';
         break;
@@ -252,10 +255,11 @@ void comparaChave(int tamanho_chave, char jogada[8], char copia_chave[8], int *l
   }
 }
 
-
+//funcao de jogo
 void jogo(int num_jogadores, int num_jogos, char nome_jogadores[4][21], time_t *tempo_inicial, char *ultima_cor, int *lugar_certo,
           int *lugar_errado, int dados[4][5][3], char jogada[8], int tamanho_chave, time_t *tempo_atual, time_t *tempo_restante,
-          time_t *tempo_jogo, int duracao_jogo, int num_cores, char repeticao_cores, char chave[8], char copia_chave[8], int tentativas){
+          time_t *tempo_jogo, int duracao_jogo, int num_cores, char repeticao_cores, char chave[8], char copia_chave[8],
+          int tentativas, char copia_jogada[8]){
 
   for(int jogador=0; jogador<num_jogadores; jogador++){   //passagem por cada jogador
     printf("Jogador %s e a sua vez\n",nome_jogadores[jogador]);
@@ -265,7 +269,7 @@ void jogo(int num_jogadores, int num_jogos, char nome_jogadores[4][21], time_t *
 
       //criacao da chave no inicio de cada jogo
       *ultima_cor = createKey(chave, repeticao_cores, tamanho_chave, num_cores);
-      printf("%s\n", chave);
+    
       for(int tentativa=0; tentativa<tentativas; tentativa++){  //ate maximo tentativas
         *lugar_certo=0;     //inicialização das variaveis com o valor 0 no inicio de cada jogo
         *lugar_errado=0;
@@ -302,17 +306,18 @@ void jogo(int num_jogadores, int num_jogos, char nome_jogadores[4][21], time_t *
 
         for(int index1=0; index1<tamanho_chave; index1++){   //copia da chave para se fazer a comparacao
           copia_chave[index1]=chave[index1];
+          copia_jogada[index1]=jogada[index1];
         }
 
       //verificacao da igualdade entre a chave de jogo e a tentativa do jogador
-        comparaChave(tamanho_chave, jogada, copia_chave, lugar_certo, lugar_errado);
+        comparaChave(tamanho_chave, jogada, copia_chave, copia_jogada, lugar_certo, lugar_errado);
 
         printf("P%dB%d\n\n", *lugar_certo, *lugar_errado);
 
         if(*lugar_certo==tamanho_chave){
           printf("PARABENS por ter conseguido acabar o jogo!\n");
           dados[jogador][jogo][2]=1;  //guarda se o jogador conseguiu completar a partida
-          printf("Acabou o jogo apos %lis e em %d jogada(s)\n", *tempo_jogo, tentativa);
+          printf("Acabou o jogo apos %lis e em %d jogada(s)\n\n", *tempo_jogo, tentativa);
           break;
         }
         else{
@@ -357,7 +362,7 @@ void vencedor(int dados[4][5][3], float mediaTempos[4], char nome[4][21], int nu
   }
   if(maximo_vitorias==0){
     printf("\nNinguem consegiu acertar em nenhuma chave de jogo. Nao ha vencedores\n");
-  } else{printf("\nO vencedor do torneio e: o jogador %d, %s\n\n", vencedor+1, nome[vencedor]);}
+  } else{printf("\nO vencedor do torneio e: o jogador %d, %s\n", vencedor+1, nome[vencedor]);}
 }
 
 //funcao para comparar os resultados e calcular o vencedor em cada categoria
