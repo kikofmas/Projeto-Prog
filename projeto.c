@@ -234,7 +234,7 @@ int checkInput(char jogada[8], int tamanho_chave, int num_cores){
   return 1;
 }
 
-//funcao para comparar as tentativas do jogador com a chave de jogo --- ESTA MAL FEITOOOOOOOO
+//funcao para comparar as tentativas do jogador com a chave de jogo
 void comparaChave(int tamanho_chave, char jogada[8], char copia_chave[8],  char copia_jogada[8], int *lugar_certo, int *lugar_errado){
   for(int index1=0; index1<tamanho_chave; index1++){
     if(tolower(jogada[index1])==copia_chave[index1]){
@@ -269,7 +269,7 @@ void jogo(int num_jogadores, int num_jogos, char nome_jogadores[4][21], time_t *
 
       //criacao da chave no inicio de cada jogo
       *ultima_cor = createKey(chave, repeticao_cores, tamanho_chave, num_cores);
-    
+
       for(int tentativa=0; tentativa<tentativas; tentativa++){  //ate maximo tentativas
         *lugar_certo=0;     //inicialização das variaveis com o valor 0 no inicio de cada jogo
         *lugar_errado=0;
