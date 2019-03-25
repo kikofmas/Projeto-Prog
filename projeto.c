@@ -20,6 +20,9 @@ int checkCombinacao(int *num_cores, int *tamanho_chave, char *repeticao_cores); 
 char createKey(char chave[8], char repeticao_cores, int tamanho_chave, int num_cores); //criacao da chave de jogo e retorna a ultima cor em jogo
 int checkInput(char jogada[8], int tamanho_chave, int num_cores); //valida que a jogada é possivel
 void comparaChave(int tamanho_chave, char jogada[8], char copia_chave[8], int *lugar_certo, int *lugar_errado); //comparacao com a chave de jogo
+void jogo(int num_jogadores, int num_jogos, char nome_jogadores[4][21], time_t *tempo_inicial, char *ultima_cor, int *lugar_certo,
+          int *lugar_errado, int dados[4][5][3], char jogada[8], int tamanho_chave, time_t *tempo_atual, time_t *tempo_restante,
+          time_t *tempo_jogo, int duracao_jogo, int num_cores, char repeticao_cores, char chave[8], char copia_chave[8], int tentativas);
 void criaMediaJogo(int num_jogadores, int num_jogos, int dados[4][5][3], float mediaTempos[4]); //criacao da media de tempo de jogo de cada jogador
 void vencedor(int dados[4][5][3], float mediaTempos[4], char nome[4][21], int num_jogadores, int num_jogos); //definicao do vencedor do jogo
 void resultados(int num_jogadores, int num_jogos, int dados[4][5][3], int g, int h, char frase[15], char nome[4][21]); //apresenta as estatisticas
@@ -78,74 +81,9 @@ int main() {
 
 //JOGO
 
-  for(int jogador=0; jogador<num_jogadores; jogador++){   //passagem por cada jogador
-    printf("Jogador %s e a sua vez\n",nome_jogadores[jogador]);
-    for(int jogo=0; jogo<num_jogos; jogo++){   //passagem por cada jogo a fazer
-      tempo_inicial = time(NULL);   //guarda o valor do tempo no inicio do jogo
-      printf("Jogo numero %d\n",jogo+1);
-
-      //criacao da chave no inicio de cada jogo
-      ultima_cor = createKey(chave, repeticao_cores, tamanho_chave, num_cores);
-
-      for(int tentativa=0; tentativa<tentativas; tentativa++){  //ate maximo tentativas
-        lugar_certo=0;     //inicialização das variaveis com o valor 0 no inicio de cada jogo
-        lugar_errado=0;
-        dados[jogador][jogo][1]=tentativa+1;  //grava o numero de jogadas efetuadas
-        while (1) {
-          char buffer[100];
-          printf("Insira uma combinacao de cores (A a %c): ", ultima_cor);
-          fgets(buffer, 100, stdin);
-          strncpy(jogada, buffer, tamanho_chave+1);
-          tempo_atual=time(NULL);       //armazenamento do tempo atual
-          tempo_jogo = tempo_atual-tempo_inicial;    //calculo do tempo atual que o jogo tem
-          tempo_restante = duracao_jogo - tempo_jogo;
-          dados[jogador][jogo][0]=tempo_jogo;   //grava o tempo do jogo atual
-          if(tempo_jogo>duracao_jogo){    //se o limite de tempo for atingido sai do jogo
-            printf("O tempo maximo de jogo foi atingido\n");
-            break;
-          }
-          if (strlen(buffer)!=tamanho_chave+1) {
-            if (strlen(buffer)>90) cleanslate();
-            printf("Erro: input incorreto. Verifique que a combinacao tem %d caracteres\n",tamanho_chave);
-          }
-          else {    //validacao do input
-            if(checkInput(jogada, tamanho_chave, num_cores)==1){
-              break;
-            }
-            else{
-              printf("Erro: input incorreto. A combinacao de cores so pode ter caracteres de (A a %c)\n",ultima_cor);
-            }
-          }
-        }
-
-        //se o limite de tempo for atingido sai do jogo
-        if(tempo_jogo>duracao_jogo) break;
-
-        for(int index1=0; index1<tamanho_chave; index1++){   //copia da chave para se fazer a comparacao
-          copia_chave[index1]=chave[index1];
-        }
-
-      //verificacao da igualdade entre a chave de jogo e a tentativa do jogador
-        comparaChave(tamanho_chave, jogada, copia_chave, &lugar_certo, &lugar_errado);
-
-        printf("P%dB%d\n\n", lugar_certo, lugar_errado);
-
-        if(lugar_certo==tamanho_chave){
-          printf("PARABENS por ter conseguido acabar o jogo!\n");
-          dados[jogador][jogo][2]=1;  //guarda se o jogador conseguiu completar a partida
-          printf("Acabou o jogo apos %lis e em %d jogada(s)\n", tempo_jogo, tentativa);
-          break;
-        }
-        else{
-          printf("Ainda tem %lis de jogo e %d jogada(s) restante(s)\n", tempo_restante, tentativas-(tentativa +1));
-        }
-      }
-      if(lugar_certo!=tamanho_chave){
-        dados[jogador][jogo][2]=0;  //guarda se o jogador conseguiu completar a partida
-        printf("Lamentamos mas nao conseguiu acabar o jogo...\n\n");
-      }
-    }
-  }
+  jogo(num_jogadores, num_jogos, nome_jogadores, &tempo_inicial, &ultima_cor, &lugar_certo,
+          &lugar_errado, dados, jogada, tamanho_chave, &tempo_atual, &tempo_restante,
+          &tempo_jogo, duracao_jogo, num_cores, repeticao_cores, chave, copia_chave, tentativas);
 
 
 //ESTATISTICAS: calculo dos resultados e apresentacao das estatisticas
@@ -191,8 +129,8 @@ void initialization(int *var, int min, int max, char frase[30]){
   printf("Insira %s (%d a %d):  ",frase,min,max);
     char input[6];
     fgets(input,6,stdin);
-    if((strlen(input)==2 && atoi(input)<10 && atoi(input)>0)||(strlen(input)==3\
-    && atoi(input)>=10 && atoi(input)<100)||(strlen(input)==4 && atoi(input)>=100)){
+    if((strlen(input)==2 && atoi(input)<10 && atoi(input)>0)||(strlen(input)==3
+          && atoi(input)>=10 && atoi(input)<100)||(strlen(input)==4 && atoi(input)>=100)){
       if(atoi(input)>=min && atoi(input)<=max){
         *var = atoi(input);
         printf("\n");
@@ -294,7 +232,7 @@ int checkInput(char jogada[8], int tamanho_chave, int num_cores){
   return 1;
 }
 
-//funcao para comparar as tentativas do jogador com a chave de jogo
+//funcao para comparar as tentativas do jogador com a chave de jogo --- ESTA MAL FEITOOOOOOOO
 void comparaChave(int tamanho_chave, char jogada[8], char copia_chave[8], int *lugar_certo, int *lugar_errado){
   for(int index1=0; index1<tamanho_chave; index1++){
     for(int index2=0; index2<tamanho_chave; index2++){
@@ -309,6 +247,81 @@ void comparaChave(int tamanho_chave, char jogada[8], char copia_chave[8], int *l
         *lugar_errado+=1;
         copia_chave[index2]='0';
         break;
+      }
+    }
+  }
+}
+
+
+void jogo(int num_jogadores, int num_jogos, char nome_jogadores[4][21], time_t *tempo_inicial, char *ultima_cor, int *lugar_certo,
+          int *lugar_errado, int dados[4][5][3], char jogada[8], int tamanho_chave, time_t *tempo_atual, time_t *tempo_restante,
+          time_t *tempo_jogo, int duracao_jogo, int num_cores, char repeticao_cores, char chave[8], char copia_chave[8], int tentativas){
+
+  for(int jogador=0; jogador<num_jogadores; jogador++){   //passagem por cada jogador
+    printf("Jogador %s e a sua vez\n",nome_jogadores[jogador]);
+    for(int jogo=0; jogo<num_jogos; jogo++){   //passagem por cada jogo a fazer
+      *tempo_inicial = time(NULL);   //guarda o valor do tempo no inicio do jogo
+      printf("Jogo numero %d\n",jogo+1);
+
+      //criacao da chave no inicio de cada jogo
+      *ultima_cor = createKey(chave, repeticao_cores, tamanho_chave, num_cores);
+      printf("%s\n", chave);
+      for(int tentativa=0; tentativa<tentativas; tentativa++){  //ate maximo tentativas
+        *lugar_certo=0;     //inicialização das variaveis com o valor 0 no inicio de cada jogo
+        *lugar_errado=0;
+        dados[jogador][jogo][1]=tentativa+1;  //grava o numero de jogadas efetuadas
+        while (1) {
+          char buffer[100];
+          printf("Insira uma combinacao de cores (A a %c): ", *ultima_cor);
+          fgets(buffer, 100, stdin);
+          strncpy(jogada, buffer, tamanho_chave+1);
+          *tempo_atual=time(NULL);       //armazenamento do tempo atual
+          *tempo_jogo = *tempo_atual-*tempo_inicial;    //calculo do tempo atual que o jogo tem
+          *tempo_restante = duracao_jogo - *tempo_jogo;
+          dados[jogador][jogo][0]=*tempo_jogo;   //grava o tempo do jogo atual
+          if(*tempo_jogo>duracao_jogo){    //se o limite de tempo for atingido sai do jogo
+            printf("O tempo maximo de jogo foi atingido\n");
+            break;
+          }
+          if (strlen(buffer)!=tamanho_chave+1) {
+            if (strlen(buffer)>90) cleanslate();
+            printf("Erro: input incorreto. Verifique que a combinacao tem %d caracteres\n",tamanho_chave);
+          }
+          else {    //validacao do input
+            if(checkInput(jogada, tamanho_chave, num_cores)==1){
+              break;
+            }
+            else{
+              printf("Erro: input incorreto. A combinacao de cores so pode ter caracteres de (A a %c)\n",*ultima_cor);
+            }
+          }
+        }
+
+        //se o limite de tempo for atingido sai do jogo
+        if(*tempo_jogo>duracao_jogo) break;
+
+        for(int index1=0; index1<tamanho_chave; index1++){   //copia da chave para se fazer a comparacao
+          copia_chave[index1]=chave[index1];
+        }
+
+      //verificacao da igualdade entre a chave de jogo e a tentativa do jogador
+        comparaChave(tamanho_chave, jogada, copia_chave, lugar_certo, lugar_errado);
+
+        printf("P%dB%d\n\n", *lugar_certo, *lugar_errado);
+
+        if(*lugar_certo==tamanho_chave){
+          printf("PARABENS por ter conseguido acabar o jogo!\n");
+          dados[jogador][jogo][2]=1;  //guarda se o jogador conseguiu completar a partida
+          printf("Acabou o jogo apos %lis e em %d jogada(s)\n", *tempo_jogo, tentativa);
+          break;
+        }
+        else{
+          printf("Ainda tem %lis de jogo e %d jogada(s) restante(s)\n", *tempo_restante, tentativas-(tentativa +1));
+        }
+      }
+      if(*lugar_certo!=tamanho_chave){
+        dados[jogador][jogo][2]=0;  //guarda se o jogador conseguiu completar a partida
+        printf("Lamentamos mas nao conseguiu acabar o jogo...\n\n");
       }
     }
   }
