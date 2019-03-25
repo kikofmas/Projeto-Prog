@@ -240,11 +240,11 @@ void initializationRepetitions(char *repeticao_cores){
     if(strlen(aux)!=2){
       if(strlen(aux)>2 && aux[2]!='\n'){
         cleanslate();
-        printf("Erro: Input invalido 1\n");
+        printf("Erro: Input invalido\n");
       }
     }
     else if (tolower(aux[0])!='s' && tolower(aux[0])!='n' && aux[1]!='\n') {
-      printf("Erro: Input invalido 1\n");
+      printf("Erro: Input invalido\n");
     }
     else{
       *repeticao_cores = aux[0];
