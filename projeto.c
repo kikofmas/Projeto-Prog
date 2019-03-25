@@ -191,7 +191,8 @@ void initialization(int *var, int min, int max, char frase[30]){
   printf("Insira %s (%d a %d):  ",frase,min,max);
     char input[6];
     fgets(input,6,stdin);
-    if((strlen(input)==2 && atoi(input)<10 && atoi(input)>0)||(strlen(input)==3 && atoi(input)>=10 && atoi(input)<100)||(strlen(input)==4 && atoi(input)>=100)){
+    if((strlen(input)==2 && atoi(input)<10 && atoi(input)>0)||(strlen(input)==3\
+    && atoi(input)>=10 && atoi(input)<100)||(strlen(input)==4 && atoi(input)>=100)){
       if(atoi(input)>=min && atoi(input)<=max){
         *var = atoi(input);
         printf("\n");
