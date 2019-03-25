@@ -1,19 +1,24 @@
+NAO MEXAS EM NADA DO QUE ESTA AQUI FEITO PLZ
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
 
-char *oi();
+int aaa();
+void bbb(int *num);
 
 int main () {
-  char ola[3];
-  char *adeus=oi();
-  printf("%s\n",adeus);
-
-   return(0);
+  int numero = aaa();
+  printf("%d\n", numero);
 }
 
-char *oi(){
+int aaa(){
+  int i=1;
+  bbb(&i);
+  return i;
+}
 
-  return ola;
+void bbb(int *num){
+  *num = *num + *num;
 }
