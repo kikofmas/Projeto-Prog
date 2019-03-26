@@ -431,7 +431,24 @@ int userAttempt(int dados[4][5][3], char ultima_cor, char jogada[8], int tamanho
 }
 
 
-//funcao de jogo
+/******************************************************************************
+* Nome da funcao: userAttempt()
+*
+* Argumentos: num_jogadores - indica quantos jogadores exitem em jogo
+*             num_jogos - indica quantos jogos cada jogador realiza
+*             num_cores - indica quantas cores estao em jogo
+*             tamanho_chave - indica o tamanho maximo que a jogada pode ter
+*             duracao_jogo - indica o tempo maximo que o jogo pode durar
+*             tentativas - indica quantas tentativas cada jogador tem
+*             repeticao_cores - indica se exite repeticao de cores na chave
+*              nome_jogadores[4][21] - array onde estao guardados os nomes dos jogadores
+*              dados[4][5][3] - array onde se guardam os dados de jogo
+*
+* Return: none
+*
+* Descricao: funcao que realiza todo o processo de jogo
+*
+******************************************************************************/
 void jogo(int num_jogadores, int num_jogos, int num_cores, int tamanho_chave, int duracao_jogo,
           int tentativas, char repeticao_cores, char nome_jogadores[4][21], int dados[4][5][3]){
 
@@ -520,7 +537,7 @@ void criaMediaTempo(int num_jogadores, int num_jogos, int dados[4][5][3], float 
 *
 * Argumentos: dados[4][5][3] - array onde estao guardados os dados de jogo
 *             mediaTempos[4] - array onde etsa guardada a media de tempo de cada jogador
-*              nome[4][21] - array onde estao guardados os nomes dos jogadores
+*             nome[4][21] - array onde estao guardados os nomes dos jogadores
 *             num_jogadores - indica o numero de jogadores
 *             num_jogos - indica o numeros de jogos
 *
