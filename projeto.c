@@ -80,7 +80,7 @@ int main() {
     combo_possivel=checkCombinacao(&num_cores, &tamanho_chave, &repeticao_cores);
   }while(combo_possivel==0);
   sleep(1);
-  system("cls");
+  system("clear");
 
 
 //JOGO
@@ -507,7 +507,7 @@ void jogo(int num_jogadores, int num_jogos, int num_cores, int tamanho_chave, in
         printf("A chave correta era: %s\n\n", chave);
       }
       sleep(5);
-      system("cls");
+      system("clear");
     }
   }
 }

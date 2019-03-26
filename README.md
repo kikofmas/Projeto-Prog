@@ -5,12 +5,15 @@ Projeto de programação
 
 A FAZER:
 0) meter o jogo em si bonitinho?
-1) inicializar todas as variaveis (verificar tudo)
-2) comentarios ftw, comentar tudo, verificar acentos e coisas mal explicadas
-3) meter tudo bonitinho com espaçamentos entre as funções, etc e tal
-4) FUNÇÃO PARA AS ESTATISTICAS
-5) verificar as mensagens de erro
-6) eu nao meto acentos.... sooo we gotta check that
-7) rever se podemos encurtar funções e otimiza-las
-8) vale a pena ter a library dos acentos?
-9) comentar a funcao initialization
+
+
+perguntar ao utilizador se quer um print dos dados dos jogos no fim para alem das estatisticas?
+
+meter um resumo das configurações antes de cada jogos (tamanho chave, jogadas, etc)
+
+perguntar o user se esta pronto antes de começar o seu jogo? (evitar perda de tempo inutil)
+
+correr isto no pc do lab
+
+
+muito opcional e discutivel: fzr um system clear a cada jogada e criar um quadro ao lado com um resumo das jogadas?
