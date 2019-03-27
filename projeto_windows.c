@@ -156,7 +156,7 @@ void cleanslate(void){
 void clearScreen(void){
   printf("\nCLIQUE NUMA TECLA PARA CONTINUAR!");
   getch();
-  system("clear");
+  system("cls");
 }
 
 /******************************************************************************

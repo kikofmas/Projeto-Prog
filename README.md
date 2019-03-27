@@ -11,8 +11,6 @@ perguntar ao utilizador se quer um print dos dados dos jogos no fim para alem da
 
 meter um resumo das configurações antes de cada jogos (tamanho chave, jogadas, etc)
 
-perguntar o user se esta pronto antes de começar o seu jogo? (evitar perda de tempo inutil)
-
 correr isto no pc do lab
 
 
