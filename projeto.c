@@ -217,7 +217,7 @@ void initializationNames(int num_jogadores, char nome[4][21]){
     while (1) {
       printf("Insira o nome do jogador %d (maximo de 20 caracteres):  ", jogador+1);
       fgets(aux, 100, stdin);
-      if (strlen(aux)>20 || strlen(aux)<=1) {  //confirmacao que o input tem apenas 20 caracteres
+      if (strlen(aux)>21 || strlen(aux)<=1) {  //confirmacao que o input tem apenas 20 caracteres
         if (strlen(aux)>90) cleanslate();
         printf("Erro: Input invalido. Verifique que o nome tem entre 1 e 20 caracteres\n");
       }
