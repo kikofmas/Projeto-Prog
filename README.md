@@ -17,3 +17,9 @@ correr isto no pc do lab
 
 
 muito opcional e discutivel: fzr um system clear a cada jogada e criar um quadro ao lado com um resumo das jogadas?
+
+
+
+
+
+PUSSYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY^2000000000000000000000000000000000000000000000000000000
