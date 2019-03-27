@@ -374,6 +374,7 @@ void comparaChave(int tamanho_chave, char jogada[8], char copia_chave[8], int *l
       }
     }
   }
+  printf("P%dB%d\n\n", *lugar_certo, *lugar_errado);
 }
 
 
@@ -417,6 +418,7 @@ int userAttempt(int dados[4][5][3], char ultima_cor, char jogada[8], int tamanho
     dados[jogador][jogo][0]=*tempo_jogo;   //grava o tempo do jogo atual
     if(*tempo_jogo>duracao_jogo){    //se o limite de tempo for atingido sai do jogo
       printf("\nO tempo maximo de jogo foi atingido\n");
+      dados[jogador][jogo][0]=duracao_jogo;
       return 0;
     }
     else if (strlen(buffer)!=tamanho_chave+1) {
@@ -488,8 +490,6 @@ void jogo(int num_jogadores, int num_jogos, int num_cores, int tamanho_chave, in
         //verificacao da igualdade entre a chave de jogo e a tentativa do jogador
           comparaChave(tamanho_chave, jogada, copia_chave, &lugar_certo, &lugar_errado);
 
-          printf("P%dB%d\n\n", lugar_certo, lugar_errado);
-
           if(lugar_certo==tamanho_chave){
             printf("PARABENS por ter conseguido acabar o jogo!\n");
             dados[jogador][jogo][2]=1;  //guarda se o jogador conseguiu completar a partida
@@ -506,7 +506,7 @@ void jogo(int num_jogadores, int num_jogos, int num_cores, int tamanho_chave, in
         printf("Lamentamos mas nao conseguiu acabar o jogo...\n");
         printf("A chave correta era: %s\n\n", chave);
       }
-      sleep(5);
+      sleep(4);
       system("clear");
     }
   }
@@ -560,7 +560,7 @@ void criaMediaTempo(int num_jogadores, int num_jogos, int dados[4][5][3], float 
 *
 ******************************************************************************/
 void vencedor(int dados[4][5][3], float mediaTempos[4], char nome[4][21], int num_jogadores, int num_jogos){
-  int vencedor=0, vitorias_jogador=0, maximo_vitorias=0;
+  int vencedor=0, vitorias_jogador=0, maximo_vitorias=0, empate=0;
   printf("ESTATISTICAS:\n");
   for (int index1 = 0; index1 < num_jogadores; index1++) {
     vitorias_jogador=0;
@@ -575,11 +575,15 @@ void vencedor(int dados[4][5][3], float mediaTempos[4], char nome[4][21], int nu
       if (mediaTempos[index1]<mediaTempos[vencedor]) {
         vencedor=index1;
       }
+      else if(mediaTempos[index1]==mediaTempos[vencedor]){
+        empate=1;
+      }
     }
   }
-  if(maximo_vitorias==0){
-    printf("\nNinguem consegiu acertar em nenhuma chave de jogo. Nao ha vencedores\n");
-  } else{printf("\nO vencedor do torneio e: o jogador %d, %s\n", vencedor+1, nome[vencedor]);}
+
+  if(maximo_vitorias==0) printf("\nNinguem consegiu acertar em nenhuma chave de jogo. Nao ha vencedores\n");
+  else if(empate=1) printf("\nHá um empate no vencedor do torneio\n");
+  else printf("\nO vencedor do torneio e: o jogador %d, %s\n", vencedor+1, nome[vencedor]);
 }
 
 
