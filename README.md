@@ -6,9 +6,6 @@ Projeto de programação
 A FAZER:
 0) meter o jogo em si bonitinho?
 
-
-perguntar ao utilizador se quer um print dos dados dos jogos no fim para alem das estatisticas?
-
 meter um resumo das configurações antes de cada jogos (tamanho chave, jogadas, etc)
 
 correr isto no pc do lab
