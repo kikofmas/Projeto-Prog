@@ -556,8 +556,6 @@ void criaDados(int num_jogadores, int num_jogos, int dados[4][5][3], float media
 
 
 
-//FALTA VER NESTAS A SITUACAO DE EMPATE!!!!!!!!!!
-
 
 
 
