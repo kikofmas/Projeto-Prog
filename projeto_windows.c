@@ -212,9 +212,8 @@ void initialization(int *var, int min, int max, char frase[30]){
 *
 ******************************************************************************/
 void initializationNames(int num_jogadores, char nome[4][21]){
-  int jogador=0;
   char aux[100]="\0"; //variavel auxiliar para recolher o input do user
-  for (; jogador < num_jogadores; jogador++) {
+  for (int jogador=0; jogador < num_jogadores; jogador++) {
     while (1) {
       printf("Insira o nome do jogador %d (maximo de 20 caracteres):  ", jogador+1);
       fgets(aux, 100, stdin);
