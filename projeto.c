@@ -33,7 +33,7 @@ void jogo(int num_jogadores, int num_jogos, int num_cores, int tamanho_chave, in
 void criaDados(int num_jogadores, int num_jogos, int dados[4][5][3], float mediaTempos[4], int numVitorias[4]); //criacao da media de tempo de jogo de cada jogador
 void vencedor(float mediaTempos[4], char nome[4][21], int num_jogadores, int num_jogos, int numVitorias[4]); //definicao do vencedor do jogo
 void resultados(int num_jogadores, int num_jogos, int dados[4][5][3], int g, int h, char frase[15], char nome[4][21]); //apresenta as estatisticas
-void showData(int dados[4][5][3], float mediaTempos[4], int num_jogadores, int numVitorias[4], int num_jogos);
+void showData(int dados[4][5][3], float mediaTempos[4], int num_jogadores, int numVitorias[4], int num_jogos, char nome_jogadores[4][21]);
 
 
 int main() {
@@ -99,7 +99,7 @@ int main() {
   resultados(num_jogadores, num_jogos, dados, 0, 1, "mais rapido", nome_jogadores);
   resultados(num_jogadores, num_jogos, dados, 1, 0, "mais curto", nome_jogadores);
 
-  showData(dados, mediaTempos, num_jogadores, numVitorias, num_jogos);
+  showData(dados, mediaTempos, num_jogadores, numVitorias, num_jogos, nome_jogadores);
 
   printf("\nESPERAMOS QUE SE TENHA DIVERTIDO!!!\n");
 
