@@ -160,6 +160,7 @@ void cleanslate(void){
 *
 * Return: none
 *
+*Side-effects: para a execucao do codigo ate o utilizador clicar enter
 *
 * Descricao: funcao para limpar o ecra
 *
@@ -170,6 +171,7 @@ void clearScreen(void){
   getchar();
   system("clear");
 }
+
 
 /******************************************************************************
 * Nome da funcao: initialization()
@@ -245,7 +247,8 @@ void initializationNames(int num_jogadores, char nome[4][21]){
 /******************************************************************************
 * Nome da funcao: initializationRepetitions()
 *
-* Argumentos: *repeticao_cores - localizacao em memoria da variavel
+* Argumentos: *repeticao_cores - localizacao em memoria da variavel que guarda
+*                                se existe repeticao de cores
 *
 * Return: none
 *
