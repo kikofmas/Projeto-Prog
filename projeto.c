@@ -14,7 +14,6 @@
 #include <time.h>     //usada para se poder calcular o tempo
 #include <ctype.h>    //toupper and tolower functions
 #include <unistd.h>   //permite usar a funcao sleep
-#include <conio.h>
 
 //DECLARACAO DE FUNCOES
 void introducao(void); //introducao ao jogo
