@@ -490,7 +490,7 @@ void jogo(int num_jogadores, int num_jogos, int num_cores, int tamanho_chave, in
 
   for(int jogador=0; jogador<num_jogadores; jogador++){   //passagem por cada jogador
     for(int jogo=0; jogo<num_jogos; jogo++){   //passagem por cada jogo a fazer
-      printf("%s e a sua vez\n\n",nome_jogadores[jogador]);
+      printf("Jogador %d: %s ,e a sua vez\n\n", jogador, nome_jogadores[jogador]);
       tempo_inicial = time(NULL);   //guarda o valor do tempo no inicio do jogo
       printf("Jogo numero %d\n",jogo+1);
 
@@ -538,7 +538,7 @@ void jogo(int num_jogadores, int num_jogos, int num_cores, int tamanho_chave, in
 }
 
 
-/****************************************************************************** .................................
+/******************************************************************************
 * Nome da funcao: criaDados()
 *
 * Argumentos: num_jogadores - indica o numero de jogadores
@@ -564,7 +564,7 @@ void criaDados(int num_jogadores, int num_jogos, int dados[4][5][3], float media
 }
 
 
-/****************************************************************************** .........................................
+/******************************************************************************
 * Nome da funcao: vencedor()
 *
 * Argumentos: mediaTempos[4] - array onde etsa guardada a media de tempo de cada jogador
@@ -608,7 +608,7 @@ void vencedor(float mediaTempos[4], char nome[4][21], int num_jogadores, int num
 }
 
 
-/****************************************************************************** ..............................................
+/******************************************************************************
 * Nome da funcao: resultados()
 *
 * Argumentos: num_jogadores - indica o numero de jogadores
@@ -663,17 +663,30 @@ void resultados(int num_jogadores, int num_jogos, int dados[4][5][3], int dado_p
       }
     }
   }
-  if(num_jogadores==1) printf("\nDevido a falta de oponents nao se pode calcular quem teve o jogo %s\n", frase);
-  else if(y!=0 && empate==0) printf("\nO vencedor do jogo %s e: o jogador %d, %s\n", frase, vencedor+1, nome[vencedor]);
-  else if(y!=0 && empate==1) printf("\nHa um empate na categoria de jogo %s\n", frase);
+  if(num_jogadores!=1){
+    if(y!=0 && empate==0) printf("\nO vencedor do jogo %s e: o jogador %d, %s\n", frase, vencedor+1, nome[vencedor]);
+    else if(y!=0 && empate==1) printf("\nHa um empate na categoria de jogo %s\n", frase);
+  }
 }
 
 
-
-
-
-
-void showData(int dados[4][5][3], float mediaTempos[4], int num_jogadores, int numVitorias[4], int num_jogos){
+/******************************************************************************
+* Nome da funcao: showData()
+*
+* Argumentos: dados[4][5][3] - array onde estao guardados os dados de jogo
+*             mediaTempos[4] - array onde esta guardada a media de tempo de cada jogador
+*             num_jogadores - indica o numero de jogadores
+*             numVitorias[4] - array onde esta guardado o numero de vitorias de cada jogador
+*             num_jogos - indica o numero de jogos
+*             char nome_jogadores[4][21] - array onde estao guardados os nomes dos jogadores
+*
+* Return: none
+*
+* Descricao: funcao para mostrar os resultados de cada jogador
+*
+******************************************************************************/
+void showData(int dados[4][5][3], float mediaTempos[4], int num_jogadores,
+              int numVitorias[4],int num_jogos, char nome_jogadores[4][21]){
   int mostraDados=0, melhorTempo=301, melhorPerformance=20;
   printf("\nSe desejar ver os dados de jogo insira 1: ");
   scanf("%d",&mostraDados);
@@ -689,7 +702,7 @@ void showData(int dados[4][5][3], float mediaTempos[4], int num_jogadores, int n
           melhorPerformance=dados[jogador][jogo][1];
         }
       }
-      printf("\nDados do jogador %d\n",jogador+1);
+      printf("\nDados do jogador %d, %s\n",jogador+1, nome_jogadores[jogador]);
       printf("  Numero de vitorias: %d\n", numVitorias[jogador]);
       printf("  Tempo medio: %.2fs\n", mediaTempos[jogador]);
       printf("  Melhor tempo: %ds\n", melhorTempo);
