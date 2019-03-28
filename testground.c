@@ -11,8 +11,7 @@ typedef struct{
 } eventos;
 
 int main () {
-  float a=2.1;
-  int b=2;
-  if(a>b) printf("ola");
+  char ola[10]="abcdefghi";
+  printf("%d\n", strlen(ola));
 
 }
