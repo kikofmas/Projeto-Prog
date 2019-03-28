@@ -101,7 +101,7 @@ int main() {
 
   showData(dados, mediaTempos, num_jogadores, numVitorias, num_jogos);
 
-  printf("ESPERAMOS QUE SE TENHA DIVERTIDO!!!\n");
+  printf("\nESPERAMOS QUE SE TENHA DIVERTIDO!!!\n");
 
   return 0;
 }
@@ -694,7 +694,7 @@ void showData(int dados[4][5][3], float mediaTempos[4], int num_jogadores, int n
       printf("  Numero de vitorias: %d\n", numVitorias[jogador]);
       printf("  Tempo medio: %.2fs\n", mediaTempos[jogador]);
       printf("  Melhor tempo: %ds\n", melhorTempo);
-      printf("  Melhor performance: %d jogada(s)\n\n", melhorPerformance);
+      printf("  Melhor performance: %d jogada(s)\n", melhorPerformance);
     }
     clearScreen();
   }
