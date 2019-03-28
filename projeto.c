@@ -321,7 +321,7 @@ int checkCombinacao(int *num_cores, int *tamanho_chave, char *repeticao_cores){
 ******************************************************************************/
 char createKey(char chave[8], char repeticao_cores, int tamanho_chave, int num_cores){
   int aux=0;
-  char coresdisp[13]={'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l'};
+  char coresdisp[13]={'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L'};
   for (int i = 0; i < tamanho_chave; i++) {
     //criacao de numeros aleatorios ate a condição se verificar
     do{
@@ -351,11 +351,11 @@ char createKey(char chave[8], char repeticao_cores, int tamanho_chave, int num_c
 *
 ******************************************************************************/
 int checkInput(char jogada[8], int tamanho_chave, int num_cores){
-  char cores[13]={'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l'};
+  char cores[13]={'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L'};
   for(int i=0;i<tamanho_chave;i++){
     int flag=0;
     for(int z=0;z<num_cores;z++){
-      if(tolower(jogada[i])==cores[z]) flag=1;
+      if(toupper(jogada[i])==cores[z]) flag=1;
     }
     if (flag==0) return 0;
   }
@@ -383,7 +383,7 @@ int checkInput(char jogada[8], int tamanho_chave, int num_cores){
 ******************************************************************************/
 void comparaChave(int tamanho_chave, char jogada[8], char copia_chave[8], int *lugar_certo, int *lugar_errado){
   for(int index1=0; index1<tamanho_chave; index1++){
-    if(tolower(jogada[index1])==copia_chave[index1]){
+    if(toupper(jogada[index1])==copia_chave[index1]){
       *lugar_certo+=1;
       copia_chave[index1]='0';
       jogada[index1]='1';
@@ -392,7 +392,7 @@ void comparaChave(int tamanho_chave, char jogada[8], char copia_chave[8], int *l
 
   for(int index1=0; index1<tamanho_chave; index1++){
     for(int index2=0; index2<tamanho_chave; index2++){
-      if(tolower(jogada[index1])==copia_chave[index2]){
+      if(toupper(jogada[index1])==copia_chave[index2]){
         *lugar_errado+=1;
         copia_chave[index2]='0';
         jogada[index1]='1';
@@ -704,9 +704,16 @@ void showData(int dados[4][5][3], float mediaTempos[4], int num_jogadores,
       }
       printf("\nDados do jogador %d, %s\n",jogador+1, nome_jogadores[jogador]);
       printf("  Numero de vitorias: %d\n", numVitorias[jogador]);
-      printf("  Tempo medio: %.2fs\n", mediaTempos[jogador]);
-      printf("  Melhor tempo: %ds\n", melhorTempo);
-      printf("  Melhor performance: %d jogada(s)\n", melhorPerformance);
+      if(numVitorias[jogador]!=0){
+        printf("  Tempo medio: %.2fs\n", mediaTempos[jogador]);
+        printf("  Melhor tempo: %ds\n", melhorTempo);
+        printf("  Melhor performance: %d jogada(s)\n", melhorPerformance);
+      }
+      else if(numVitorias[jogador]==0){
+        printf("  Tempo medio: Nao aplicavel\n");
+        printf("  Melhor tempo: Nao aplicavel\n");
+        printf("  Melhor performance: Nao aplicavel\n", melhorPerformance);
+      }
     }
     getchar();
     clearScreen();

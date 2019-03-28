@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <ctype.h>
 
 typedef struct{
   int hora;
@@ -12,6 +13,6 @@ typedef struct{
 
 int main () {
   char ola[10]="abcdefghi";
-  printf("%d\n", strlen(ola));
+  printf("%s\n", tolower(ola));
 
 }
