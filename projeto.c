@@ -602,7 +602,7 @@ void vencedor(float mediaTempos[4], char nome[4][21], int num_jogadores, int num
   }
 
   if(maximo_vitorias==0) printf("\nNinguem consegiu acertar em nenhuma chave de jogo. Nao ha vencedores.\n");
-  else if(num_jogadores==1) printf("\nNão é possivel determinar um vencedor devido à falta de oponentes.\n");
+  else if(num_jogadores==1) printf("\nNao e possivel determinar um vencedor devido a falta de oponentes.\n");
   else if(empate==1) printf("\nExiste um empate no jogo!\n");
   else printf("\nO vencedor do torneio e: o jogador %d, %s.\n", vencedor+1, nome[vencedor]);
 }
