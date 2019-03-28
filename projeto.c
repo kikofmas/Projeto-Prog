@@ -152,6 +152,18 @@ void cleanslate(void){
   }
 }
 
+
+/******************************************************************************
+* Nome da funcao: clearScreen()
+*
+* Argumentos: none
+*
+* Return: none
+*
+*
+* Descricao: funcao para limpar o ecra
+*
+******************************************************************************/
 void clearScreen(void){
   sleep(1);
   printf("\nCLIQUE ENTER PARA CONTINUAR!");
@@ -318,9 +330,6 @@ char createKey(char chave[8], char repeticao_cores, int tamanho_chave, int num_c
     //se n for possivel a repeticao de cores elimina-se da lista a cor inserida na chave
     if(repeticao_cores=='n' || repeticao_cores=='N') coresdisp[aux]='0';
   }
-
-printf("%s\n", chave);
-
 
   return 'A'+num_cores-1;
 }
@@ -669,7 +678,7 @@ void showData(int dados[4][5][3], float mediaTempos[4], int num_jogadores, int n
   int mostraDados=0, melhorTempo=301, melhorPerformance=20;
   printf("\nSe desejar ver os dados de jogo insira 1: ");
   scanf("%d",&mostraDados);
-  if(mostraDados){
+  if(mostraDados==1){
     for(int jogador=0;jogador<num_jogadores;jogador++){
       melhorTempo=301;
       melhorPerformance=20;
