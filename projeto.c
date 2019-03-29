@@ -490,7 +490,7 @@ void jogo(int num_jogadores, int num_jogos, int num_cores, int tamanho_chave, in
 
   for(int jogador=0; jogador<num_jogadores; jogador++){   //passagem por cada jogador
     for(int jogo=0; jogo<num_jogos; jogo++){   //passagem por cada jogo a fazer
-      printf("Jogador %d: %s ,e a sua vez\n\n", jogador, nome_jogadores[jogador]);
+      printf("Jogador %d: %s ,e a sua vez\n\n", jogador+1, nome_jogadores[jogador]);
       tempo_inicial = time(NULL);   //guarda o valor do tempo no inicio do jogo
       printf("Jogo numero %d\n",jogo+1);
 
