@@ -168,7 +168,7 @@ void clearScreen(void){
   sleep(1);
   printf("\nCLIQUE ENTER PARA CONTINUAR!");
   cleanslate();
-  system("clear");
+  system("cls");
 }
 
 
