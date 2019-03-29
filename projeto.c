@@ -712,7 +712,7 @@ void showData(int dados[4][5][3], float mediaTempos[4], int num_jogadores,
       else if(numVitorias[jogador]==0){
         printf("  Tempo medio: Nao aplicavel\n");
         printf("  Melhor tempo: Nao aplicavel\n");
-        printf("  Melhor performance: Nao aplicavel\n", melhorPerformance);
+        printf("  Melhor performance: Nao aplicavel\n");
       }
     }
     getchar();
