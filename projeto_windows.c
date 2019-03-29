@@ -168,7 +168,7 @@ void clearScreen(void){
   sleep(1);
   printf("\nCLIQUE ENTER PARA CONTINUAR!");
   cleanslate();
-  system("cls");
+  system("clear");
 }
 
 
@@ -490,7 +490,7 @@ void jogo(int num_jogadores, int num_jogos, int num_cores, int tamanho_chave, in
 
   for(int jogador=0; jogador<num_jogadores; jogador++){   //passagem por cada jogador
     for(int jogo=0; jogo<num_jogos; jogo++){   //passagem por cada jogo a fazer
-      printf("Jogador %d: %s ,e a sua vez\n\n", jogador, nome_jogadores[jogador]);
+      printf("Jogador %d: %s, e a sua vez\n\n", jogador+1, nome_jogadores[jogador]);
       tempo_inicial = time(NULL);   //guarda o valor do tempo no inicio do jogo
       printf("Jogo numero %d\n",jogo+1);
 
@@ -637,33 +637,33 @@ void resultados(int num_jogadores, int num_jogos, int dados[4][5][3], int dado_p
   int z=301;  //guarda o valor do parametro secundario
   int y=0; //verifica se ha pelo menos um jogo ganho por alguem
   int empate=0;
-  for (int jogador = 0; jogador < num_jogadores; jogador++) {
-    for (int jogo = 0; jogo < num_jogos; jogo++) {
-      //compara com o tempo mais baixo atual e verifica se o jogo foi acabado
-      if (dados[jogador][jogo][dado_principal]<x && dados[jogador][jogo][2]==1) {
-        vencedor=jogador;
-        x=dados[jogador][jogo][dado_principal];
-        z=dados[jogador][jogo][dado_desempate];
-        y=1;
-        empate=0;
-      }
-      //em caso de empate compara-se o numero de jogadas e verifica se o jogo foi acabado
-      else if (dados[jogador][jogo][dado_principal]==x && dados[jogador][jogo][2]==1) {
-        if (dados[jogador][jogo][dado_desempate]<z) {
-          y=1;
+  if(num_jogadores!=1){
+    for (int jogador = 0; jogador < num_jogadores; jogador++) {
+      for (int jogo = 0; jogo < num_jogos; jogo++) {
+        //compara com o tempo mais baixo atual e verifica se o jogo foi acabado
+        if (dados[jogador][jogo][dado_principal]<x && dados[jogador][jogo][2]==1) {
+          vencedor=jogador;
           x=dados[jogador][jogo][dado_principal];
           z=dados[jogador][jogo][dado_desempate];
-          vencedor=jogador;
           y=1;
           empate=0;
         }
-        else if (dados[jogador][jogo][dado_desempate]==z){
-          empate=1;
+        //em caso de empate compara-se o numero de jogadas e verifica se o jogo foi acabado
+        else if (dados[jogador][jogo][dado_principal]==x && dados[jogador][jogo][2]==1) {
+          if (dados[jogador][jogo][dado_desempate]<z) {
+            y=1;
+            x=dados[jogador][jogo][dado_principal];
+            z=dados[jogador][jogo][dado_desempate];
+            vencedor=jogador;
+            y=1;
+            empate=0;
+          }
+          else if (dados[jogador][jogo][dado_desempate]==z){
+            empate=1;
+          }
         }
       }
     }
-  }
-  if(num_jogadores!=1){
     if(y!=0 && empate==0) printf("\nO vencedor do jogo %s e: o jogador %d, %s\n", frase, vencedor+1, nome[vencedor]);
     else if(y!=0 && empate==1) printf("\nHa um empate na categoria de jogo %s\n", frase);
   }
@@ -712,7 +712,7 @@ void showData(int dados[4][5][3], float mediaTempos[4], int num_jogadores,
       else if(numVitorias[jogador]==0){
         printf("  Tempo medio: Nao aplicavel\n");
         printf("  Melhor tempo: Nao aplicavel\n");
-        printf("  Melhor performance: Nao aplicavel\n", melhorPerformance);
+        printf("  Melhor performance: Nao aplicavel\n");
       }
     }
     getchar();
