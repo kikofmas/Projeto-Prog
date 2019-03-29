@@ -5,14 +5,9 @@
 #include <string.h>
 #include <unistd.h>
 #include <ctype.h>
-
-typedef struct{
-  int hora;
-  char descricao[10];
-} eventos;
+#include <time.h>
 
 int main () {
-  char ola[10]="abcdefghi";
-  printf("%s\n", tolower(ola));
-
+  int eee;
+  gets(eee);
 }
