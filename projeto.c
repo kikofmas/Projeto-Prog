@@ -31,8 +31,8 @@ int userAttempt(int dados[4][5][3], char ultima_cor, char jogada[8], int tamanho
 void jogo(int num_jogadores, int num_jogos, int num_cores, int tamanho_chave, int duracao_jogo,
           int tentativas, char repeticao_cores, char nome_jogadores[4][21], int dados[4][5][3]);  //funcao que permite jogar
 void criaDados(int num_jogadores, int num_jogos, int dados[4][5][3], float mediaTempos[4], int numVitorias[4]); //criacao da media de tempo de jogo de cada jogador
-void vencedor(float mediaTempos[4], char nome[4][21], int num_jogadores, int num_jogos, int numVitorias[4]); //definicao do vencedor do jogo
-void resultados(int num_jogadores, int num_jogos, int dados[4][5][3], int g, int h, char frase[15], char nome[4][21]); //apresenta as estatisticas
+void vencedor(float mediaTempos[4], char nome[4][21], int num_jogadores, int numVitorias[4]); //definicao do vencedor do jogo
+void resultados(int num_jogadores, int num_jogos, int dados[4][5][3], int dado_principal, int dado_desempate, char frase[15], char nome[4][21]); //apresenta as estatisticas
 void showData(int dados[4][5][3], float mediaTempos[4], int num_jogadores, int numVitorias[4], int num_jogos, char nome_jogadores[4][21]);
 
 
@@ -95,7 +95,7 @@ int main() {
 //ESTATISTICAS: calculo dos resultados e apresentacao das estatisticas
 
   criaDados(num_jogadores, num_jogos, dados, mediaTempos, numVitorias);
-  vencedor(mediaTempos, nome_jogadores, num_jogadores, num_jogos, numVitorias);
+  vencedor(mediaTempos, nome_jogadores, num_jogadores, numVitorias);
   resultados(num_jogadores, num_jogos, dados, 0, 1, "mais rapido", nome_jogadores);
   resultados(num_jogadores, num_jogos, dados, 1, 0, "mais curto", nome_jogadores);
 
@@ -578,8 +578,8 @@ void criaDados(int num_jogadores, int num_jogos, int dados[4][5][3], float media
 * Descricao: funcao para descobrir o vencedor do jogo
 *
 ******************************************************************************/
-void vencedor(float mediaTempos[4], char nome[4][21], int num_jogadores, int num_jogos, int numVitorias[4]){
-  int vencedor=0, vitorias_jogador=0, maximo_vitorias=0, empate=0;
+void vencedor(float mediaTempos[4], char nome[4][21], int num_jogadores, int numVitorias[4]){
+  int vencedor=0, maximo_vitorias=0, empate=0;
 
   printf("ESTATISTICAS:\n");
 
