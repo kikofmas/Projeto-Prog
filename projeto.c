@@ -447,7 +447,7 @@ int userAttempt(int dados[4][5][3], char ultima_cor, char jogada[8], int tamanho
       dados[jogador][jogo][0]=duracao_jogo;
       return 0;
     }
-    else if (strlen(buffer)!=tamanho_chave+1) {
+    else if ((int)strlen(buffer)!=tamanho_chave+1) {
       if (strlen(buffer)>90) cleanslate();
       printf("Erro: input incorreto. Verifique que a combinacao tem %d caracteres\n",tamanho_chave);
     }
