@@ -42,7 +42,7 @@ int main() {
   char nome_jogadores[4][21]={{"\0"},{"\0"},{"\0"},{"\0"}}, repeticao_cores='\0';
   int num_jogadores=0, duracao_jogo=0, num_jogos=0, num_cores=0, tamanho_chave=0, tentativas=0, combo_possivel=0;
 //declaracao das variaveis das estatisticas:
-  int dados[4][5][3]={0}; //[][][0]=tempo, [][][1]=tentativas, [][][2]=vitoria
+  int dados[4][5][3]={{{0}}}; //[][][0]=tempo, [][][1]=tentativas, [][][2]=vitoria
   int numVitorias[4]={0};
   float mediaTempos[4]={0};
 
