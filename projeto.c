@@ -18,7 +18,7 @@
 //DECLARACAO DE FUNCOES
 void introducao(void); //introducao ao jogo
 void cleanslate(void); //limpa o input indesejado
-void clearScreen(void);
+void clearScreen(void); //elimina o ecra
 void initialization(int *var, int min, int max, char frase[10]); //inicializacao das variaveis tipo int
 void initializationNames(int num_jogadores, char nome[4][21]); //introducao dos nomes dos jogadores
 void initializationRepetitions(char *repeticao_cores); //escolha da existencia repticao de cores
@@ -33,7 +33,7 @@ void jogo(int num_jogadores, int num_jogos, int num_cores, int tamanho_chave, in
 void criaDados(int num_jogadores, int num_jogos, int dados[4][5][3], float mediaTempos[4], int numVitorias[4]); //criacao da media de tempo de jogo de cada jogador
 void vencedor(float mediaTempos[4], char nome[4][21], int num_jogadores, int numVitorias[4]); //definicao do vencedor do jogo
 void resultados(int num_jogadores, int num_jogos, int dados[4][5][3], int dado_principal, int dado_desempate, char frase[15], char nome[4][21]); //apresenta as estatisticas
-void showData(int dados[4][5][3], float mediaTempos[4], int num_jogadores, int numVitorias[4], int num_jogos, char nome_jogadores[4][21]);
+void showData(int dados[4][5][3], float mediaTempos[4], int num_jogadores, int numVitorias[4], int num_jogos, char nome_jogadores[4][21]);  //apresenta dados extra de jogo
 
 
 int main() {
