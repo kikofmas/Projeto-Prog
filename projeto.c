@@ -197,6 +197,7 @@ void countdown(void){
   sleep(1);
   printf("1\n");
   sleep(1);
+  
   clearScreen(0);
 }
 
