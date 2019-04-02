@@ -18,7 +18,8 @@
 //DECLARACAO DE FUNCOES
 void introducao(void); //introducao ao jogo
 void cleanslate(void); //limpa o input indesejado
-void clearScreen(void); //elimina o ecra
+void clearScreen(int k); //elimina o ecra
+void countdown(void); //inicia uma contagem decrescente
 void initialization(int *var, int min, int max, char frase[10]); //inicializacao das variaveis tipo int
 void initializationNames(int num_jogadores, char nome[4][21]); //introducao dos nomes dos jogadores
 void initializationRepetitions(char *repeticao_cores); //escolha da existencia repticao de cores
@@ -83,7 +84,7 @@ int main() {
     combo_possivel=checkCombinacao(&num_cores, &tamanho_chave, &repeticao_cores);
   }while(combo_possivel==0);
 
-  clearScreen();
+  clearScreen(1);
 
 
 //JOGO
@@ -159,15 +160,44 @@ void cleanslate(void){
 *
 * Return: none
 *
-*Side-effects: para a execucao do codigo ate o utilizador clicar enter
+* Side-effects: para a execucao do codigo ate o utilizador clicar enter
 *
 * Descricao: funcao para limpar o ecra
 *
 ******************************************************************************/
-void clearScreen(void){
-  printf("\nCLIQUE ENTER PARA CONTINUAR!");
-  cleanslate();
+void clearScreen(int k){
+  if(k==1){
+    printf("\nCLIQUE ENTER PARA CONTINUAR!");
+    cleanslate();
+  }
   system("clear");
+}
+
+
+/******************************************************************************
+* Nome da funcao: countdown()
+*
+* Argumentos: none
+*
+* Return: none
+*
+* Side-effects: imprime os numeros 5 a 1 com 1 segundo de intrvalo
+*
+* Descricao: funcao para iniciar uma contagem decrescente
+*
+******************************************************************************/
+void countdown(void){
+  printf("5\n");
+  sleep(1);
+  printf("4\n");
+  sleep(1);
+  printf("3\n");
+  sleep(1);
+  printf("2\n");
+  sleep(1);
+  printf("1\n");
+  sleep(1);
+  clearScreen(0);
 }
 
 
@@ -489,6 +519,8 @@ void jogo(int num_jogadores, int num_jogos, int num_cores, int tamanho_chave, in
 
   for(int jogador=0; jogador<num_jogadores; jogador++){   //passagem por cada jogador
     for(int jogo=0; jogo<num_jogos; jogo++){   //passagem por cada jogo a fazer
+      printf("Jogador %d: %s, e a sua vez\n\n", jogador+1, nome_jogadores[jogador]);
+      countdown();
       printf("Tamanho da chave: %d; Numero de cores: %d; Repeticao de cores: %c;\n", tamanho_chave, num_cores, repeticao_cores);
       printf("Tem %d tentativas e %ds disponiveis\n\n", tentativas, duracao_jogo);
       printf("Jogador %d: %s, e a sua vez\n\n", jogador+1, nome_jogadores[jogador]);
@@ -533,7 +565,7 @@ void jogo(int num_jogadores, int num_jogos, int num_cores, int tamanho_chave, in
         printf("Lamentamos mas nao conseguiu acabar o jogo...\n");
         printf("A chave correta era: %s\n\n", chave);
       }
-      clearScreen();
+      clearScreen(1);
     }
   }
 }
@@ -717,6 +749,6 @@ void showData(int dados[4][5][3], float mediaTempos[4], int num_jogadores,
       }
     }
     getchar();
-    clearScreen();
+    clearScreen(1);
   }
 }
