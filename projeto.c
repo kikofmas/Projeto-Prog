@@ -175,34 +175,6 @@ void clearScreen(int k){
 
 
 /******************************************************************************
-* Nome da funcao: countdown()
-*
-* Argumentos: none
-*
-* Return: none
-*
-* Side-effects: imprime os numeros 5 a 1 com 1 segundo de intrvalo
-*
-* Descricao: funcao para iniciar uma contagem decrescente
-*
-******************************************************************************/
-void countdown(void){
-  printf("5\n");
-  sleep(1);
-  printf("4\n");
-  sleep(1);
-  printf("3\n");
-  sleep(1);
-  printf("2\n");
-  sleep(1);
-  printf("1\n");
-  sleep(1);
-  
-  clearScreen(0);
-}
-
-
-/******************************************************************************
 * Nome da funcao: initialization()
 *
 * Argumentos: *var - localizacao em memoria da variavel a inicializar
@@ -521,7 +493,6 @@ void jogo(int num_jogadores, int num_jogos, int num_cores, int tamanho_chave, in
   for(int jogador=0; jogador<num_jogadores; jogador++){   //passagem por cada jogador
     for(int jogo=0; jogo<num_jogos; jogo++){   //passagem por cada jogo a fazer
       printf("Jogador %d: %s, e a sua vez\n\n", jogador+1, nome_jogadores[jogador]);
-      countdown();
       printf("Tamanho da chave: %d; Numero de cores: %d; Repeticao de cores: %c;\n", tamanho_chave, num_cores, repeticao_cores);
       printf("Tem %d tentativas e %ds disponiveis\n\n", tentativas, duracao_jogo);
       printf("Jogador %d: %s, e a sua vez\n\n", jogador+1, nome_jogadores[jogador]);
