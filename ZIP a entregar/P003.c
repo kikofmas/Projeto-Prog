@@ -14,13 +14,12 @@
 #include <time.h>     //usada para se poder calcular o tempo
 #include <ctype.h>    //toupper and tolower functions
 #include <unistd.h>   //permite usar a funcao sleep
-#include <termios.h>  //permite usar a funcao tcflush
 
 //DECLARACAO DE FUNCOES
 void introducao(void); //introducao ao jogo
 void cleanslate(void); //limpa o input indesejado
 void clearScreen(int k); //elimina o ecra
-void countdown(int i, char name[]); //inicia uma contagem decrescente
+void countdown(void); //inicia uma contagem decrescente
 void initialization(int *var, int min, int max, char frase[10]); //inicializacao das variaveis tipo int
 void initializationNames(int num_jogadores, char nome[4][21]); //introducao dos nomes dos jogadores
 void initializationRepetitions(char *repeticao_cores); //escolha da existencia repticao de cores
@@ -157,7 +156,7 @@ void cleanslate(void){
 /******************************************************************************
 * Nome da funcao: clearScreen()
 *
-* Argumentos: k - define se pede input do utilizador antes de apagar o ecrã
+* Argumentos: none
 *
 * Return: none
 *
@@ -172,43 +171,6 @@ void clearScreen(int k){
     cleanslate();
   }
   system("clear");
-}
-
-
-/******************************************************************************
-* Nome da funcao: countdown()
-*
-* Argumentos: i - numero do jogador atual
-              nome - nome do jogador atual
-*
-* Return: none
-*
-* Side-effects: conta 5 segundos no ecrã
-*
-* Descricao: conta 5 segundos no ecrã e apaga o input do utilizador durante esse tempo
-*
-******************************************************************************/
-void countdown(int i, char nome[]){
-  printf("5\n");
-  sleep(1);
-  clearScreen(0);
-  printf("Jogador %d: %s, e a sua vez\n\n", i, nome);
-  printf("4\n");
-  sleep(1);
-  clearScreen(0);
-  printf("Jogador %d: %s, e a sua vez\n\n", i, nome);
-  printf("3\n");
-  sleep(1);
-  clearScreen(0);
-  printf("Jogador %d: %s, e a sua vez\n\n", i, nome);
-  printf("2\n");
-  sleep(1);
-  clearScreen(0);
-  printf("Jogador %d: %s, e a sua vez\n\n", i, nome);
-  printf("1\n");
-  sleep(1);
-  tcflush(0,TCIFLUSH); // 0 representa o stdin, TCIFLUSH limpa o input do utilizador não foi lido
-  clearScreen(0);
 }
 
 
@@ -531,7 +493,6 @@ void jogo(int num_jogadores, int num_jogos, int num_cores, int tamanho_chave, in
   for(int jogador=0; jogador<num_jogadores; jogador++){   //passagem por cada jogador
     for(int jogo=0; jogo<num_jogos; jogo++){   //passagem por cada jogo a fazer
       printf("Jogador %d: %s, e a sua vez\n\n", jogador+1, nome_jogadores[jogador]);
-      countdown(jogador+1, nome_jogadores[jogador]);
       printf("Tamanho da chave: %d; Numero de cores: %d; Repeticao de cores: %c;\n", tamanho_chave, num_cores, repeticao_cores);
       printf("Tem %d tentativas e %ds disponiveis\n\n", tentativas, duracao_jogo);
       printf("Jogador %d: %s, e a sua vez\n\n", jogador+1, nome_jogadores[jogador]);
