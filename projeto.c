@@ -761,5 +761,7 @@ void showData(int dados[4][5][3], float mediaTempos[4], int num_jogadores,
     }
     getchar();
     clearScreen(1);
+  } else{
+    clearScreen(0);
   }
 }
