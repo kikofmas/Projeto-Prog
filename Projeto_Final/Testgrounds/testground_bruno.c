@@ -11,7 +11,7 @@
 #include "oraculo.h"
 
 int main() {
-  activate_oracle(4, 6, 0);
-
+  //activate_oracle(4, 6, 0);
+  aaa
   return 0;
 }
