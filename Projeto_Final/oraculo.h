@@ -29,10 +29,20 @@ void generate_key(int);
 /* try is produced by the client                            */
 /* If the client produces an attempt with wrong colors,     */
 /* returns NULL.                                            */
-/* Example: if number of colors is 4, key size is 6, and    */
+/* Example: if number of colors is 6, key size is 4, and    */
 /* this function receives an attempt with AAAG, it will     */
 /* return NULL because G is the seventh color.              */
 reply * validate_key(char * try);
+
+/* Produces the result for two keys, comparing them         */
+/* try1 and try2 are produced by the client                 */
+/* Both try1 and try2 should be of same size as specified   */
+/* in the activation. This function will simply check for   */
+/* the given size. Anything above or below will get NULL    */
+/* Example: if number of colors is 6, key size is 4, and    */
+/* this function receives one try with AAAG, it will        */
+/* return NULL because G is the seventh color.              */
+reply * compare_keys(char * try1, char * try2);
 
 /* Shuts down the oracle, by freeing all allocated variables */
 void terminate_oracle();
