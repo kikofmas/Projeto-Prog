@@ -34,7 +34,7 @@ int userAttempt(dados **ptr_dados, char ultima_cor, char *jogada, int tamanho_ch
 void jogo(int num_jogadores, int num_jogos, int num_cores, int tamanho_chave, int duracao_jogo,
           int tentativas, char repeticao_cores, char **nome_jogadores, dados **ptr_dados);  //funcao que permite jogar
 void criaDados(int num_jogadores, int num_jogos, dados **ptr_dados, float *mediaTempos, int *numVitorias); //criacao da media de tempo de jogo de cada jogador
-
+void vencedor(float *mediaTempos, char **nome, int num_jogadores, int *numVitorias); //definicao do vencedor do jogo
 
 
 //DECLARACAO DE ESTRUTURAS
@@ -480,4 +480,48 @@ void criaDados(int num_jogadores, int num_jogos, dados **ptr_dados, float *media
     }
     if(*numVitorias[jogador]!=0) *mediaTempos[jogador]/= (float)*numVitorias[jogador];
   }
+}
+
+
+/******************************************************************************
+* Nome da funcao: vencedor()
+*
+* Argumentos: mediaTempos[4] - array onde etsa guardada a media de tempo de cada jogador
+*             nome[4][21] - array onde estao guardados os nomes dos jogadores
+*             num_jogadores - indica o numero de jogadores
+*             num_jogos - indica o numeros de jogos
+*             numVitorias[4] - array onde estao guardados o numero de vitorias de cada jogador
+*
+* Return: none
+*
+* Descricao: funcao para descobrir o vencedor do jogo
+*
+******************************************************************************/
+void vencedor(float *mediaTempos, char **nome, int num_jogadores, int *numVitorias){
+  int vencedor=0, maximo_vitorias=0, empate=0;
+
+  printf("ESTATISTICAS:\n");
+
+  for (int jogador = 0; jogador < num_jogadores; jogador++) {
+
+    if (*numVitorias[jogador]>maximo_vitorias) { //compara o numero de vitorias com o mais alto atual
+      vencedor=jogador;  //z e o numero do jogador vencedor atual
+      maximo_vitorias = *numVitorias[jogador];  //y e o parametro vencedor atual
+      empate=0;
+    }
+    else if (*numVitorias[jogador]==maximo_vitorias) { //em caso de empate compara-se a media de tempos dos jogadores
+      if (*mediaTempos[jogador]<*mediaTempos[vencedor]) {
+        vencedor=jogador;
+        empate=0;
+      }
+      else if(*mediaTempos[jogador]==*mediaTempos[vencedor]){
+        empate=1;
+      }
+    }
+  }
+
+  if(maximo_vitorias==0) printf("\nNinguem consegiu acertar em nenhuma chave de jogo. Nao ha vencedores.\n");
+  else if(num_jogadores==1) printf("\nNao e possivel determinar um vencedor devido a falta de oponentes.\n");
+  else if(empate==1) printf("\nExiste um empate no jogo!\n");
+  else printf("\nO vencedor do torneio e: o jogador %d, %s.\n", vencedor+1, *nome[vencedor]);
 }

@@ -11,6 +11,8 @@ verificar que as funções estão o mais curtas/rapidas e a ocupar o minimo de m
 mudar argumentos funções
 
 
+fazer print de quem esta empatado??
+
 
 transformar dados[][][] em array de estruturas???
 
