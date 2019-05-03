@@ -1,10 +1,5 @@
 # Projeto-Prog
 
-
-ponteiros
-
-
-
 modificar intro e etc para contemplar as partes do projeto final
 
 modificar a descrição das funções
@@ -25,16 +20,13 @@ utilizar funções dos profs e retirar os indicios das nossas
 criar um ficheiro com as funções/estruturas do projeto intermedio ou dois ficheiros separados tipo um para funções e outros so para todas as estruturas
 
 
-mudar argumentos funções
+mediatempos e numVitorias a dar erros quando se usa memoria dinamica e nao sei porque FODA-SE
 
 
 fazer print de quem esta empatado??
 
 
-transformar dados[][][] em array de estruturas???
-
 criar função so para alocar memoria segundo as inicializações ou ao longo do codigo (agora esta ao longo do codigo)
-
 
 
 problema com função resultados (em transição e a unica que falta) parametro dado principal e de desempate
