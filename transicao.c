@@ -3,7 +3,7 @@
 
 
 void resultados(int num_jogadores, int num_jogos, dados **ptr_dados, int dado_principal, int dado_desempate, char frase[], char **nome); //apresenta as estatisticas
-void showData(dados **ptr_dados, float *mediaTempos, int num_jogadores, int *numVitorias, int num_jogos, char **nome_jogadores);  //apresenta dados extra de jogo
+
 
 /***************************************************************************************************************************************************************************
 ****************************************************************************************************************************************************************************
@@ -14,11 +14,6 @@ void showData(dados **ptr_dados, float *mediaTempos, int num_jogadores, int *num
 ****************************************************************************************************************************************************************************
 ****************************************************************************************************************************************************************************
 ***************************************************************************************************************************************************************************/
-
-
-
-
-
 
 
 /******************************************************************************
@@ -78,57 +73,5 @@ void resultados(int num_jogadores, int num_jogos, dados **ptr_dados, int dado_pr
     }
     if(y!=0 && empate==0) printf("\nO vencedor do jogo %s e: o jogador %d, %s\n", frase, vencedor+1, nome[vencedor]);
     else if(y!=0 && empate==1) printf("\nHa um empate na categoria de jogo %s\n", frase);
-  }
-}
-
-
-/******************************************************************************
-* Nome da funcao: showData()
-*
-* Argumentos: dados[4][5][3] - array onde estao guardados os dados de jogo
-*             mediaTempos[4] - array onde esta guardada a media de tempo de cada jogador
-*             num_jogadores - indica o numero de jogadores
-*             numVitorias[4] - array onde esta guardado o numero de vitorias de cada jogador
-*             num_jogos - indica o numero de jogos
-*             char nome_jogadores[4][21] - array onde estao guardados os nomes dos jogadores
-*
-* Return: none
-*
-* Descricao: funcao para mostrar os resultados de cada jogador
-*
-******************************************************************************/
-void showData(dados **ptr_dados, float *mediaTempos, int num_jogadores, int *numVitorias, int num_jogos, char **nome_jogadores){
-  int mostraDados=0, melhorTempo=301, melhorPerformance=20;
-  printf("\nSe desejar ver os dados de jogo insira 1: ");
-  scanf("%d",&mostraDados);
-  if(mostraDados==1){
-    for(int jogador=0;jogador<num_jogadores;jogador++){
-      melhorTempo=301;
-      melhorPerformance=20;
-      for(int jogo=0; jogo<num_jogos; jogo++){
-        if(dados[jogador][jogo][0]<melhorTempo){
-          melhorTempo=dados[jogador][jogo][0];
-        }
-        if(dados[jogador][jogo][1]<melhorPerformance){
-          melhorPerformance=dados[jogador][jogo][1];
-        }
-      }
-      printf("\nDados do jogador %d, %s\n",jogador+1, nome_jogadores[jogador]);
-      printf("  Numero de vitorias: %d\n", numVitorias[jogador]);
-      if(numVitorias[jogador]!=0){
-        printf("  Tempo medio: %.2fs\n", mediaTempos[jogador]);
-        printf("  Melhor tempo: %ds\n", melhorTempo);
-        printf("  Melhor performance: %d jogada(s)\n", melhorPerformance);
-      }
-      else if(numVitorias[jogador]==0){
-        printf("  Tempo medio: Nao aplicavel\n");
-        printf("  Melhor tempo: Nao aplicavel\n");
-        printf("  Melhor performance: Nao aplicavel\n");
-      }
-    }
-    getchar();
-    clearScreen(1);
-  } else{
-    clearScreen(0);
   }
 }

@@ -36,6 +36,8 @@ void jogo(int num_jogadores, int num_jogos, int num_cores, int tamanho_chave, in
 void criaDados(int num_jogadores, int num_jogos, dados **ptr_dados, float *mediaTempos, int *numVitorias); //criacao da media de tempo de jogo de cada jogador
 void vencedor(float *mediaTempos, char **nome, int num_jogadores, int *numVitorias); //definicao do vencedor do jogo
 
+void showData(dados **ptr_dados, float *mediaTempos, int num_jogadores, int *numVitorias, int num_jogos, char **nome_jogadores);  //apresenta dados extra de jogo
+
 
 //DECLARACAO DE ESTRUTURAS
 typedef struct {
@@ -475,10 +477,10 @@ void criaDados(int num_jogadores, int num_jogos, dados **ptr_dados, float *media
 
   for (int jogador = 0; jogador < num_jogadores; jogador++) {
     for (int jogo = 0; jogo < num_jogos; jogo++) {
-      if(ptr_dados[jogador][jogo].vitoria==1) *mediaTempos[jogador] += (float)ptr_dados[jogador][jogo].tempo;
-      *numVitorias[jogador] += ptr_dados[jogador][jogo].vitoria;
+      if(ptr_dados[jogador][jogo].vitoria==1) *(mediaTempos+jogador) += (float)ptr_dados[jogador][jogo].tempo;
+      *(numVitorias+jogador) += ptr_dados[jogador][jogo].vitoria;
     }
-    if(*numVitorias[jogador]!=0) *mediaTempos[jogador]/= (float)*numVitorias[jogador];
+    if(*(numVitorias+jogador)!=0) *(mediaTempos+jogador)/= (float)*(numVitorias+jogador);
   }
 }
 
@@ -504,17 +506,17 @@ void vencedor(float *mediaTempos, char **nome, int num_jogadores, int *numVitori
 
   for (int jogador = 0; jogador < num_jogadores; jogador++) {
 
-    if (*numVitorias[jogador]>maximo_vitorias) { //compara o numero de vitorias com o mais alto atual
+    if (*(numVitorias+jogador)>maximo_vitorias) { //compara o numero de vitorias com o mais alto atual
       vencedor=jogador;  //z e o numero do jogador vencedor atual
-      maximo_vitorias = *numVitorias[jogador];  //y e o parametro vencedor atual
+      maximo_vitorias = *(numVitorias+jogador);  //y e o parametro vencedor atual
       empate=0;
     }
-    else if (*numVitorias[jogador]==maximo_vitorias) { //em caso de empate compara-se a media de tempos dos jogadores
-      if (*mediaTempos[jogador]<*mediaTempos[vencedor]) {
+    else if (*(numVitorias+jogador)==maximo_vitorias) { //em caso de empate compara-se a media de tempos dos jogadores
+      if (*(mediaTempos+jogador)<*(mediaTempos+vencedor)) {
         vencedor=jogador;
         empate=0;
       }
-      else if(*mediaTempos[jogador]==*mediaTempos[vencedor]){
+      else if(*(mediaTempos+jogador)==*(mediaTempos+vencedor)){
         empate=1;
       }
     }
@@ -523,5 +525,72 @@ void vencedor(float *mediaTempos, char **nome, int num_jogadores, int *numVitori
   if(maximo_vitorias==0) printf("\nNinguem consegiu acertar em nenhuma chave de jogo. Nao ha vencedores.\n");
   else if(num_jogadores==1) printf("\nNao e possivel determinar um vencedor devido a falta de oponentes.\n");
   else if(empate==1) printf("\nExiste um empate no jogo!\n");
-  else printf("\nO vencedor do torneio e: o jogador %d, %s.\n", vencedor+1, *nome[vencedor]);
+  else printf("\nO vencedor do torneio e: o jogador %d, %s.\n", vencedor+1, *(nome+vencedor));
+}
+
+
+
+
+
+/***************************************************************************************************************************************************************************
+****************************************************************************************************************************************************************************
+****************************************************************************************************************************************************************************
+****************************************************************************************************************************************************************************
+****************************************************************************************************************************************************************************
+****************************************************************************************************************************************************************************
+****************************************************************************************************************************************************************************
+****************************************************************************************************************************************************************************
+***************************************************************************************************************************************************************************/
+
+
+
+/******************************************************************************
+* Nome da funcao: showData()
+*
+* Argumentos: dados[4][5][3] - array onde estao guardados os dados de jogo
+*             mediaTempos[4] - array onde esta guardada a media de tempo de cada jogador
+*             num_jogadores - indica o numero de jogadores
+*             numVitorias[4] - array onde esta guardado o numero de vitorias de cada jogador
+*             num_jogos - indica o numero de jogos
+*             char nome_jogadores[4][21] - array onde estao guardados os nomes dos jogadores
+*
+* Return: none
+*
+* Descricao: funcao para mostrar os resultados de cada jogador
+*
+******************************************************************************/
+void showData(dados **ptr_dados, float *mediaTempos, int num_jogadores, int *numVitorias, int num_jogos, char **nome_jogadores){
+  int mostraDados=0, melhorTempo=301, melhorPerformance=20;
+  printf("\nSe desejar ver os dados de jogo insira 1: ");
+  scanf("%d",&mostraDados);
+  if(mostraDados==1){
+    for(int jogador=0;jogador<num_jogadores;jogador++){
+      melhorTempo=301;
+      melhorPerformance=20;
+      for(int jogo=0; jogo<num_jogos; jogo++){
+        if(ptr_dados[jogador][jogo].tempo<melhorTempo){
+          melhorTempo=ptr_dados[jogador][jogo].tempo;
+        }
+        if(ptr_dados[jogador][jogo].tentativas<melhorPerformance){
+          melhorPerformance=dados[jogador][jogo].tentativas;
+        }
+      }
+      printf("\nDados do jogador %d, %s\n",jogador+1, *(nome_jogadores+jogador));
+      printf("  Numero de vitorias: %d\n", *(numVitorias+jogador));
+      if(*(numVitorias+jogador)!=0){
+        printf("  Tempo medio: %.2fs\n", *(mediaTempos+jogador));
+        printf("  Melhor tempo: %ds\n", melhorTempo);
+        printf("  Melhor performance: %d jogada(s)\n", melhorPerformance);
+      }
+      else if(*(numVitorias+jogador)==0){
+        printf("  Tempo medio: Nao aplicavel\n");
+        printf("  Melhor tempo: Nao aplicavel\n");
+        printf("  Melhor performance: Nao aplicavel\n");
+      }
+    }
+    getchar();
+    clearScreen(1);
+  } else{
+    clearScreen(0);
+  }
 }
