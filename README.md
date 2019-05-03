@@ -1,5 +1,10 @@
 # Projeto-Prog
 
+
+ponteiros
+
+
+
 modificar intro e etc para contemplar as partes do projeto final
 
 modificar a descrição das funções
@@ -8,7 +13,16 @@ modificar a descrição das funções
 adicionar inicializações para PvE e EvE
 
 
+mallocs para variaveis locais?
+
+
 verificar que as funções estão o mais curtas/rapidas e a ocupar o minimo de memoria
+
+
+utilizar funções dos profs e retirar os indicios das nossas
+
+
+criar um ficheiro com as funções/estruturas do projeto intermedio ou dois ficheiros separados tipo um para funções e outros so para todas as estruturas
 
 
 mudar argumentos funções

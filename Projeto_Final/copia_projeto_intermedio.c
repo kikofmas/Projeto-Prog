@@ -84,7 +84,7 @@ int main() {
 
   //verificacao de que a combinacao de parametros e possivel
     combo_possivel=checkCombinacao(&num_cores, &tamanho_chave, &repeticao_cores);
-  }while(combo_possivel==0);
+  }while(combo_possivel==-1);
 
   clearScreen(1);
 
@@ -325,8 +325,8 @@ void initializationRepetitions(char *repeticao_cores){
 *             *tamanho_chave - valor minimo que a variavel a inicializar pode tomar
 *             *repeticao_cores - valor maximo que a variavel a inicializar pode tomar
 *
-* Return: 1 se a combinacao e possivel
-*         0 se a combinacao e impossivel
+* Return: 0 se a combinacao e possivel
+*         -1 se a combinacao e impossivel
 *
 * Side-effects: Quando a funcao retorna 0, o valor das variaveis dadas como argumento
 *               e alterado: num_cores=0, tamanho_chave=0, repeticao_cores='\0'
@@ -341,9 +341,9 @@ int checkCombinacao(int *num_cores, int *tamanho_chave, char *repeticao_cores){
     *num_cores=0;
     *tamanho_chave=0;
     *repeticao_cores='\0';
-    return 0;
+    return -1;
   }
-  return 1;
+  return 0;
 }
 
 
