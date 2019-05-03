@@ -384,8 +384,8 @@ char createKey(char chave[8], char repeticao_cores, int tamanho_chave, int num_c
 *             tamanho_chave - indica o tamanho que a chave de jogo tem
 *             num_cores - indica o numero de cores que estao em jogo
 *
-* Return: 1 se a jogada for possivel
-*         0 se se a jogada nao for valida
+* Return: 0 se a jogada for possivel
+*         -1 se se a jogada nao for valida
 *
 * Descricao: funcao para verificar se a jogada feita pelo utilizador esta
 *            correta dentro dos parametros definidos durante a inicializacao
@@ -398,9 +398,9 @@ int checkInput(char jogada[8], int tamanho_chave, int num_cores){
     for(int z=0;z<num_cores;z++){
       if(toupper(jogada[i])==cores[z]) flag=1;
     }
-    if (flag==0) return 0;
+    if (flag==0) return -1;
   }
-  return 1;
+  return 0;
 }
 
 
@@ -462,8 +462,8 @@ void comparaChave(int tamanho_chave, char jogada[8], char copia_chave[8], int *l
 *             jogador - indica o jogador que se encontra a jogar
 *             jogo - indica o jogo em que o jogador se encontra
 *
-* Return: 1 se a jogada efetuada for valida e o tempo de jogo ainda nao tiver acabado
-*         0 se o tempo de jogo chegar ao maximo defindo pelo utilizador
+* Return: 0 se a jogada efetuada for valida e o tempo de jogo ainda nao tiver acabado
+*         -1 se o tempo de jogo chegar ao maximo defindo pelo utilizador
 *
 * Side-effects: Quando a funcao retorna zero leva acpassagem para o proximo
 *               jogo no decorrer do fluxo de jogo
@@ -486,15 +486,15 @@ int userAttempt(int dados[4][5][3], char ultima_cor, char jogada[8], int tamanho
     if(*tempo_jogo>duracao_jogo){    //se o limite de tempo for atingido sai do jogo
       printf("\nO tempo maximo de jogo foi atingido\n");
       dados[jogador][jogo][0]=duracao_jogo;
-      return 0;
+      return -1;
     }
     else if ((int)strlen(buffer)!=tamanho_chave+1) {
       if (strlen(buffer)>90) cleanslate();
       printf("Erro: input incorreto. Verifique que a combinacao tem %d caracteres\n",tamanho_chave);
     }
     else {    //validacao do input
-      if(checkInput(jogada, tamanho_chave, num_cores)==1){
-        return 1;
+      if(checkInput(jogada, tamanho_chave, num_cores)==0){
+        return 0;
       }
       else{
         printf("Erro: input incorreto. A combinacao de cores so pode ter caracteres de (A a %c)\n",ultima_cor);
@@ -550,7 +550,7 @@ void jogo(int num_jogadores, int num_jogos, int num_cores, int tamanho_chave, in
         verificacao = userAttempt(dados, ultima_cor, jogada, tamanho_chave, tempo_inicial, &tempo_jogo,
                     &tempo_restante, duracao_jogo, num_cores, jogador, jogo);
 
-        if(verificacao==0) {
+        if(verificacao==-1) {
           tentativa=tentativas;
         }
         else{

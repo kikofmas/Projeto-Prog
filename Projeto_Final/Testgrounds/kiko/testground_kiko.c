@@ -36,8 +36,8 @@ int main(int argc, char const *argv[]) {
       printf("ERRO: Numero de argumentos inválido\n");
   }
 
-  if (func_valid == -1) exit(EXIT_FAILURE);
-  return EXIT_SUCCESS;
+  if (func_valid == -1) exit(-1);
+  return 0;
 }
 
 
@@ -54,8 +54,8 @@ int test_mode_check(int k, char const *argv[], int *flag_init, int *flag_ord, in
       *flag_ord = i+1;
     } else {
       printf("ERRO: Argumentos incorretos ou não identificados\n");
-      exit(EXIT_FAILURE);
+      exit(-1);
     }
   }
-  exit(EXIT_SUCCESS);
+  return 0;
 }
