@@ -1,5 +1,9 @@
 # Projeto-Prog
 
+
+criar uma (ou mais) estrutura com todas as inicializações em vez de termos milhentas variaveis?
+
+
 modificar intro e etc para contemplar as partes do projeto final
 
 modificar a descrição das funções
@@ -14,7 +18,7 @@ mallocs para variaveis locais?
 verificar que as funções estão o mais curtas/rapidas e a ocupar o minimo de memoria
 
 
-utilizar funções dos profs e retirar os indicios das nossas
+utilizar funções dos profs e retirar os indicios das nossas --- temos de usar as do prof no modo PvP?
 
 
 criar um ficheiro com as funções/estruturas do projeto intermedio ou dois ficheiros separados tipo um para funções e outros so para todas as estruturas

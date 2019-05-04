@@ -48,7 +48,7 @@ void criaDados(int num_jogadores, int num_jogos, dados **ptr_dados, float mediaT
 void vencedor(float mediaTempos[4], char **nome, int num_jogadores, int numVitorias[4]); //definicao do vencedor do jogo
 
 void showData(dados **ptr_dados, float mediaTempos[4], int num_jogadores, int numVitorias[4], int num_jogos, char **nome_jogadores);  //apresenta dados extra de jogo
-void clear_memory(char **vect1, int v1, dados **ptr_dados, int v2, float *vect3, int v3, int *vect4, int v4);
+void clear_memory(char **vect1, int v1, dados **ptr_dados, float *vect3, int *vect4);
 
 
 
@@ -121,7 +121,7 @@ int main(int argc, char const *argv[]) {
 
   printf("\nESPERAMOS QUE SE TENHA DIVERTIDO!!!\n");
 
-  clear_memory(nome_jogadores, num_jogadores, ptr_dados, num_jogadores, mediaTempos, num_jogadores, numVitorias, num_jogadores);
+  clear_memory(nome_jogadores, num_jogadores, ptr_dados, mediaTempos, numVitorias);
 
   return 0;
 
@@ -737,12 +737,12 @@ void showData(dados **ptr_dados, float mediaTempos[4], int num_jogadores, int nu
 }
 
 
-void clear_memory(char **vect1, int v1, dados **ptr_dados, int v2, float *vect3, int v3, int *vect4, int v4){
+void clear_memory(char **vect1, int v1, dados **ptr_dados, float *vect3, int *vect4){
   for (int i = 0; i < v1; i++) {
     free(vect1[i]);
   }
   free(vect1);
-  for (int i = 0; i < v2; i++) {
+  for (int i = 0; i < v1; i++) {
     free(ptr_dados[i]);
   }
   free(ptr_dados);
