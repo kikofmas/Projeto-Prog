@@ -1,6 +1,9 @@
 # Projeto-Prog
 
 
+passar tudo para argumentos em vez de as funções reotrnarem as coisas?
+
+
 criar uma (ou mais) estrutura com todas as inicializações em vez de termos milhentas variaveis?
 
 
