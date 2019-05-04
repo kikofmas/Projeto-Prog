@@ -24,7 +24,7 @@ utilizar funções dos profs e retirar os indicios das nossas --- temos de usar 
 criar um ficheiro com as funções/estruturas do projeto intermedio ou dois ficheiros separados tipo um para funções e outros so para todas as estruturas
 
 
-mediatempos e numVitorias a dar erros quando se usa memoria dinamica e nao sei porque FODA-SE
+mediatempos e numVitorias a dar erros quando se usa memoria dinamica e nao sei porque FODA-SE --- acho que ja sei resolver, eu é que sou burro
 
 
 fazer print de quem esta empatado??
