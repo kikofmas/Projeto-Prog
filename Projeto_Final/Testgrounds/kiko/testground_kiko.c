@@ -32,15 +32,22 @@ int main(int argc, char const *argv[]) {
   error=mode_check(argc, argv, &cmd_flag);
   if (error==-1) exit(-1);
 
+
+  //passar para funcao??
   if (cmd_flag.init==0 && cmd_flag.hist==0 && cmd_flag.ord==0) {
+    printf("MODO INTERATIVO\n");
     /* fazer o jogo normal/interativo */
   } else if(cmd_flag.init==0 && cmd_flag.hist!=0 && cmd_flag.ord!=0){
+    printf("MODO TESTE\n\nAPENAS REORDENAÇAO");
     /* fazer so o algoritmo de reordenaçao */
+    /* load -h file and reord*/
   } else if(cmd_flag.init==0 && ((cmd_flag.hist!=0 && cmd_flag.ord==0) || (cmd_flag.hist==0 && cmd_flag.ord!=0))){
     printf("ERRO: Falta o ficheiro das inicializações\n");
     exit(-1);
   } else if(cmd_flag.init!=0){
+    printf("MODO TESTE\n\n");
     /* jogar EvE */
+    /*load init files and others if needed -- use ifs to allow or not passage*/
   }
 
 
@@ -50,9 +57,9 @@ int main(int argc, char const *argv[]) {
 
 int mode_check(int argc, char const *argv[], flags *cmd_flag){
   int func_valid=0;
+
   switch (argc) {
     case 1:
-      printf("MODO INTERATIVO\n");
       cmd_flag->init=0;
       cmd_flag->hist=0;
       cmd_flag->ord=0;
@@ -69,6 +76,7 @@ int mode_check(int argc, char const *argv[], flags *cmd_flag){
     default:
       printf("ERRO: Numero de argumentos inválido\n");
   }
+
   if (func_valid == -1) exit(-1);
   return 0;
 }
@@ -76,7 +84,7 @@ int mode_check(int argc, char const *argv[], flags *cmd_flag){
 
 int test_mode_config(int k, char const *argv[], flags **cmd_flag) {
   char ini[] = "-i", hist[] = "-h", ord[] = "-o";
-  printf("MODO TESTE\n");
+
   for (int i = 1; i < k; i += 2) {
     if (strcmp(ini, argv[i]) == 0) {
       (*cmd_flag)->init = i+1;
@@ -89,5 +97,6 @@ int test_mode_config(int k, char const *argv[], flags **cmd_flag) {
       exit(-1);
     }
   }
+
   return 0;
 }
