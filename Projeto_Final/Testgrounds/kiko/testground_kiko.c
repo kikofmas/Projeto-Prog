@@ -16,10 +16,10 @@ typedef struct{
   int init;
   int hist;
   int ord;
-}flags;
+}flags; //flags guardam o numero do argumento, iguais a 0 se não estiverem presentes
 
 
-//flags guardam o numero do argumento, iguais a 0 se não estiverem presentes
+
 int mode_check(int argc, char const *argv[], flags *cmd_flag);
 int test_mode_config(int k, char const *argv[], flags **cmd_flag);
 
@@ -33,10 +33,14 @@ int main(int argc, char const *argv[]) {
   if (error==-1) exit(-1);
 
   if (cmd_flag.init==0 && cmd_flag.hist==0 && cmd_flag.ord==0) {
-    /* fazer as inicializações */
-  } elif(cmd_flag.init==0 && (cmd_flag.hist!=0 || cmd_flag.ord!=0)){
+    /* fazer o jogo normal */
+  } else if(cmd_flag.init==0 && cmd_flag.hist!=0 && cmd_flag.ord!=0){
+    /*fazer so o algoritmo de reordenaçao*/
+  } else if(cmd_flag.init==0 && ((cmd_flag.hist!=0 && cmd_flag.ord==0) || (cmd_flag.hist==0 && cmd_flag.ord!=0))){
     printf("ERRO: Falta o ficheiro das inicializações\n");
     exit(-1);
+  } else if(cmd_flag.init!=0){
+    /*jogar EvE */
   }
 
 
@@ -49,6 +53,9 @@ int mode_check(int argc, char const *argv[], flags *cmd_flag){
   switch (argc) {
     case 1:
       printf("MODO INTERATIVO\n");
+      cmd_flag->init=0;
+      cmd_flag->hist=0;
+      cmd_flag->ord=0;
       break;
     case 3:
       func_valid = test_mode_config(3, argv, &cmd_flag);
