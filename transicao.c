@@ -2,7 +2,7 @@
 
 
 
-void resultados(int num_jogadores, int num_jogos, dados **ptr_dados, int dado_principal, int dado_desempate, char frase[], char **nome); //apresenta as estatisticas
+void resultados(int num_jogadores, int num_jogos, dados **ptr_dados, int dado_principal, char frase[], char **nome); //apresenta as estatisticas
 
 
 /***************************************************************************************************************************************************************************
@@ -70,37 +70,43 @@ void resultados(int num_jogadores, int num_jogos, dados **ptr_dados, int dado_pr
 *            do dado principal indicado
 *
 ******************************************************************************/
-void resultados(int num_jogadores, int num_jogos, dados **ptr_dados, int dado_principal, int dado_desempate, char frase[], char **nome){
+void resultados(int num_jogadores, int num_jogos, dados **ptr_dados, int dado_principal, char frase[], char **nome){
   int vencedor=0; //guarda o numero do jogador vencedor atual
   int x=301;  //guarda o valor do parametro principal
   int z=301;  //guarda o valor do parametro secundario
   int y=0; //verifica se ha pelo menos um jogo ganho por alguem
   int empate=0;
-  int principal = 0;
-  int desempate = 0;
+  int principal = 0, desempate = 0;
   if(num_jogadores!=1){
     for (int jogador = 0; jogador < num_jogadores; jogador++) {
       for (int jogo = 0; jogo < num_jogos; jogo++) {
         //compara com o tempo mais baixo atual e verifica se o jogo foi acabado
-
-        if (dados[jogador][jogo][dado_principal]<x && dados[jogador][jogo][2]==1) {
+        if(dado_principal==0){
+          principal=ptr_dados[jogador][jogo].tempo;
+          desempate=ptr_dados[jogador][jogo].tentativas;
+        }
+        else if(dado_principal==1){
+          principal=ptr_dados[jogador][jogo].tentativas;
+          desempate=ptr_dados[jogador][jogo].tempo;
+        }
+        if (principal<x && ptr_dados[jogador][jogo].vitoria==1) {
           vencedor=jogador;
-          x=dados[jogador][jogo][dado_principal];
-          z=dados[jogador][jogo][dado_desempate];
+          x=principal;
+          z=desempate;
           y=1;
           empate=0;
         }
         //em caso de empate compara-se o numero de jogadas e verifica se o jogo foi acabado
-        else if (dados[jogador][jogo][dado_principal]==x && dados[jogador][jogo][2]==1) {
-          if (dados[jogador][jogo][dado_desempate]<z) {
+        else if (principal==x && ptr_dados[jogador][jogo].vitoria==1) {
+          if (desempate<z) {
             y=1;
-            x=dados[jogador][jogo][dado_principal];
-            z=dados[jogador][jogo][dado_desempate];
+            x=principal;
+            z=desempate;
             vencedor=jogador;
             y=1;
             empate=0;
           }
-          else if (dados[jogador][jogo][dado_desempate]==z){
+          else if (desempate==z){
             empate=1;
           }
         }

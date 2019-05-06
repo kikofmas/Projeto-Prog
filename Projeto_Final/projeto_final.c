@@ -47,9 +47,9 @@ int userAttempt(dados **ptr_dados, char ultima_cor, char *jogada, int tamanho_ch
                 time_t *tempo_jogo, time_t *tempo_restante, int duracao_jogo, int num_cores, int jogador, int jogo); //tentativa do jogador
 dados **jogo(int num_jogadores, int num_jogos, int num_cores, int tamanho_chave, int duracao_jogo,\
             int tentativas, char repeticao_cores, char **nome_jogadores);  //funcao que permite jogar
-void criaDados(int num_jogadores, int num_jogos, dados **ptr_dados, float *mediaTempos, int *numVitorias); //criacao da media de tempo de jogo de cada jogador
+void criaDados(int num_jogadores, int num_jogos, dados **ptr_dados, float **mediaTempos, int **numVitorias); //criacao da media de tempo de jogo de cada jogador
 void vencedor(float *mediaTempos, char **nome, int num_jogadores, int *numVitorias); //definicao do vencedor do jogo
-
+void resultados(int num_jogadores, int num_jogos, dados **ptr_dados, int dado_principal, char frase[], char **nome); //apresenta as estatisticas
 void showData(dados **ptr_dados, float *mediaTempos, int num_jogadores, int *numVitorias, int num_jogos, char **nome_jogadores);  //apresenta dados extra de jogo
 void clear_memory(char **vect1, int v1, dados **ptr_dados, float *vect3, int *vect4);
 
@@ -115,11 +115,10 @@ int main(int argc, char const *argv[]) {
 
 //ESTATISTICAS: calculo dos resultados e apresentacao das estatisticas
 
-  criaDados(defs_jogo.num_jogadores, defs_jogo.num_jogos, ptr_dados, mediaTempos, numVitorias);
+  criaDados(defs_jogo.num_jogadores, defs_jogo.num_jogos, ptr_dados, &mediaTempos, &numVitorias);
   vencedor(mediaTempos, nome_jogadores, defs_jogo.num_jogadores, numVitorias);
-  resultados(defs_jogo.num_jogadores, defs_jogo.num_jogos, ptr_dados, 0, 1, "mais rapido", nome_jogadores);
-  //resultados(num_jogadores, num_jogos, dados, 1, 0, "mais curto", nome_jogadores);
-
+  resultados(defs_jogo.num_jogadores, defs_jogo.num_jogos, ptr_dados, 0, "mais rapido", nome_jogadores);
+  resultados(defs_jogo.num_jogadores, defs_jogo.num_jogos, ptr_dados, 1, "mais curto", nome_jogadores);
   showData(ptr_dados, mediaTempos, defs_jogo.num_jogadores, numVitorias, defs_jogo.num_jogos, nome_jogadores);
 
   printf("\nESPERAMOS QUE SE TENHA DIVERTIDO!!!\n");
@@ -216,7 +215,7 @@ void countdown(int k, char **nome){
     clearScreen(0);
     printf("Jogador %d: %s, e a sua vez\n\n", k, *nome);
   }
-  //tcflush(0,TCIFLUSH); // 0 representa o stdin, TCIFLUSH limpa o input do utilizador não foi lido
+  tcflush(0,TCIFLUSH); // 0 representa o stdin, TCIFLUSH limpa o input do utilizador não foi lido
   clearScreen(0);
 }
 
@@ -598,6 +597,7 @@ dados **jogo(int num_jogadores, int num_jogos, int num_cores, int tamanho_chave,
       clearScreen(1);
     }
   }
+
   free(chave);
   free(copia_chave);
   free(jogada);
@@ -620,17 +620,17 @@ dados **jogo(int num_jogadores, int num_jogos, int num_cores, int tamanho_chave,
 *            media de tempo de jogo e numero de vitorias
 *
 ******************************************************************************/
-void criaDados(int num_jogadores, int num_jogos, dados **ptr_dados, float *mediaTempos, int *numVitorias){
+void criaDados(int num_jogadores, int num_jogos, dados **ptr_dados, float **mediaTempos, int **numVitorias){
 
-  mediaTempos=(float *)calloc(num_jogadores+1, sizeof(float));
-  numVitorias=(int *)calloc(num_jogadores+1, sizeof(int));
+  *mediaTempos=(float *)calloc(num_jogadores+1, sizeof(float));
+  *numVitorias=(int *)calloc(num_jogadores+1, sizeof(int));
 
   for (int jogador = 0; jogador < num_jogadores; jogador++) {
     for (int jogo = 0; jogo < num_jogos; jogo++) {
-      if((ptr_dados[jogador][jogo]).vitoria==1) mediaTempos[jogador] += (float)((ptr_dados[jogador][jogo]).tempo);
-      numVitorias[jogador] += (ptr_dados[jogador][jogo]).vitoria;
+      if((ptr_dados[jogador][jogo]).vitoria==1) *mediaTempos[jogador] += (float)((ptr_dados[jogador][jogo]).tempo);
+      *numVitorias[jogador] += (ptr_dados[jogador][jogo]).vitoria;
     }
-    if(numVitorias[jogador]!=0) mediaTempos[jogador]/= (float)(numVitorias[jogador]);
+    if(*numVitorias[jogador]!=0) *mediaTempos[jogador]/= (float)(*numVitorias[jogador]);
   }
 }
 
@@ -676,6 +676,76 @@ void vencedor(float *mediaTempos, char **nome, int num_jogadores, int *numVitori
   else if(num_jogadores==1) printf("\nNao e possivel determinar um vencedor devido a falta de oponentes.\n");
   else if(empate==1) printf("\nExiste um empate no jogo!\n");
   else printf("\nO vencedor do torneio e: o jogador %d, %s.\n", vencedor+1, *(nome+vencedor));
+}
+
+
+/******************************************************************************
+* Nome da funcao: resultados()
+*
+* Argumentos: num_jogadores - indica o numero de jogadores
+*             num_jogos - indica o numeros de jogos
+*             dados[4][5][3] - array onde estao guardados os dados de jogo
+*             dado_principal - indica o dado que esta a ser comparado:
+*                               0 - tempo de jogo
+*                               1 - tentativas de jogo
+*             dado_desempate - indica o dado para desempatar a comparacao:
+*                               0 - tempo de jogo
+*                               1 - tentativas de jogo
+*             frase[15] - descrição breve (max: 14 chars) da comparacao
+*             nome[4][21] - array onde estao guardados os nomes dos jogadores
+*
+* Return: none
+*
+* Descricao: funcao para comparar os dados de jogo e indicar o vencedor de cada
+*            categoria (jogo mais rapido ou jogo em menos tentativas) dependendo
+*            do dado principal indicado
+*
+******************************************************************************/
+void resultados(int num_jogadores, int num_jogos, dados **ptr_dados, int dado_principal, char frase[], char **nome){
+  int vencedor=0; //guarda o numero do jogador vencedor atual
+  int x=301;  //guarda o valor do parametro principal
+  int z=301;  //guarda o valor do parametro secundario
+  int y=0; //verifica se ha pelo menos um jogo ganho por alguem
+  int empate=0;
+  int principal = 0, desempate = 0;
+  if(num_jogadores!=1){
+    for (int jogador = 0; jogador < num_jogadores; jogador++) {
+      for (int jogo = 0; jogo < num_jogos; jogo++) {
+        //compara com o tempo mais baixo atual e verifica se o jogo foi acabado
+        if(dado_principal==0){
+          principal=ptr_dados[jogador][jogo].tempo;
+          desempate=ptr_dados[jogador][jogo].tentativas;
+        }
+        else if(dado_principal==1){
+          principal=ptr_dados[jogador][jogo].tentativas;
+          desempate=ptr_dados[jogador][jogo].tempo;
+        }
+        if (principal<x && ptr_dados[jogador][jogo].vitoria==1) {
+          vencedor=jogador;
+          x=principal;
+          z=desempate;
+          y=1;
+          empate=0;
+        }
+        //em caso de empate compara-se o numero de jogadas e verifica se o jogo foi acabado
+        else if (principal==x && ptr_dados[jogador][jogo].vitoria==1) {
+          if (desempate<z) {
+            y=1;
+            x=principal;
+            z=desempate;
+            vencedor=jogador;
+            y=1;
+            empate=0;
+          }
+          else if (desempate==z){
+            empate=1;
+          }
+        }
+      }
+    }
+    if(y!=0 && empate==0) printf("\nO vencedor do jogo %s e: o jogador %d, %s\n", frase, vencedor+1, nome[vencedor]);
+    else if(y!=0 && empate==1) printf("\nHa um empate na categoria de jogo %s\n", frase);
+  }
 }
 
 
