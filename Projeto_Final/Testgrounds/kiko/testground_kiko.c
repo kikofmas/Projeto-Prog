@@ -33,14 +33,14 @@ int main(int argc, char const *argv[]) {
   if (error==-1) exit(-1);
 
   if (cmd_flag.init==0 && cmd_flag.hist==0 && cmd_flag.ord==0) {
-    /* fazer o jogo normal */
+    /* fazer o jogo normal/interativo */
   } else if(cmd_flag.init==0 && cmd_flag.hist!=0 && cmd_flag.ord!=0){
-    /*fazer so o algoritmo de reordenaçao*/
+    /* fazer so o algoritmo de reordenaçao */
   } else if(cmd_flag.init==0 && ((cmd_flag.hist!=0 && cmd_flag.ord==0) || (cmd_flag.hist==0 && cmd_flag.ord!=0))){
     printf("ERRO: Falta o ficheiro das inicializações\n");
     exit(-1);
   } else if(cmd_flag.init!=0){
-    /*jogar EvE */
+    /* jogar EvE */
   }
 
 
