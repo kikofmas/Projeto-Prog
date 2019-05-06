@@ -17,6 +17,7 @@
 #include <ctype.h>    //toupper and tolower functions
 #include <unistd.h>   //permite usar a funcao sleep
 #include <termios.h>  //permite usar a funcao tcflush
+#include "oraculo.h"
 
 
 //DECLARACAO DE ESTRUTURAS
@@ -62,6 +63,7 @@ int main(int argc, char const *argv[]) {
   defs defs_jogo={'\0',0,0,0,0,0,0};
   char **nome_jogadores=NULL;
   int combo_possivel=0;
+  int rep=0;
 //declaracao das variaveis das estatisticas:
   dados **ptr_dados=NULL; //[][][0]=tempo, [][][1]=tentativas, [][][2]=vitoria
   int *numVitorias=NULL;
@@ -103,6 +105,10 @@ int main(int argc, char const *argv[]) {
   //verificacao de que a combinacao de parametros e possivel
     combo_possivel=checkCombinacao(&defs_jogo.num_cores, &defs_jogo.tamanho_chave, &defs_jogo.repeticao_cores);
   }while(combo_possivel==-1);
+
+  if(tolower(defs_jogo.repeticao_cores)=='s') rep=1;
+
+  activate_oracle(defs_jogo.tamanho_chave, defs_jogo.num_cores, rep);
 
   clearScreen(1);
 

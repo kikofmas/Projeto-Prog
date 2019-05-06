@@ -10,8 +10,7 @@
 #include <termios.h>  //permite usar a funcao tcflush
 #include "oraculo.h"
 
-int main() {
-  //activate_oracle(4, 6, 0);
-  aaa
+int main(int argc, char const *argv[]) {
+  
   return 0;
 }
