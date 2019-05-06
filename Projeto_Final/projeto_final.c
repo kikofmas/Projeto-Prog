@@ -117,7 +117,7 @@ int main(int argc, char const *argv[]) {
 
   criaDados(defs_jogo.num_jogadores, defs_jogo.num_jogos, ptr_dados, mediaTempos, numVitorias);
   vencedor(mediaTempos, nome_jogadores, defs_jogo.num_jogadores, numVitorias);
-  //resultados(num_jogadores, num_jogos, dados, 0, 1, "mais rapido", nome_jogadores);
+  resultados(defs_jogo.num_jogadores, defs_jogo.num_jogos, ptr_dados, 0, 1, "mais rapido", nome_jogadores);
   //resultados(num_jogadores, num_jogos, dados, 1, 0, "mais curto", nome_jogadores);
 
   showData(ptr_dados, mediaTempos, defs_jogo.num_jogadores, numVitorias, defs_jogo.num_jogos, nome_jogadores);

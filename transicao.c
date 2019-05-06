@@ -76,10 +76,13 @@ void resultados(int num_jogadores, int num_jogos, dados **ptr_dados, int dado_pr
   int z=301;  //guarda o valor do parametro secundario
   int y=0; //verifica se ha pelo menos um jogo ganho por alguem
   int empate=0;
+  int principal = 0;
+  int desempate = 0;
   if(num_jogadores!=1){
     for (int jogador = 0; jogador < num_jogadores; jogador++) {
       for (int jogo = 0; jogo < num_jogos; jogo++) {
         //compara com o tempo mais baixo atual e verifica se o jogo foi acabado
+
         if (dados[jogador][jogo][dado_principal]<x && dados[jogador][jogo][2]==1) {
           vencedor=jogador;
           x=dados[jogador][jogo][dado_principal];
