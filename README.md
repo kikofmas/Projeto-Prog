@@ -1,5 +1,7 @@
 # Projeto-Prog
 
+quando se verifica que os ficheiros abrem/estao corretos??
+
 
 passar tudo para argumentos em vez de as funções reotrnarem as coisas?
 
