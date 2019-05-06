@@ -810,6 +810,6 @@ void clear_memory(char **vect1, int v1, dados **ptr_dados, float *vect3, int *ve
     free(ptr_dados[i]);
   }
   free(ptr_dados);
-  //free(vect3);
-  //free(vect4);
+  free(vect3);
+  free(vect4);
 }
