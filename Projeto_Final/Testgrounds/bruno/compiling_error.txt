@@ -1,3 +1,0 @@
-/home/student/github/Projeto-Prog/Projeto_Final/Testgrounds/bruno/testground_bruno.c:20:1: error: expected ‘=’, ‘,’, ‘;’, ‘asm’ or ‘__attribute__’ before numeric constant
- 100 // número de jogos
- ^

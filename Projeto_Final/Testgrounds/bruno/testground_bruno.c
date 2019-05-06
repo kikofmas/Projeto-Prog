@@ -46,14 +46,7 @@ int main(int argc, char const *argv[]) {
     token = strtok(NULL,"\n");
     defs_jogo.tentativas = atoi(token);
 
-    printf("%s\n", nome_jogadores);
-    printf("%d\n", defs_jogo.num_jogos);
-    printf("%d\n", defs_jogo.num_cores);
-    printf("%d\n", defs_jogo.tamanho_chave);
-    printf("%c\n", defs_jogo.repeticao_cores);
-    printf("%d\n", defs_jogo.tentativas_alea);
-    printf("%d\n", defs_jogo.tentativas);
-
+    free(text);
   }
   else{
     perror("Erro");

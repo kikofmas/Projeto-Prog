@@ -32,6 +32,12 @@ typedef struct {
   int num_jogadores, duracao_jogo, num_jogos, num_cores, tamanho_chave, tentativas, tentativas_alea;
 } defs;
 
+typedef struct{
+  int init;
+  int hist;
+  int ord;
+}flags; //flags guardam o numero do argumento, iguais a 0 se não estiverem presentes
+
 //DECLARACAO DE FUNCOES
 void introducao(void); //introducao ao jogo
 void cleanslate(void); //limpa o input indesejado
@@ -54,10 +60,17 @@ void resultados(int num_jogadores, int num_jogos, dados **ptr_dados, int dado_pr
 void showData(dados **ptr_dados, float *mediaTempos, int num_jogadores, int *numVitorias, int num_jogos, char **nome_jogadores);  //apresenta dados extra de jogo
 void clear_memory(char **vect1, int v1, dados **ptr_dados, float *vect3, int *vect4);
 
+int mode_check(int argc, char const *argv[], flags *cmd_flag);
+int test_mode_config(int k, char const *argv[], flags **cmd_flag);
+
 
 
 
 int main(int argc, char const *argv[]) {
+
+//declaracao das variaveis para o modo de funcionamento do programa
+  int error=0;
+  flags cmd_flag={0, 0, 0};
 
 //declaracao das variaveis da inicializacao:
   defs defs_jogo={'\0',0,0,0,0,0,0,0};
@@ -73,63 +86,133 @@ int main(int argc, char const *argv[]) {
   time_t t;
   srand((unsigned) time(&t)); //inicializa o gerador aleatorio
 
-
-//INICIALIZACAO DAS VARIAVEIS DE JOGO
-  introducao();
-
-  //numero de jogadores
-  initialization(&defs_jogo.num_jogadores, 1, 4, "o numero de jogadores");
-
-  //nome dos jogadores
-   nome_jogadores=initializationNames(defs_jogo.num_jogadores);
-
-  //numero de jogos
-  initialization(&defs_jogo.num_jogos, 1, 5, "o numero de jogos");
-
-  //numero maximo de tentivas por jogo
-  initialization(&defs_jogo.tentativas, 10, 20, "o numero maximo de tentativas");
-
-  //duracao de cada jogo
-  initialization(&defs_jogo.duracao_jogo, 60, 300, "o tempo de jogo (em segundos)");
-
-  do{
-  //dimensao da chave
-    initialization(&defs_jogo.tamanho_chave, 4, 8, "a dimensao da chave com que deseja jogar");
-
-  //numero de cores em jogo
-    initialization(&defs_jogo.num_cores, 6, 12, "o numero de cores com que deseja jogar");
-
-  //repeticao de cores
-    initializationRepetitions(&defs_jogo.repeticao_cores);
-
-  //verificacao de que a combinacao de parametros e possivel
-    combo_possivel=checkCombinacao(&defs_jogo.num_cores, &defs_jogo.tamanho_chave, &defs_jogo.repeticao_cores);
-  }while(combo_possivel==-1);
-
-  if(tolower(defs_jogo.repeticao_cores)=='s') rep=1;
-
-  clearScreen(1);
+  error=mode_check(argc, argv, &cmd_flag);
+  if (error==-1) exit(-1);
 
 
-//JOGO
+  //passar para funcao??
+  if (cmd_flag.init==0 && cmd_flag.hist==0 && cmd_flag.ord==0) {
+    printf("MODO INTERATIVO\n");
 
-  activate_oracle(defs_jogo.tamanho_chave, defs_jogo.num_cores, rep);
+    //INICIALIZACAO DAS VARIAVEIS DE JOGO
+      introducao();
 
-  ptr_dados=jogo(defs_jogo.num_jogadores, defs_jogo.num_jogos, defs_jogo.num_cores, defs_jogo.tamanho_chave,
-                 defs_jogo.duracao_jogo, defs_jogo.tentativas, defs_jogo.repeticao_cores, nome_jogadores);
+      //numero de jogadores
+      initialization(&defs_jogo.num_jogadores, 1, 4, "o numero de jogadores");
+
+      //nome dos jogadores
+      nome_jogadores=initializationNames(defs_jogo.num_jogadores);
+
+      //numero de jogos
+      initialization(&defs_jogo.num_jogos, 1, 5, "o numero de jogos");
+
+      //numero maximo de tentivas por jogo
+      initialization(&defs_jogo.tentativas, 10, 20, "o numero maximo de tentativas");
+
+      //duracao de cada jogo
+      initialization(&defs_jogo.duracao_jogo, 60, 300, "o tempo de jogo (em segundos)");
+
+      do{
+      //dimensao da chave
+        initialization(&defs_jogo.tamanho_chave, 4, 8, "a dimensao da chave com que deseja jogar");
+
+      //numero de cores em jogo
+        initialization(&defs_jogo.num_cores, 6, 12, "o numero de cores com que deseja jogar");
+
+      //repeticao de cores
+        initializationRepetitions(&defs_jogo.repeticao_cores);
+
+      //verificacao de que a combinacao de parametros e possivel
+        combo_possivel=checkCombinacao(&defs_jogo.num_cores, &defs_jogo.tamanho_chave, &defs_jogo.repeticao_cores);
+      }while(combo_possivel==-1);
+
+      if(tolower(defs_jogo.repeticao_cores)=='s') rep=1;
+
+      clearScreen(1);
 
 
-//ESTATISTICAS: calculo dos resultados e apresentacao das estatisticas
+    //JOGO
 
-  criaDados(defs_jogo.num_jogadores, defs_jogo.num_jogos, ptr_dados, &mediaTempos, &numVitorias);
-  vencedor(mediaTempos, nome_jogadores, defs_jogo.num_jogadores, numVitorias);
-  resultados(defs_jogo.num_jogadores, defs_jogo.num_jogos, ptr_dados, 0, "mais rapido", nome_jogadores);
-  resultados(defs_jogo.num_jogadores, defs_jogo.num_jogos, ptr_dados, 1, "mais curto", nome_jogadores);
-  showData(ptr_dados, mediaTempos, defs_jogo.num_jogadores, numVitorias, defs_jogo.num_jogos, nome_jogadores);
+      activate_oracle(defs_jogo.tamanho_chave, defs_jogo.num_cores, rep);
 
-  printf("\nESPERAMOS QUE SE TENHA DIVERTIDO!!!\n");
+      ptr_dados=jogo(defs_jogo.num_jogadores, defs_jogo.num_jogos, defs_jogo.num_cores, defs_jogo.tamanho_chave,
+                     defs_jogo.duracao_jogo, defs_jogo.tentativas, defs_jogo.repeticao_cores, nome_jogadores);
 
-  clear_memory(nome_jogadores, defs_jogo.num_jogadores, ptr_dados, mediaTempos, numVitorias);
+
+    //ESTATISTICAS: calculo dos resultados e apresentacao das estatisticas
+
+      criaDados(defs_jogo.num_jogadores, defs_jogo.num_jogos, ptr_dados, &mediaTempos, &numVitorias);
+      vencedor(mediaTempos, nome_jogadores, defs_jogo.num_jogadores, numVitorias);
+      resultados(defs_jogo.num_jogadores, defs_jogo.num_jogos, ptr_dados, 0, "mais rapido", nome_jogadores);
+      resultados(defs_jogo.num_jogadores, defs_jogo.num_jogos, ptr_dados, 1, "mais curto", nome_jogadores);
+      showData(ptr_dados, mediaTempos, defs_jogo.num_jogadores, numVitorias, defs_jogo.num_jogos, nome_jogadores);
+
+      printf("\nESPERAMOS QUE SE TENHA DIVERTIDO!!!\n");
+
+      clear_memory(nome_jogadores, defs_jogo.num_jogadores, ptr_dados, mediaTempos, numVitorias);
+}
+  else if(cmd_flag.init==0 && cmd_flag.hist!=0 && cmd_flag.ord!=0){
+    printf("MODO TESTE\n\nAPENAS REORDENAÇAO");
+    /* fazer so o algoritmo de reordenaçao */
+    /* load -h file and reord*/
+  }
+  else if(cmd_flag.init==0 && ((cmd_flag.hist!=0 && cmd_flag.ord==0) || (cmd_flag.hist==0 && cmd_flag.ord!=0))){
+    printf("ERRO: Falta o ficheiro das inicializações\n");
+    exit(-1);
+  }
+  else if(cmd_flag.init!=0){
+    printf("MODO TESTE\n\n");
+    /* jogar EvE */
+    /*load init files and others if needed -- use ifs to allow or not passage*/
+
+    //passar esta merda para funcao
+
+    FILE *fptr = fopen(argv[cmd_flag.init],"rb");
+    if(fptr!=NULL){
+      defs defs_jogo={'\0',0,0,0,0,0,0};
+      char *nome_jogadores=NULL;
+      char c;
+      char *text = (char *)malloc(sizeof(char));
+      int counter=1;
+      while((c=fgetc(fptr))!=EOF){
+        text = (char *)realloc(text,counter);
+        text[counter-1]=c;
+        counter++;
+      }
+      fclose(fptr);
+      char *token;
+      token = strtok(text,"\n");
+      nome_jogadores = (char *)malloc((strlen(token)+1)*sizeof(char));
+      strcpy(nome_jogadores,token);
+      token = strtok(NULL,"\n");
+      defs_jogo.num_jogos = atoi(token);
+      token = strtok(NULL,"\n");
+      defs_jogo.num_cores = atoi(token);
+      token = strtok(NULL,"\n");
+      defs_jogo.tamanho_chave = atoi(token);
+      token = strtok(NULL,"\n");
+      defs_jogo.repeticao_cores = token[0];
+      token = strtok(NULL,"\n");
+      defs_jogo.tentativas_alea = atoi(token);
+      token = strtok(NULL,"\n");
+      defs_jogo.tentativas = atoi(token);
+
+      //esta aqui so para nao dar warning de var nao usada e confirmacao
+      printf("%s\n", nome_jogadores);
+      printf("%d\n", defs_jogo.num_jogos);
+      printf("%d\n", defs_jogo.num_cores);
+      printf("%d\n", defs_jogo.tamanho_chave);
+      printf("%c\n", defs_jogo.repeticao_cores);
+      printf("%d\n", defs_jogo.tentativas_alea);
+      printf("%d\n", defs_jogo.tentativas);
+
+      free(text);
+    }
+    else{
+      perror("Erro");
+      exit(-1);
+    }
+  }
 
   return 0;
 
@@ -818,4 +901,53 @@ void clear_memory(char **vect1, int v1, dados **ptr_dados, float *vect3, int *ve
   free(ptr_dados);
   free(vect3);
   free(vect4);
+}
+
+
+
+
+
+int mode_check(int argc, char const *argv[], flags *cmd_flag){
+  int func_valid=0;
+
+  switch (argc) {
+    case 1:
+      cmd_flag->init=0;
+      cmd_flag->hist=0;
+      cmd_flag->ord=0;
+      break;
+    case 3:
+      func_valid = test_mode_config(3, argv, &cmd_flag);
+      break;
+    case 5:
+      func_valid = test_mode_config(5, argv, &cmd_flag);
+      break;
+    case 7:
+      func_valid = test_mode_config(7, argv, &cmd_flag);
+      break;
+    default:
+      printf("ERRO: Numero de argumentos inválido\n");
+  }
+
+  if (func_valid == -1) exit(-1);
+  return 0;
+}
+
+int test_mode_config(int k, char const *argv[], flags **cmd_flag) {
+  char ini[] = "-i", hist[] = "-h", ord[] = "-o";
+
+  for (int i = 1; i < k; i += 2) {
+    if (strcmp(ini, argv[i]) == 0) {
+      (*cmd_flag)->init = i+1;
+    } else if (strcmp(hist, argv[i]) == 0) {
+      (*cmd_flag)->hist = i+1;
+    } else if (strcmp(ord, argv[i]) == 0) {
+      (*cmd_flag)->ord = i+1;
+    } else {
+      printf("ERRO: Argumentos incorretos ou não identificados\n");
+      exit(-1);
+    }
+  }
+
+  return 0;
 }
