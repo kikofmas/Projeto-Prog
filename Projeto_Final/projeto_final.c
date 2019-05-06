@@ -29,7 +29,7 @@ typedef struct {
 
 typedef struct {
   char repeticao_cores;
-  int num_jogadores, duracao_jogo, num_jogos, num_cores, tamanho_chave, tentativas;
+  int num_jogadores, duracao_jogo, num_jogos, num_cores, tamanho_chave, tentativas, tentativas_alea;
 } defs;
 
 //DECLARACAO DE FUNCOES
@@ -60,7 +60,7 @@ void clear_memory(char **vect1, int v1, dados **ptr_dados, float *vect3, int *ve
 int main(int argc, char const *argv[]) {
 
 //declaracao das variaveis da inicializacao:
-  defs defs_jogo={'\0',0,0,0,0,0,0};
+  defs defs_jogo={'\0',0,0,0,0,0,0,0};
   char **nome_jogadores=NULL;
   int combo_possivel=0;
   int rep=0;
@@ -108,12 +108,12 @@ int main(int argc, char const *argv[]) {
 
   if(tolower(defs_jogo.repeticao_cores)=='s') rep=1;
 
-  activate_oracle(defs_jogo.tamanho_chave, defs_jogo.num_cores, rep);
-
   clearScreen(1);
 
 
 //JOGO
+
+  activate_oracle(defs_jogo.tamanho_chave, defs_jogo.num_cores, rep);
 
   ptr_dados=jogo(defs_jogo.num_jogadores, defs_jogo.num_jogos, defs_jogo.num_cores, defs_jogo.tamanho_chave,
                  defs_jogo.duracao_jogo, defs_jogo.tentativas, defs_jogo.repeticao_cores, nome_jogadores);
