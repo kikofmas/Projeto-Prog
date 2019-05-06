@@ -25,11 +25,21 @@ int test_mode_config(int k, char const *argv[], flags **cmd_flag);
 
 
 int main(int argc, char const *argv[]) {
+  int error=0;
   flags cmd_flag={0, 0, 0};
 
-  mode_check(argc, argv, &cmd_flag);
 
-  printf("%d %d %d\n", cmd_flag.init, cmd_flag.hist, cmd_flag.ord);
+  error=mode_check(argc, argv, &cmd_flag);
+  if (error==-1) exit(-1);
+
+  if (cmd_flag.init==0 && cmd_flag.hist==0 && cmd_flag.ord==0) {
+    /* fazer as inicializações */
+  } elif(cmd_flag.init==0 && (cmd_flag.hist!=0 || cmd_flag.ord!=0)){
+    printf("ERRO: Falta o ficheiro das inicializações\n");
+    exit(-1);
+  }
+
+
   return 0;
 }
 
