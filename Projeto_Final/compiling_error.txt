@@ -1,3 +1,0 @@
-/tmp/ccXvCl0B.o: In function `main':
-projeto_final.c:(.text+0x199): undefined reference to `activate_oracle'
-collect2: error: ld returned 1 exit status
