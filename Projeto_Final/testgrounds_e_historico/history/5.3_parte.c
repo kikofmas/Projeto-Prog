@@ -1,6 +1,4 @@
-/****************************
-*       testground KIKO    *
-****************************/
+
 
 #include <stdlib.h>
 #include <errno.h>    //library de error handling

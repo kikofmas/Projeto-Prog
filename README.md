@@ -1,5 +1,7 @@
 # Projeto-Prog
 
+estruturas -->> pode ser mais facil usar tambem um ponteiro a apontar para a posicao anterior
+
 
 allocs nao e tamanho_chave+1????
 vale a pena ter a estrutura dados tendo em conta a criacao do registo??

@@ -65,37 +65,82 @@ int main(int argc, char const *argv[]) {
 
 
   //coisas fucao
+  int a=0; //se houver ficheiro hmmmmm
   game_reg *current_player;
   current_player=*registo_jogo;
 
+
   //inicio de jogador
-  current_player->game_ID=((last_game->ID)+1);
-  last_game->player_ID[0]="0";
-  pid=atoi(last_game->player_ID);
-  pid++;
-  sprintf(current_player->player_ID, "%d", pid);
-  current_player->player_ID[0]="J";
-  current_player->colors=defs_jogo->num_cores;
-  current_player->key_size=defs_jogo->tamanho_chave;
-  current_player->repet=defs_jogo->repeticao_cores;
-  current_player->game_time=defs_jogo->duracao_jogo;
-  current_player->next=NULL;
+
+  /*isto so funciona se leres o ficheiro -h antes e meteres o pointer a apontar para a lista
+  caso se implemente de maneira diferente tenho de mudar isto*/
+  while (current_player->next != NULL){
+    current_player = current_player->next;
+  }
+  if (a==0 && flags->hist==0) {  //verifica se primeiro elemento da lista esta preenchido
+    current_player->game_ID=((last_game->ID)+1);
+    last_game->player_ID[0]="0";
+    pid=atoi(last_game->player_ID);
+    pid++;
+    sprintf(current_player->player_ID, "%d", pid);
+    current_player->player_ID[0]="J";
+    current_player->colors=defs_jogo->num_cores;
+    current_player->key_size=defs_jogo->tamanho_chave;
+    current_player->repet=defs_jogo->repeticao_cores;
+    current_player->game_time=defs_jogo->duracao_jogo;
+    current_player->next=NULL;
+    a=1;
+  } else {
+    current_player->nex->game_ID=((last_game->ID)+1);
+    last_game->next->player_ID[0]="0";
+    pid=atoi(last_game->player_ID);
+    pid++;
+    sprintf(current_player->next->player_ID, "%d", pid);
+    current_player->next->player_ID[0]="J";
+    current_player->next->colors=defs_jogo->num_cores;
+    current_player->next->key_size=defs_jogo->tamanho_chave;
+    current_player->next->repet=defs_jogo->repeticao_cores;
+    current_player->next->game_time=defs_jogo->duracao_jogo;
+    current_player->next->next=NULL;
+  }
+
+
+
+
 
   //inicio de jogo
-  current_player->key=calloc((defs_jogo->tamanho_chave)+1, sizeof(char));
-  current_player->first=calloc(1, sizeof(guess_list));
+  int b=0;
   guess_list *current_guess;
   current_guess=current_player->first;
+  current_player->key=calloc((defs_jogo->tamanho_chave)+1, sizeof(char));
+  current_player->first=calloc(1, sizeof(guess_list));
+
 
   //inicio de tentativa
-  current_guess->guess_ID=tentativa+1;
-  current_guess->guess=calloc((defs_jogo->tamanho_chave)+1, sizeof(char));
-  strcpy(current_guess->guess, jogada);
-  current_guess->result[0]="P";
-  sprintf(current_guess->result[1], "%c", lugar_certo);
-  current_guess->result[2]="B";
-  sprintf(current_guess->result[3], "%c", lugar_errado);
-  current_guess->next=NULL;
+
+  while (current_guess->next != NULL){
+    current_guess = current_guess->next;
+  }
+  if (b==0) {  //verifica se primeiro elemento da lista esta preenchido
+    current_guess->guess_ID=tentativa+1;
+    current_guess->guess=calloc((defs_jogo->tamanho_chave)+1, sizeof(char));
+    strcpy(current_guess->guess, jogada);
+    current_guess->result[0]="P";
+    sprintf(current_guess->result[1], "%c", lugar_certo);
+    current_guess->result[2]="B";
+    sprintf(current_guess->result[3], "%c", lugar_errado);
+    current_guess->next=NULL;
+    b=1;
+  } else {
+    current_guess->next->guess_ID=tentativa+1;
+    current_guess->next->guess=calloc((defs_jogo->tamanho_chave)+1, sizeof(char));
+    strcpy(current_guess->next->guess, jogada);
+    current_guess->next->result[0]="P";
+    sprintf(current_guess->next->result[1], "%c", lugar_certo);
+    current_guess->next->result[2]="B";
+    sprintf(current_guess->next->result[3], "%c", lugar_errado);
+    current_guess->next->next=NULL;
+  }
 
   //fim do jogo
   /*onde se grava a vitoria*/
