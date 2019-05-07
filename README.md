@@ -1,5 +1,10 @@
 # Projeto-Prog
 
+
+allocs nao e tamanho_chave+1????
+vale a pena ter a estrutura dados tendo em conta a criacao do registo??
+
+
 quando se verifica que os ficheiros abrem/estao corretos??
 
 

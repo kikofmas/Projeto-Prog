@@ -209,7 +209,7 @@ int main(int argc, char const *argv[]) {
       free(text);
     }
     else{
-      perror("Erro");
+      perror("ERRO:");
       exit(-1);
     }
   }
