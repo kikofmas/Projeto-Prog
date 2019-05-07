@@ -3,7 +3,8 @@
 ****************************/
 
 
-/*podemos chamar esta parte em funcao ou so msm dentro do jogo*/
+/* -podemos chamar esta parte em funcao ou so msm dentro do jogo
+** - isto so grava a lista de listas -- it should work */
 
 
 
