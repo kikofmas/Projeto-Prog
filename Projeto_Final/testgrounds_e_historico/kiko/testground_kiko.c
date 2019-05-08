@@ -47,6 +47,10 @@ typedef struct game_registry {
 
 
 
+void free_guess_list(guess_list *current);
+void free_game_registry(game_reg *current);
+
+
 
 int main(int argc, char const *argv[]) {
   game_reg *registo_jogo;
@@ -68,10 +72,12 @@ int main(int argc, char const *argv[]) {
   //coisas fucao
   int a=0; //se houver ficheiro hmmmmm
   game_reg *current_player;
+  *registo_jogo=calloc(1, sizeof(game_reg));
   current_player=*registo_jogo;
 
+  //inicio jogador?????
 
-  //inicio de jogador
+  //inicio de jogo
 
   /*isto so funciona se leres o ficheiro -h antes e meteres o pointer a apontar para a lista
   caso se implemente de maneira diferente tenho de mudar isto*/
@@ -92,7 +98,8 @@ int main(int argc, char const *argv[]) {
     current_player->next=NULL;
     a=1;
   } else {
-    current_player->nex->game_ID=((last_game->ID)+1);
+    current_player->next=calloc(1, sizeof(game_reg));
+    current_player->next->game_ID=((last_game->ID)+1);
     last_game->next->player_ID[0]="0";
     pid=atoi(last_game->player_ID);
     pid++;
@@ -110,11 +117,10 @@ int main(int argc, char const *argv[]) {
 
 
   //inicio de jogo
-  int b=0;
   guess_list *current_guess;
-  current_guess=current_player->first;
   current_player->key=calloc((defs_jogo->tamanho_chave)+1, sizeof(char));
   current_player->first=calloc(1, sizeof(guess_list));
+  current_guess=current_player->first;
 
 
   //inicio de tentativa
@@ -122,7 +128,7 @@ int main(int argc, char const *argv[]) {
   while (current_guess->next != NULL){
     current_guess = current_guess->next;
   }
-  if (b==0) {  //verifica se primeiro elemento da lista esta preenchido
+  if (tentativa==0) {  //verifica se primeiro elemento da lista esta preenchido
     current_guess->guess_ID=tentativa+1;
     current_guess->guess=calloc((defs_jogo->tamanho_chave)+1, sizeof(char));
     strcpy(current_guess->guess, jogada);
@@ -131,8 +137,8 @@ int main(int argc, char const *argv[]) {
     current_guess->result[2]="B";
     sprintf(current_guess->result[3], "%c", lugar_errado);
     current_guess->next=NULL;
-    b=1;
   } else {
+    current_guess->next=calloc(1, sizeof(guess_list));
     current_guess->next->guess_ID=tentativa+1;
     current_guess->next->guess=calloc((defs_jogo->tamanho_chave)+1, sizeof(char));
     strcpy(current_guess->next->guess, jogada);
@@ -155,4 +161,20 @@ int main(int argc, char const *argv[]) {
   strcpy(last_game->player_ID, current_player->player_ID);
 
   return 0;
+}
+
+//funcao recursiva para libertar as listas de listas
+void free_game_registry(game_reg *current){
+  if (current->next != NULL) {
+    free_game_registry(current->next);
+  }
+  free_guess_list(current->first);
+  free(current);
+}
+
+void free_guess_list(guess_list *current){
+  if (current->next != NULL) {
+    free_guess_list(current->next);
+  }
+  free(current);
 }
