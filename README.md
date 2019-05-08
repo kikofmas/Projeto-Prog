@@ -1,7 +1,16 @@
 # Projeto-Prog
 
 
-metere os nomes na estrutura
+tenho que verificar que tudo no meu testground funciona como deve -- kiko
+
+
+verificar que a criacao/continuacao da lista de listas registo_jogo nao pode ser encurtada
+
+
+otimizar algoritmo principal
+
+
+meter os nomes na estrutura
 
 
 estruturas -->> pode ser mais facil usar tambem um ponteiro a apontar para a posicao anterior

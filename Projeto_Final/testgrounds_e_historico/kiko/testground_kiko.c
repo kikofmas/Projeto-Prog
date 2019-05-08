@@ -1,4 +1,4 @@
-/****************************
+current_game/****************************
 *       testground KIKO    *
 ****************************/
 
@@ -76,10 +76,7 @@ int main(int argc, char const *argv[]) {
 
   //coisas fucao
   int a=0; //se houver ficheiro hmmmmm
-  game_reg *current_player;
-  *registo_jogo=calloc(1, sizeof(game_reg));
-  current_player=*registo_jogo;
-
+  game_reg *current_game; //chama-se current mas isso so e vdd para a primeira vez, a partir dai e o anterior
   //inicio jogador?????
 
   /*SOU BURRO COMO O CRL*/
@@ -89,37 +86,54 @@ int main(int argc, char const *argv[]) {
 
   /*isto so funciona se leres o ficheiro -h antes e meteres o pointer a apontar para a lista
   caso se implemente de maneira diferente tenho de mudar isto*/
-  while (current_player->next != NULL){
-    current_player = current_player->next;
+  current_game=registo_jogo;
+  while (current_game->next != NULL){
+    current_game = current_game->next;
   }
   if (a==0 && flags->hist==0) {  //verifica se primeiro elemento da lista esta preenchido
-    current_player->game_ID=((last_game->ID)+1);
+    registo_jogo=calloc(1, sizeof(game_reg));
+    current_game=registo_jogo; //se e a primeira vez que se passa aqui estrutura esta nao esta alocada, dai voltar a fazer isto
+
+    current_game->game_ID=((last_game->ID)+1);
+    current_game->player_name=calloc(strlen((nome_jogadores+jogador)+1, sizeof(char));
+    strcpy(current_game->player_name, *(nome_jogadores+jogador));
     last_game->player_ID[0]="0";
     pid=atoi(last_game->player_ID);
     pid++;
-    sprintf(current_player->player_ID, "%d", pid);
-    current_player->player_ID[0]="J";
-    current_player->colors=defs_jogo->num_cores;
-    current_player->key_size=defs_jogo->tamanho_chave;
-    current_player->repet=defs_jogo->repeticao_cores;
-    current_player->game_time=defs_jogo->duracao_jogo;
-    current_player->prev=last_game->last;
-    current_player->next=NULL;
+    sprintf(current_game->player_ID, "%d", pid);
+    current_game->player_ID[0]="J";
+    current_game->colors=defs_jogo->num_cores;
+    current_game->key_size=defs_jogo->tamanho_chave;
+    current_game->repet=defs_jogo->repeticao_cores;
+    current_game->game_time=defs_jogo->duracao_jogo;
+    current_game->prev=last_game->last;
+    current_game->next=NULL;
     a=1;
   } else {
-    current_player->next=calloc(1, sizeof(game_reg));
-    current_player->next->game_ID=((last_game->ID)+1);
+    current_game->next=calloc(1, sizeof(game_reg));
+    current_game->next->game_ID=((last_game->ID)+1);
+    current_game->next->player_name=calloc(strlen((nome_jogadores+jogador)+1, sizeof(char));
+    strcpy(current_game->next->player_name, *(nome_jogadores+jogador));
+    if (strcmp(current_game->player_name, current_game->next->player_name) == 0) {
+      strcpy(current_game->next->player_ID, current_game->player_ID);
+    } else {
+      last_game->next->player_ID[0]="0";
+      pid=atoi(last_game->player_ID);
+      pid++;
+      sprintf(current_game->next->player_ID, "%d", pid);
+      current_game->next->player_ID[0]="J";
+    }
     last_game->next->player_ID[0]="0";
     pid=atoi(last_game->player_ID);
     pid++;
-    sprintf(current_player->next->player_ID, "%d", pid);
-    current_player->next->player_ID[0]="J";
-    current_player->next->colors=defs_jogo->num_cores;
-    current_player->next->key_size=defs_jogo->tamanho_chave;
-    current_player->next->repet=defs_jogo->repeticao_cores;
-    current_player->next->game_time=defs_jogo->duracao_jogo;
-    current_player->next->prev=last_game->last;
-    current_player->next->next=NULL;
+    sprintf(current_game->next->player_ID, "%d", pid);
+    current_game->next->player_ID[0]="J";
+    current_game->next->colors=defs_jogo->num_cores;
+    current_game->next->key_size=defs_jogo->tamanho_chave;
+    current_game->next->repet=defs_jogo->repeticao_cores;
+    current_game->next->game_time=defs_jogo->duracao_jogo;
+    current_game->next->prev=last_game->last;
+    current_game->next->next=NULL;
   }
 
 
@@ -128,24 +142,24 @@ int main(int argc, char const *argv[]) {
 
   //inicio de jogo
   guess_list *current_guess;
-  current_player->key=calloc((defs_jogo->tamanho_chave)+1, sizeof(char));
-  current_player->first=calloc(1, sizeof(guess_list));
-  current_guess=current_player->first;
-
-
+  current_guess=current_game->first;
   //inicio de tentativa
 
   while (current_guess->next != NULL){
     current_guess = current_guess->next;
   }
   if (tentativa==0) {  //verifica se primeiro elemento da lista esta preenchido
+    current_game->key=calloc((defs_jogo->tamanho_chave)+1, sizeof(char));
+    current_game->first=calloc(1, sizeof(guess_list));
+    current_guess=current_game->first; //se e a primeira vez que se passa aqui estrutura esta nao esta alocada, dai voltar a fazer isto
+
     current_guess->guess_ID=tentativa+1;
     current_guess->guess=calloc((defs_jogo->tamanho_chave)+1, sizeof(char));
     strcpy(current_guess->guess, jogada);
     current_guess->result[0]="P";
-    sprintf(current_guess->result[1], "%c", lugar_certo);
+    sprintf(current_guess->result[1], "%d", lugar_certo);
     current_guess->result[2]="B";
-    sprintf(current_guess->result[3], "%c", lugar_errado);
+    sprintf(current_guess->result[3], "%d", lugar_errado);
     current_guess->prev=NULL;
     current_guess->next=NULL;
   } else {
@@ -163,15 +177,15 @@ int main(int argc, char const *argv[]) {
 
   //fim do jogo
   /*onde se grava a vitoria*/
-  strcpy(current_player->key, current_guess->guess);
+  strcpy(current_game->key, current_guess->guess);
 
   /*onde se mete a derrota*/
-  strcpy(current_player->key, travessao);
+  strcpy(current_game->key, travessao);
 
   /*no fim*/
-  last_game->ID=current_player->ID;
-  strcpy(last_game->player_ID, current_player->player_ID);
-  last_game->last=current_player;
+  last_game->ID=current_game->ID;
+  strcpy(last_game->player_ID, current_game->player_ID);
+  last_game->last=current_game;
 
 
 
