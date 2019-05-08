@@ -8,53 +8,74 @@
 #include <ctype.h>    //toupper and tolower functions
 #include <unistd.h>   //permite usar a funcao sleep
 #include <termios.h>  //permite usar a funcao tcflush
-//#include "oraculo.h"
+#include "oraculo.h"
 
-typedef struct {
-  char repeticao_cores;
-  int num_jogadores, duracao_jogo, num_jogos, num_cores, tamanho_chave, tentativas_alea, tentativas;
-} defs;
+typedef struct letras_t{
+  char letra;
+  struct letras_t * next;
+} letras;
+
+void reset(letras **index, letras **lista_cores, int size);
 
 int main(int argc, char const *argv[]) {
-  FILE *fptr = fopen(argv[2],"rb");
-  if(fptr!=NULL){
-    defs defs_jogo={'\0',0,0,0,0,0,0};
-    char *nome_jogadores=NULL;
-    char c;
-    char *text = (char *)malloc(sizeof(char));
-    int counter=1;
-    while((c=fgetc(fptr))!=EOF){
-      text = (char *)realloc(text,counter);
-      text[counter-1]=c;
-      counter++;
+
+  int colors=12;
+  int size=8;
+  letras **lista_cores, **index;
+  char *tentativa;
+  reply * answer;
+  int pretas;
+  //int brancas;
+
+  activate_oracle(size, colors, 1);
+  printf("\n\n\n");
+  generate_key(1);
+  printf("\n\n\n");
+
+  lista_cores = (letras **)calloc(size,sizeof(letras*));
+  index = (letras **)calloc(size,sizeof(letras*));
+  tentativa = (char *)calloc(size,sizeof(char));
+
+  for(int i=0;i<size;i++){
+    letras *aux;
+    lista_cores[i] = calloc(1,sizeof(letras));
+    aux=lista_cores[i];
+    aux->letra = 'A';
+    aux->next = NULL;
+    for(int a=1;a<colors;a++){
+      aux->next = calloc(1,sizeof(letras));
+      aux->next->letra = 'A'+a;
+      aux->next->next = NULL;
+      aux = aux->next;
     }
-    fclose(fptr);
-    char *token;
-    token = strtok(text,"\n");
-    nome_jogadores = (char *)malloc((strlen(token)+1)*sizeof(char));
-    strcpy(nome_jogadores,token);
-    token = strtok(NULL,"\n");
-    defs_jogo.num_jogos = atoi(token);
-    token = strtok(NULL,"\n");
-    defs_jogo.num_cores = atoi(token);
-    token = strtok(NULL,"\n");
-    defs_jogo.tamanho_chave = atoi(token);
-    token = strtok(NULL,"\n");
-    defs_jogo.repeticao_cores = token[0];
-    token = strtok(NULL,"\n");
-    defs_jogo.tentativas_alea = atoi(token);
-    token = strtok(NULL,"\n");
-    defs_jogo.tentativas = atoi(token);
-
-    free(text);
-  }
-  else{
-    perror("Erro");
-    exit(-1);
   }
 
+  for(int i=0;i<size;i++){
+    index[i] = lista_cores[i];
+  }
 
+  while(index[0]!=NULL){
+    for(int i=0;i<size;i++){
+      tentativa[i] = index[i]->letra;
+    }
+    answer = validate_key(tentativa);
+    pretas = get_blacks(answer);
+    if(pretas == 8) printf("done\n");
+    index[size-1] = index[size-1]->next;
+    reset(index,lista_cores,size-1);
+  }
 
 
   return 0;
+}
+
+void reset(letras **index, letras **lista_cores, int size){
+  if(size==0) return;
+  else{
+    if(index[size]==NULL){
+      index[size] = lista_cores[size];
+      index[size-1] = index[size-1]->next;
+      reset(index, lista_cores, size-1);
+    }
+  }
 }
