@@ -178,3 +178,6 @@ void free_guess_list(guess_list *current){
   }
   free(current);
 }
+
+
+void reord_2_elements()
