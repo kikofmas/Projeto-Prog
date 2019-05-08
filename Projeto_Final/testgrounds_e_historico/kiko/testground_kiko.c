@@ -23,12 +23,14 @@ typedef struct guess_t {
   char *guess;
   char result[5];
   struct guess_t *next;
+  struct guess_t *prev;
 }guess_list;
 
 
 typedef struct {
   int ID;
   char player_ID[5];
+  game_reg *last;
 }hist_data;
 
 
@@ -42,6 +44,7 @@ typedef struct game_registry {
   char *key;
   int game_time;
   struct game_registry *next;
+  struct game_registry *prev;
   guess_list *first;
 }game_reg;
 
@@ -50,11 +53,13 @@ typedef struct game_registry {
 void free_guess_list(guess_list *current);
 void free_game_registry(game_reg *current);
 
+void reord_2_elements(game_reg *ptr1);
+
 
 
 int main(int argc, char const *argv[]) {
   game_reg *registo_jogo;
-  hist_data *last_game;
+  hist_data *last_game={0, "J000", NULL};
   int pid=0;
   char travessao[]="-";
 
@@ -77,6 +82,9 @@ int main(int argc, char const *argv[]) {
 
   //inicio jogador?????
 
+  /*SOU BURRO COMO O CRL*/
+
+
   //inicio de jogo
 
   /*isto so funciona se leres o ficheiro -h antes e meteres o pointer a apontar para a lista
@@ -95,6 +103,7 @@ int main(int argc, char const *argv[]) {
     current_player->key_size=defs_jogo->tamanho_chave;
     current_player->repet=defs_jogo->repeticao_cores;
     current_player->game_time=defs_jogo->duracao_jogo;
+    current_player->prev=last_game->last;
     current_player->next=NULL;
     a=1;
   } else {
@@ -109,6 +118,7 @@ int main(int argc, char const *argv[]) {
     current_player->next->key_size=defs_jogo->tamanho_chave;
     current_player->next->repet=defs_jogo->repeticao_cores;
     current_player->next->game_time=defs_jogo->duracao_jogo;
+    current_player->next->prev=last_game->last;
     current_player->next->next=NULL;
   }
 
@@ -136,6 +146,7 @@ int main(int argc, char const *argv[]) {
     sprintf(current_guess->result[1], "%c", lugar_certo);
     current_guess->result[2]="B";
     sprintf(current_guess->result[3], "%c", lugar_errado);
+    current_guess->prev=NULL;
     current_guess->next=NULL;
   } else {
     current_guess->next=calloc(1, sizeof(guess_list));
@@ -146,6 +157,7 @@ int main(int argc, char const *argv[]) {
     sprintf(current_guess->next->result[1], "%c", lugar_certo);
     current_guess->next->result[2]="B";
     sprintf(current_guess->next->result[3], "%c", lugar_errado);
+    current_guess->next->prev=current_guess;
     current_guess->next->next=NULL;
   }
 
@@ -159,6 +171,7 @@ int main(int argc, char const *argv[]) {
   /*no fim*/
   last_game->ID=current_player->ID;
   strcpy(last_game->player_ID, current_player->player_ID);
+  last_game->last=current_player;
 
   return 0;
 }
@@ -180,4 +193,10 @@ void free_guess_list(guess_list *current){
 }
 
 
-void reord_2_elements()
+void reord_2_elements(game_reg *ptr){
+  game_reg *aux;
+  aux=ptr->next;
+  ptr->next=ptr->next->next;
+  aux->next=ptr->next->next;
+  ptr->next->next=aux;
+}
