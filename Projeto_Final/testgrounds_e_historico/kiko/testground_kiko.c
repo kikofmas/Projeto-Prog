@@ -52,8 +52,8 @@ typedef struct game_registry {
 
 void free_guess_list(guess_list *current);
 void free_game_registry(game_reg *current);
-
-void reord_2_elements(game_reg *ptr1);
+game_reg *recursive_bubble_sort_fast(game_reg *current, game_reg *limit);
+void reord_2_elements(game_reg *ptr);
 
 
 
@@ -173,8 +173,14 @@ int main(int argc, char const *argv[]) {
   strcpy(last_game->player_ID, current_player->player_ID);
   last_game->last=current_player;
 
+
+
+  registo_jogo=recursive_bubble_sort_fast(registo_jogo, NULL);
+
+
   return 0;
 }
+
 
 //funcao recursiva para libertar as listas de listas
 void free_game_registry(game_reg *current){
@@ -185,6 +191,7 @@ void free_game_registry(game_reg *current){
   free(current);
 }
 
+
 void free_guess_list(guess_list *current){
   if (current->next != NULL) {
     free_guess_list(current->next);
@@ -193,10 +200,31 @@ void free_guess_list(guess_list *current){
 }
 
 
+game_reg *recursive_bubble_sort_fast(game_reg *current, game_reg *limit){
+  game_reg *top=current;
+  if (current == limit) {
+    while (current->prev != NULL) {
+      current=current->prev;
+    }
+    return current;
+  }
+  while (current->game_time > current->next->game_time) {
+    reord_2_elements(current);
+    while (current->game_time < current->game_time && current->next != limit) {
+      curren=current->next;
+    }
+  }
+  top=recursive_bubble_sort_fast(top, current);
+  return top;
+}
+
+
 void reord_2_elements(game_reg *ptr){
-  game_reg *aux;
-  aux=ptr->next;
-  ptr->next=ptr->next->next;
-  aux->next=ptr->next->next;
-  ptr->next->next=aux;
+  game_reg *aux = ptr->next;
+  ptr->next=aux->next;
+  aux->prev=ptr->prev;
+  ptr->prev=aux;
+  aux->next=ptr;
+  if (ptr->next != NULL) ptr->next->prev=ptr;
+  if (aux->prev != NULL) aux->prev->next=aux;
 }
