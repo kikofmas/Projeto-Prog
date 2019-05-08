@@ -202,7 +202,7 @@ void free_guess_list(guess_list *current){
 
 game_reg *recursive_bubble_sort_fast(game_reg *current, game_reg *limit){
   game_reg *top=current;
-  if (current == limit) {
+  if (current == limit) { //base case
     while (current->prev != NULL) {
       current=current->prev;
     }
@@ -214,8 +214,8 @@ game_reg *recursive_bubble_sort_fast(game_reg *current, game_reg *limit){
       curren=current->next;
     }
   }
-  top=recursive_bubble_sort_fast(top, current);
-  return top;
+  top=recursive_bubble_sort_fast(top, current);//recursion
+  return top;//return "new" first element of list
 }
 
 
