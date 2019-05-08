@@ -22,7 +22,7 @@ typedef struct guess_t {
   int guess_ID;
   char *guess;
   char result[5];
-  guess_t *next;
+  struct guess_t *next;
 }guess_list;
 
 
