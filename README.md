@@ -1,5 +1,9 @@
 # Projeto-Prog
 
+
+metere os nomes na estrutura
+
+
 estruturas -->> pode ser mais facil usar tambem um ponteiro a apontar para a posicao anterior
 
 
