@@ -42,6 +42,7 @@ typedef struct game_registry {
   int key_size;
   char repet;
   char *key;
+  int tentativas;
   float game_time;
   struct game_registry *next;
   struct game_registry *prev;
@@ -53,6 +54,7 @@ typedef struct game_registry {
 void free_guess_list(guess_list *current);
 void free_game_registry(game_reg *current);
 game_reg *recursive_bubble_sort_fast(game_reg *current, game_reg *limit);
+game_reg *recursive_bubble_sort_short(game_reg *current, game_reg *limit);
 void reord_2_elements(game_reg *ptr);
 
 
@@ -178,7 +180,7 @@ int main(int argc, char const *argv[]) {
 
 
   registo_jogo=recursive_bubble_sort_fast(registo_jogo, NULL);
-
+  registo_jogo=recursive_bubble_sort_short(registo_jogo, NULL);
 
   return 0;
 }
@@ -213,6 +215,25 @@ game_reg *recursive_bubble_sort_fast(game_reg *current, game_reg *limit){
   while (current->game_time > current->next->game_time) {
     reord_2_elements(current);
     while (current->game_time < current->game_time && current->next != limit) {
+      current=current->next;
+    }
+  }
+  top=recursive_bubble_sort_fast(top, current);//recursion
+  return top;//return "new" first element of list
+}
+
+
+game_reg *recursive_bubble_sort_short(game_reg *current, game_reg *limit){
+  game_reg *top=current;
+  if (current == limit) { //base case
+    while (current->prev != NULL) {
+      current=current->prev;
+    }
+    return current;
+  }
+  while (current->tentativas > current->next->tentativas) {
+    reord_2_elements(current);
+    while (current->tentativas < current->tentativas && current->next != limit) {
       current=current->next;
     }
   }
