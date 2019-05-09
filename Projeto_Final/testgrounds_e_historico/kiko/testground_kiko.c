@@ -1,4 +1,4 @@
-current_game/****************************
+/****************************
 *       testground KIKO    *
 ****************************/
 
@@ -42,7 +42,7 @@ typedef struct game_registry {
   int key_size;
   char repet;
   char *key;
-  int game_time;
+  float game_time;
   struct game_registry *next;
   struct game_registry *prev;
   guess_list *first;
@@ -100,7 +100,7 @@ int main(int argc, char const *argv[]) {
     last_game->player_ID[0]='0';
     pid=atoi(last_game->player_ID);
     pid++;
-    sprintf(current_game->player_ID, "%04d", pid);
+    sprintf(current_game->player_ID, "J%03d", pid);
     current_game->player_ID[0]='J';
     current_game->colors=defs_jogo->num_cores;
     current_game->key_size=defs_jogo->tamanho_chave;
@@ -120,14 +120,8 @@ int main(int argc, char const *argv[]) {
       last_game->next->player_ID[0]='0';
       pid=atoi(last_game->player_ID);
       pid++;
-      sprintf(current_game->next->player_ID, "%04d", pid);
-      current_game->next->player_ID[0]='J';
+      sprintf(current_game->next->player_ID, "J%03d", pid);
     }
-    last_game->next->player_ID[0]='0';
-    pid=atoi(last_game->player_ID);
-    pid++;
-    sprintf(current_game->next->player_ID, "%04d", pid);
-    current_game->next->player_ID[0]='J';
     current_game->next->colors=defs_jogo->num_cores;
     current_game->next->key_size=defs_jogo->tamanho_chave;
     current_game->next->repet=defs_jogo->repeticao_cores;
@@ -156,10 +150,7 @@ int main(int argc, char const *argv[]) {
     current_guess->guess_ID=tentativa+1;
     current_guess->guess=calloc((defs_jogo->tamanho_chave)+1, sizeof(char));
     strcpy(current_guess->guess, jogada);
-    current_guess->result[0]='P';
-    sprintf(current_guess->result[1], "%1d", lugar_certo);
-    current_guess->result[2]='B';
-    sprintf(current_guess->result[3], "%1d", lugar_errado);
+    sprintf(current_guess->result, "P%1dB%1d", lugar_certo, lugar_errado);
     current_guess->prev=NULL;
     current_guess->next=NULL;
   } else {
@@ -167,10 +158,7 @@ int main(int argc, char const *argv[]) {
     current_guess->next->guess_ID=tentativa+1;
     current_guess->next->guess=calloc((defs_jogo->tamanho_chave)+1, sizeof(char));
     strcpy(current_guess->next->guess, jogada);
-    current_guess->next->result[0]='P';
-    sprintf(current_guess->next->result[1], "%1d", lugar_certo);
-    current_guess->next->result[2]='B';
-    sprintf(current_guess->next->result[3], "%1d", lugar_errado);
+    sprintf(current_guess->next->result, "P%1dB%1d", lugar_certo, lugar_errado);
     current_guess->next->prev=current_guess;
     current_guess->next->next=NULL;
   }
@@ -225,7 +213,7 @@ game_reg *recursive_bubble_sort_fast(game_reg *current, game_reg *limit){
   while (current->game_time > current->next->game_time) {
     reord_2_elements(current);
     while (current->game_time < current->game_time && current->next != limit) {
-      curren=current->next;
+      current=current->next;
     }
   }
   top=recursive_bubble_sort_fast(top, current);//recursion
