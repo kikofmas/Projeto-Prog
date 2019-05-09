@@ -97,11 +97,11 @@ int main(int argc, char const *argv[]) {
     current_game->game_ID=((last_game->ID)+1);
     current_game->player_name=calloc(strlen((nome_jogadores+jogador)+1, sizeof(char));
     strcpy(current_game->player_name, *(nome_jogadores+jogador));
-    last_game->player_ID[0]="0";
+    last_game->player_ID[0]='0';
     pid=atoi(last_game->player_ID);
     pid++;
-    sprintf(current_game->player_ID, "%d", pid);
-    current_game->player_ID[0]="J";
+    sprintf(current_game->player_ID, "%04d", pid);
+    current_game->player_ID[0]='J';
     current_game->colors=defs_jogo->num_cores;
     current_game->key_size=defs_jogo->tamanho_chave;
     current_game->repet=defs_jogo->repeticao_cores;
@@ -117,17 +117,17 @@ int main(int argc, char const *argv[]) {
     if (strcmp(current_game->player_name, current_game->next->player_name) == 0) {
       strcpy(current_game->next->player_ID, current_game->player_ID);
     } else {
-      last_game->next->player_ID[0]="0";
+      last_game->next->player_ID[0]='0';
       pid=atoi(last_game->player_ID);
       pid++;
-      sprintf(current_game->next->player_ID, "%d", pid);
-      current_game->next->player_ID[0]="J";
+      sprintf(current_game->next->player_ID, "%04d", pid);
+      current_game->next->player_ID[0]='J';
     }
-    last_game->next->player_ID[0]="0";
+    last_game->next->player_ID[0]='0';
     pid=atoi(last_game->player_ID);
     pid++;
-    sprintf(current_game->next->player_ID, "%d", pid);
-    current_game->next->player_ID[0]="J";
+    sprintf(current_game->next->player_ID, "%04d", pid);
+    current_game->next->player_ID[0]='J';
     current_game->next->colors=defs_jogo->num_cores;
     current_game->next->key_size=defs_jogo->tamanho_chave;
     current_game->next->repet=defs_jogo->repeticao_cores;
@@ -156,10 +156,10 @@ int main(int argc, char const *argv[]) {
     current_guess->guess_ID=tentativa+1;
     current_guess->guess=calloc((defs_jogo->tamanho_chave)+1, sizeof(char));
     strcpy(current_guess->guess, jogada);
-    current_guess->result[0]="P";
-    sprintf(current_guess->result[1], "%d", lugar_certo);
-    current_guess->result[2]="B";
-    sprintf(current_guess->result[3], "%d", lugar_errado);
+    current_guess->result[0]='P';
+    sprintf(current_guess->result[1], "%1d", lugar_certo);
+    current_guess->result[2]='B';
+    sprintf(current_guess->result[3], "%1d", lugar_errado);
     current_guess->prev=NULL;
     current_guess->next=NULL;
   } else {
@@ -167,10 +167,10 @@ int main(int argc, char const *argv[]) {
     current_guess->next->guess_ID=tentativa+1;
     current_guess->next->guess=calloc((defs_jogo->tamanho_chave)+1, sizeof(char));
     strcpy(current_guess->next->guess, jogada);
-    current_guess->next->result[0]="P";
-    sprintf(current_guess->next->result[1], "%c", lugar_certo);
-    current_guess->next->result[2]="B";
-    sprintf(current_guess->next->result[3], "%c", lugar_errado);
+    current_guess->next->result[0]='P';
+    sprintf(current_guess->next->result[1], "%1d", lugar_certo);
+    current_guess->next->result[2]='B';
+    sprintf(current_guess->next->result[3], "%1d", lugar_errado);
     current_guess->next->prev=current_guess;
     current_guess->next->next=NULL;
   }
