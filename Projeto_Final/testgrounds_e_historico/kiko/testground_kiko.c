@@ -52,6 +52,7 @@ typedef struct game_registry {
 
 
 void save_game_ini(game_reg *registo_jogo, int hist_file);
+void save_key(int k, game_reg *registo_jogo, char jogada[]);
 void save_guess_ini(game_reg *top);
 void sort_registry(game_reg **registo_jogo, int pos, char *argv[]);
 game_reg *recursive_bubble_sort_fast(game_reg *current, game_reg *limit);
@@ -77,21 +78,16 @@ int main(int argc, char const *argv[]) {
   //funcoes a usar
   save_game_ini(registo_jogo, cmd_flag->hist);
   save_guess_ini(registo_jogo);
-  sort_registry(&registo_jogo, cmd_flag->ord, argv[])
+  sort_registry(&registo_jogo, cmd_flag->ord, argv[]);
   free_game_registry(registo_jogo);
   free_guess_list(registo_jogo);
-
-
-
+  save_key(1, registo_jogo, jogada);
+  save_key(0, registo_jogo, jogada);
 
 
 
   //fim do jogo
-  /*onde se grava a vitoria*/
-  strcpy(current_game->key, current_guess->guess);
 
-  /*onde se mete a derrota*/
-  strcpy(current_game->key, travessao);
 
   /*no fim*/
   last_game->ID=current_game->ID;
@@ -105,9 +101,8 @@ int main(int argc, char const *argv[]) {
 
 
 
-void save_game_ini(game_reg *registo_jogo, int hist_file) {
+void save_game_ini (game_reg *registo_jogo, int hist_file) {
   int pid=0;
-  char travessao[]="-";
   static int k=0; //se houver ficheiro hmmmmm
   game_reg *current_game; //chama-se current mas isso so e vdd para a primeira vez, a partir dai e o anterior
   //inicio de jogo
@@ -121,7 +116,6 @@ void save_game_ini(game_reg *registo_jogo, int hist_file) {
   if (k==0 && hist_file==0) {  //verifica se primeiro elemento da lista esta preenchido
     registo_jogo=calloc(1, sizeof(game_reg));
     current_game=registo_jogo; //se e a primeira vez que se passa aqui estrutura esta nao esta alocada, dai voltar a fazer isto
-
     current_game->game_ID=((last_game->ID)+1);
     current_game->player_name=calloc(strlen((nome_jogadores+jogador)+1, sizeof(char));
     strcpy(current_game->player_name, *(nome_jogadores+jogador));
@@ -158,6 +152,18 @@ void save_game_ini(game_reg *registo_jogo, int hist_file) {
   }
 }
 
+
+void save_key(int k, game_reg *registo_jogo, char jogada[]){
+  current_game = registo_jogo;
+  char travessao[] = "-";
+  while (current_game->next != NULL){
+    current_game = current_game->next;
+  }
+  /*onde se grava a vitoria*/
+  if(k==1) strcpy(current_game->key, jogada);
+  /*onde se mete a derrota*/
+  if(k==0) strcpy(current_game->key, travessao);
+}
 
 
 void save_guess_ini(game_reg *top) {
