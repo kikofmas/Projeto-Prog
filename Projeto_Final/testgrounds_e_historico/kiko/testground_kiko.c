@@ -11,14 +11,17 @@ int main(int argc, char const *argv[]) {
 
 
   if (flags->hist != 0) {
-    /*carregar os dados para a pequena estrutura  *
-    * ******************************************* *
-    * ******************************************* *
-    * ****************************************** */
+    FILE *fptr=fopen(argv[flags->hist], "r");
+    hist_data *last_game={0, "J000", NULL};
+    while(!feof(fp)){
+      fscanf(fptr, "%d %s %*[^\n]\n", last_game->ID, last_game->player_ID, NULL);
+      for (int i = 0; i < count; i++) {
+        /* code */
+      }
+    }
   }
 
   //funcoes a usar
-
   sort_registry(&registo_jogo, cmd_flag->ord, argv[]);
 
 
