@@ -51,19 +51,21 @@ typedef struct game_registry {
 
 
 
-void free_guess_list(guess_list *current);
-void free_game_registry(game_reg *current);
+void save_game_ini(game_reg *registo_jogo, int hist_file);
+void save_guess_ini(game_reg *top);
+void sort_registry(game_reg **registo_jogo, int pos, char *argv[]);
 game_reg *recursive_bubble_sort_fast(game_reg *current, game_reg *limit);
 game_reg *recursive_bubble_sort_short(game_reg *current, game_reg *limit);
 void reord_2_elements(game_reg *ptr);
+
+void free_guess_list(guess_list *current);
+void free_game_registry(game_reg *current);
 
 
 
 int main(int argc, char const *argv[]) {
   game_reg *registo_jogo;
   hist_data *last_game={0, "J000", NULL};
-  int pid=0;
-  char travessao[]="-";
 
   if (flags->hist != 0) {
     /*carregar os dados para a pequena estrutura  *
@@ -72,27 +74,51 @@ int main(int argc, char const *argv[]) {
     * ****************************************** */
   }
 
-  (**registo_jogo) //argumento funcoes
-  (&registo_jogo) //argumento main
+  //funcoes a usar
+  save_game_ini(registo_jogo, cmd_flag->hist);
+  save_guess_ini(registo_jogo);
+  sort_registry(&registo_jogo, cmd_flag->ord, argv[])
+  free_game_registry(registo_jogo);
+  free_guess_list(registo_jogo);
 
 
-  //coisas fucao
-  int a=0; //se houver ficheiro hmmmmm
+
+
+
+
+  //fim do jogo
+  /*onde se grava a vitoria*/
+  strcpy(current_game->key, current_guess->guess);
+
+  /*onde se mete a derrota*/
+  strcpy(current_game->key, travessao);
+
+  /*no fim*/
+  last_game->ID=current_game->ID;
+  strcpy(last_game->player_ID, current_game->player_ID);
+  last_game->last=current_game;
+
+
+
+  return 0;
+}
+
+
+
+void save_game_ini(game_reg *registo_jogo, int hist_file) {
+  int pid=0;
+  char travessao[]="-";
+  static int k=0; //se houver ficheiro hmmmmm
   game_reg *current_game; //chama-se current mas isso so e vdd para a primeira vez, a partir dai e o anterior
-  //inicio jogador?????
-
-  /*SOU BURRO COMO O CRL*/
-
-
   //inicio de jogo
-
   /*isto so funciona se leres o ficheiro -h antes e meteres o pointer a apontar para a lista
   caso se implemente de maneira diferente tenho de mudar isto*/
   current_game=registo_jogo;
   while (current_game->next != NULL){
     current_game = current_game->next;
+    k=1;
   }
-  if (a==0 && flags->hist==0) {  //verifica se primeiro elemento da lista esta preenchido
+  if (k==0 && hist_file==0) {  //verifica se primeiro elemento da lista esta preenchido
     registo_jogo=calloc(1, sizeof(game_reg));
     current_game=registo_jogo; //se e a primeira vez que se passa aqui estrutura esta nao esta alocada, dai voltar a fazer isto
 
@@ -110,7 +136,6 @@ int main(int argc, char const *argv[]) {
     current_game->game_time=defs_jogo->duracao_jogo;
     current_game->prev=last_game->last;
     current_game->next=NULL;
-    a=1;
   } else {
     current_game->next=calloc(1, sizeof(game_reg));
     current_game->next->game_ID=((last_game->ID)+1);
@@ -131,20 +156,25 @@ int main(int argc, char const *argv[]) {
     current_game->next->prev=last_game->last;
     current_game->next->next=NULL;
   }
+}
 
 
 
-
-
-  //inicio de jogo
+void save_guess_ini(game_reg *top) {
+  int k=0;//flag que verifica se existe o primeiro elemento da lista
+  game_reg current_game=top;
   guess_list *current_guess;
-  current_guess=current_game->first;
-  //inicio de tentativa
 
+  while (current_game->next != NULL){
+    current_game = current_game->next;
+  }
+  current_guess=current_game->first;
   while (current_guess->next != NULL){
     current_guess = current_guess->next;
+    k=1;
   }
-  if (tentativa==0) {  //verifica se primeiro elemento da lista esta preenchido
+  if (k==0) {  //verifica se primeiro elemento da lista esta preenchido
+    current_game->tentativas=tentativa+1;
     current_game->key=calloc((defs_jogo->tamanho_chave)+1, sizeof(char));
     current_game->first=calloc(1, sizeof(guess_list));
     current_guess=current_game->first; //se e a primeira vez que se passa aqui estrutura esta nao esta alocada, dai voltar a fazer isto
@@ -156,6 +186,7 @@ int main(int argc, char const *argv[]) {
     current_guess->prev=NULL;
     current_guess->next=NULL;
   } else {
+    current_game->next->tentativas=tentativa+1;
     current_guess->next=calloc(1, sizeof(guess_list));
     current_guess->next->guess_ID=tentativa+1;
     current_guess->next->guess=calloc((defs_jogo->tamanho_chave)+1, sizeof(char));
@@ -164,43 +195,17 @@ int main(int argc, char const *argv[]) {
     current_guess->next->prev=current_guess;
     current_guess->next->next=NULL;
   }
-
-  //fim do jogo
-  /*onde se grava a vitoria*/
-  strcpy(current_game->key, current_guess->guess);
-
-  /*onde se mete a derrota*/
-  strcpy(current_game->key, travessao);
-
-  /*no fim*/
-  last_game->ID=current_game->ID;
-  strcpy(last_game->player_ID, current_game->player_ID);
-  last_game->last=current_game;
-
-
-
-  registo_jogo=recursive_bubble_sort_fast(registo_jogo, NULL);
-  registo_jogo=recursive_bubble_sort_short(registo_jogo, NULL);
-
-  return 0;
 }
 
 
-//funcao recursiva para libertar as listas de listas
-void free_game_registry(game_reg *current){
-  if (current->next != NULL) {
-    free_game_registry(current->next);
+void sort_registry(game_reg **registo_jogo, int pos, char *argv[]){
+  if (strcmp(fast, argv[pos]) == 0) {
+    *registo_jogo=recursive_bubble_sort_fast(registo_jogo, NULL);
+  } else if (strcmp(short, argv[pos]) == 0) {
+    registo_jogo=recursive_bubble_sort_short(registo_jogo, NULL);
+  } else {
+    printf("ERRO: impossivel ordenar. Instrucao errada\n");
   }
-  free_guess_list(current->first);
-  free(current);
-}
-
-
-void free_guess_list(guess_list *current){
-  if (current->next != NULL) {
-    free_guess_list(current->next);
-  }
-  free(current);
 }
 
 
@@ -250,4 +255,23 @@ void reord_2_elements(game_reg *ptr){
   aux->next=ptr;
   if (ptr->next != NULL) ptr->next->prev=ptr;
   if (aux->prev != NULL) aux->prev->next=aux;
+}
+
+
+
+//funcao recursiva para libertar as listas de listas
+void free_game_registry(game_reg *current){
+  if (current->next != NULL) {
+    free_game_registry(current->next);
+  }
+  free_guess_list(current->first);
+  free(current);
+}
+
+
+void free_guess_list(guess_list *current){
+  if (current->next != NULL) {
+    free_guess_list(current->next);
+  }
+  free(current);
 }

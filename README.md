@@ -1,6 +1,9 @@
 # Projeto-Prog
 
 
+podemos fazer load do ficheiro -h mesmo se não o usamos?? -->> se nao tenho de mudar condicoes
+
+
 tenho que verificar que tudo no meu testground funciona como deve -- kiko
 
 
