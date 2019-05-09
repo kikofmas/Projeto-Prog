@@ -3,6 +3,38 @@
 ****************************/
 
 
+
+int main(int argc, char const *argv[]) {
+
+/*falta implementar isto e testar a minha copia.........*/
+
+
+
+  if (flags->hist != 0) {
+    /*carregar os dados para a pequena estrutura  *
+    * ******************************************* *
+    * ******************************************* *
+    * ****************************************** */
+  }
+
+  //funcoes a usar
+
+  sort_registry(&registo_jogo, cmd_flag->ord, argv[]);
+
+
+
+
+
+
+  return 0;
+}
+
+
+
+
+
+
+
 /* -podemos chamar esta parte em funcao ou so msm dentro do jogo
 ** - isto so grava a lista de listas -- it should work */
 
@@ -64,41 +96,6 @@ void free_game_registry(game_reg *current);
 
 
 
-int main(int argc, char const *argv[]) {
-  game_reg *registo_jogo;
-  hist_data *last_game={0, "J000", NULL};
-
-  if (flags->hist != 0) {
-    /*carregar os dados para a pequena estrutura  *
-    * ******************************************* *
-    * ******************************************* *
-    * ****************************************** */
-  }
-
-  //funcoes a usar
-  save_game_ini(registo_jogo, cmd_flag->hist);
-  save_guess_ini(registo_jogo);
-  sort_registry(&registo_jogo, cmd_flag->ord, argv[]);
-  free_game_registry(registo_jogo);
-  free_guess_list(registo_jogo);
-  save_key(1, registo_jogo, jogada);
-  save_key(0, registo_jogo, jogada);
-
-
-
-  //fim do jogo
-
-
-  /*no fim*/
-  last_game->ID=current_game->ID;
-  strcpy(last_game->player_ID, current_game->player_ID);
-  last_game->last=current_game;
-
-
-
-  return 0;
-}
-
 
 
 void save_game_ini (game_reg *registo_jogo, int hist_file) {
@@ -130,6 +127,9 @@ void save_game_ini (game_reg *registo_jogo, int hist_file) {
     current_game->game_time=defs_jogo->duracao_jogo;
     current_game->prev=last_game->last;
     current_game->next=NULL;
+    last_game->ID=current_game->ID;
+    strcpy(last_game->player_ID, current_game->player_ID);
+    last_game->last=current_game;
   } else {
     current_game->next=calloc(1, sizeof(game_reg));
     current_game->next->game_ID=((last_game->ID)+1);
@@ -149,6 +149,9 @@ void save_game_ini (game_reg *registo_jogo, int hist_file) {
     current_game->next->game_time=defs_jogo->duracao_jogo;
     current_game->next->prev=last_game->last;
     current_game->next->next=NULL;
+    last_game->ID=current_game->next->ID;
+    strcpy(last_game->player_ID, current_game->next->player_ID);
+    last_game->last=current_game->next;
   }
 }
 
@@ -262,7 +265,6 @@ void reord_2_elements(game_reg *ptr){
   if (ptr->next != NULL) ptr->next->prev=ptr;
   if (aux->prev != NULL) aux->prev->next=aux;
 }
-
 
 
 //funcao recursiva para libertar as listas de listas
