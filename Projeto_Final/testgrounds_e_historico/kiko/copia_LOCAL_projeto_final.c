@@ -91,10 +91,13 @@ void vencedor(float *mediaTempos, char **nome, int num_jogadores, int *numVitori
 void resultados(int num_jogadores, int num_jogos, dados **ptr_dados, int dado_principal, char frase[], char **nome); //apresenta as estatisticas
 void showData(dados **ptr_dados, float *mediaTempos, int num_jogadores, int *numVitorias, int num_jogos, char **nome_jogadores);  //apresenta dados extra de jogo
 
+
+void read_hist_file_1(char const *argv[], int arg_num, hist_data *last_game);
+
 int mode_check(int argc, char const *argv[], flags *cmd_flag);
 int test_mode_config(int k, char const *argv[], flags **cmd_flag);
 
-void save_game_ini(game_reg *registo_jogo, int hist_file);
+void save_game_ini(game_reg *registo_jogo, int hist_file, int ord);
 void save_key(int k, game_reg *registo_jogo, char jogada[]);
 void save_guess_ini(game_reg *top);
 void sort_registry(game_reg **registo_jogo, int pos, char *argv[]);
@@ -125,7 +128,7 @@ int main(int argc, char const *argv[]) {
   int *numVitorias=NULL;
   float *mediaTempos=NULL;
   game_reg *registo_jogo;
-  hist_data *last_game={0, "J000", NULL};
+  hist_data last_game={0, "J000", NULL};
 
 //inicializacao da funcao srand:
   time_t t;
@@ -941,6 +944,27 @@ void showData(dados **ptr_dados, float *mediaTempos, int num_jogadores, int *num
 }
 
 
+void read_hist_file_1(char const *argv[], int arg_num, hist_data *last_game){
+
+  int k=0, a=0, b=0, a1=0, a2=0;
+
+  FILE *fptr=fopen(argv[arg_num], "r");
+
+  while(!feof(fptr)){
+    fscanf(fptr, "%d J%d %* %* %* %* %* %d %*[^\n]\n", a, b, NULL, NULL, NULL, NULL, NULL, NULL, &k, NULL);
+    for (int i = 0; i < k; i++) {
+      fscanf(fptr, "%*[^\n]\n", NULL);
+    }
+    if (a>a1) a1=a;
+    if (b>b1) b1=b;
+  }
+  if (b1>998) b1=0;
+  sprintf(last_game->ID, "J%03d", a1);
+  sprintf(last_game->player_ID, "J%03d", b1);
+  fclose(fptr);
+}
+
+
 int mode_check(int argc, char const *argv[], flags *cmd_flag){
   int func_valid=0;
 
@@ -988,7 +1012,7 @@ int test_mode_config(int k, char const *argv[], flags **cmd_flag) {
 }
 
 
-void save_game_ini(game_reg *registo_jogo, int hist_file){
+void save_game_ini(game_reg *registo_jogo, int hist_file, int ord){
   int pid=0;
   char travessao[]="-";
   static int k=0; //se houver ficheiro hmmmmm
@@ -999,9 +1023,8 @@ void save_game_ini(game_reg *registo_jogo, int hist_file){
   current_game=registo_jogo;
   while (current_game->next != NULL){
     current_game = current_game->next;
-    k=1;
   }
-  if (k==0 && hist_file==0) {  //verifica se primeiro elemento da lista esta preenchido
+  if (k==0 && !(hist_file!=0 && ord!=0)) {  //verifica se primeiro elemento da lista esta preenchido
     registo_jogo=calloc(1, sizeof(game_reg));
     current_game=registo_jogo; //se e a primeira vez que se passa aqui estrutura esta nao esta alocada, dai voltar a fazer isto
 
@@ -1019,6 +1042,7 @@ void save_game_ini(game_reg *registo_jogo, int hist_file){
     current_game->game_time=defs_jogo->duracao_jogo;
     current_game->prev=last_game->last;
     current_game->next=NULL;
+    k=1;
   } else {
     current_game->next=calloc(1, sizeof(game_reg));
     current_game->next->game_ID=((last_game->ID)+1);

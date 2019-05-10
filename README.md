@@ -1,6 +1,12 @@
 # Projeto-Prog
 
 
+temos de atualizar a puta dos .zip
+
+
+CONTAR TEMPO EM ms!!!!!
+
+
 podemos fazer load do ficheiro -h mesmo se não o usamos?? -->> se nao tenho de mudar condicoes
 
 
