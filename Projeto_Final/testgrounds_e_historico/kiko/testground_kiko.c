@@ -9,20 +9,48 @@ int main(int argc, char const *argv[]) {
 /*falta implementar isto e testar a minha copia.........*/
 
 
+void read_hist_file_2(char const *argv[], int arg_num);
 
-  if (flags->hist != 0) {
-    FILE *fptr=fopen(argv[flags->hist], "r");
-    hist_data *last_game={0, "J000", NULL};
-    while(!feof(fp)){
-      fscanf(fptr, "%d %s %*[^\n]\n", last_game->ID, last_game->player_ID, NULL);
-      for (int i = 0; i < count; i++) {
-        /* code */
-      }
-    }
+
+  if (cmd_flag->hist != 0) {
+    read_hist_file_1(argv, *flags->hist, &last_game);
+    if (cmd_flag->ord != 0) read_hist_file_2(argv, *flags->hist);
   }
 
-  //funcoes a usar
-  sort_registry(&registo_jogo, cmd_flag->ord, argv[]);
+void read_hist_file_2(char const *argv[], int arg_num, game_reg **registo_jogo) {
+  game_reg *current;
+  char name[50]="\0", key[10]="\0";
+  FILE *fptr=fopen(argv[arg_num], "r");
+  *registo_jogo=calloc(1, sizeof(game_reg));
+  current=*registo_jogo;
+  fscanf(fptr, "%d %s %s %d %d %c %s %d %f\n", current->game_ID, current->player_ID, name, current->colors,
+        current->key_size, current->repet, key, current->tentativas, current->game_time);
+  current->key=calloc(strlen(key)+1, sizeof(char));
+  current->player_name=calloc(strlen(name)+1, sizeof(char));
+  strcpy(current->key, key);
+  strcpy(current->player_name, name);
+  while(!feof(fptr)){
+    current->next=calloc(1, sizeof(game_reg));
+    fscanf(fptr, "%d %s %s %d %d %c %s %d %f\n", current->next->game_ID, current->next->player_ID, name, current->next->colors,
+          current->next->key_size, current->next->repet, key, current->next->tentativas, current->next->game_time);
+    current->key=calloc(strlen(key)+1, sizeof(char));
+    current->player_name=calloc(strlen(name)+1, sizeof(char));
+    strcpy(current->key, key);
+    strcpy(current->player_name, name);
+    current->next->next=NULL;
+    current=current->next;
+  }
+}
+
+
+
+
+
+
+  if (cmd_flag->ord != 0) {
+    sort_registry(&registo_jogo, cmd_flag->ord, argv);
+  }
+
 
 
 
@@ -156,6 +184,26 @@ void save_game_ini (game_reg *registo_jogo, int hist_file) {
     strcpy(last_game->player_ID, current_game->next->player_ID);
     last_game->last=current_game->next;
   }
+}
+
+
+void read_hist_file_1(char const *argv[], int arg_num, hist_data *last_game){
+
+  int k=0, a=0, b=0, a1=0, a2=0;
+
+  FILE *fptr=fopen(argv[arg_num], "r");
+
+  while(!feof(fptr)){
+    fscanf(fptr, "%d J%d %* %* %* %* %* %d %*[^\n]\n", a, b, NULL, NULL, NULL, NULL, NULL, NULL, &k, NULL);
+    for (int i = 0; i < k; i++) {
+      fscanf(fptr, "%*[^\n]\n", NULL);
+    }
+    if (a>a1) a1=a;
+    if (b>b1) b1=b;
+  }
+  if (b1>998) b1=0;
+  sprintf(last_game->ID, "J%03d", a1);
+  sprintf(last_game->player_ID, "J%03d", b1);
 }
 
 
