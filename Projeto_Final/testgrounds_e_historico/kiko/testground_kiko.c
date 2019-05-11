@@ -9,47 +9,19 @@ int main(int argc, char const *argv[]) {
 /*falta implementar isto e testar a minha copia.........*/
 
 
-void read_hist_file_2(char const *argv[], int arg_num);
-
-
-  if (cmd_flag->hist != 0) {
-    read_hist_file_1(argv, *flags->hist, &last_game);
-    if (cmd_flag->ord != 0) read_hist_file_2(argv, *flags->hist);
-  }
-
-void read_hist_file_2(char const *argv[], int arg_num, game_reg **registo_jogo) {
-  game_reg *current;
-  char name[50]="\0", key[10]="\0";
-  FILE *fptr=fopen(argv[arg_num], "r");
-  *registo_jogo=calloc(1, sizeof(game_reg));
-  current=*registo_jogo;
-  fscanf(fptr, "%d %s %s %d %d %c %s %d %f\n", current->game_ID, current->player_ID, name, current->colors,
-        current->key_size, current->repet, key, current->tentativas, current->game_time);
-  current->key=calloc(strlen(key)+1, sizeof(char));
-  current->player_name=calloc(strlen(name)+1, sizeof(char));
-  strcpy(current->key, key);
-  strcpy(current->player_name, name);
-  while(!feof(fptr)){
-    current->next=calloc(1, sizeof(game_reg));
-    fscanf(fptr, "%d %s %s %d %d %c %s %d %f\n", current->next->game_ID, current->next->player_ID, name, current->next->colors,
-          current->next->key_size, current->next->repet, key, current->next->tentativas, current->next->game_time);
-    current->key=calloc(strlen(key)+1, sizeof(char));
-    current->player_name=calloc(strlen(name)+1, sizeof(char));
-    strcpy(current->key, key);
-    strcpy(current->player_name, name);
-    current->next->next=NULL;
-    current=current->next;
-  }
-}
 
 
 
 
 
 
-  if (cmd_flag->ord != 0) {
-    sort_registry(&registo_jogo, cmd_flag->ord, argv);
-  }
+
+
+
+
+
+
+
 
 
 
@@ -126,7 +98,30 @@ void free_guess_list(guess_list *current);
 void free_game_registry(game_reg *current);
 
 
-
+void read_hist_file_2(char const *argv[], int arg_num, game_reg **registo_jogo) {
+  game_reg *current;
+  char name[50]="\0", key[10]="\0";
+  FILE *fptr=fopen(argv[arg_num], "r");
+  *registo_jogo=calloc(1, sizeof(game_reg));
+  current=*registo_jogo;
+  fscanf(fptr, "%d %s %s %d %d %c %s %d %f\n", current->game_ID, current->player_ID, name, current->colors,
+        current->key_size, current->repet, key, current->tentativas, current->game_time);
+  current->key=calloc(strlen(key)+1, sizeof(char));
+  current->player_name=calloc(strlen(name)+1, sizeof(char));
+  strcpy(current->key, key);
+  strcpy(current->player_name, name);
+  while(!feof(fptr)){
+    current->next=calloc(1, sizeof(game_reg));
+    fscanf(fptr, "%d %s %s %d %d %c %s %d %f\n", current->next->game_ID, current->next->player_ID, name, current->next->colors,
+          current->next->key_size, current->next->repet, key, current->next->tentativas, current->next->game_time);
+    current->key=calloc(strlen(key)+1, sizeof(char));
+    current->player_name=calloc(strlen(name)+1, sizeof(char));
+    strcpy(current->key, key);
+    strcpy(current->player_name, name);
+    current->next->next=NULL;
+    current=current->next;
+  }
+}
 
 
 void save_game_ini (game_reg *registo_jogo, int hist_file) {

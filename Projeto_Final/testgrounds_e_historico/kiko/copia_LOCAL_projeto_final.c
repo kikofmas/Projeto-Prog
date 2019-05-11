@@ -93,6 +93,7 @@ void showData(dados **ptr_dados, float *mediaTempos, int num_jogadores, int *num
 
 
 void read_hist_file_1(char const *argv[], int arg_num, hist_data *last_game);
+void read_hist_file_2(char const *argv[], int arg_num);
 
 int mode_check(int argc, char const *argv[], flags *cmd_flag);
 int test_mode_config(int k, char const *argv[], flags **cmd_flag);
@@ -201,6 +202,9 @@ int main(int argc, char const *argv[]) {
 }
   else if(cmd_flag.init==0 && cmd_flag.hist!=0 && cmd_flag.ord!=0){
     printf("MODO TESTE\n\nAPENAS REORDENAÇAO");
+    read_hist_file_1(argv, *flags->hist, &last_game);
+    read_hist_file_2(argv, *flags->hist);
+    }
     /* fazer so o algoritmo de reordenaçao */
     /* load -h file and reord*/
   }
@@ -214,6 +218,11 @@ int main(int argc, char const *argv[]) {
     /*load init files and others if needed -- use ifs to allow or not passage*/
 
     //passar esta merda para funcao
+
+    if (cmd_flag->hist != 0) {
+      read_hist_file_1(argv, *flags->hist, &last_game);
+      if (cmd_flag->ord != 0) read_hist_file_2(argv, *flags->hist);
+    }
 
     FILE *fptr = fopen(argv[cmd_flag.init],"rb");
     if(fptr!=NULL){
@@ -260,6 +269,10 @@ int main(int argc, char const *argv[]) {
       perror("ERRO:");
       exit(-1);
     }
+  }
+
+  if (cmd_flag->ord != 0) {
+    sort_registry(&registo_jogo, cmd_flag->ord, argv);
   }
 
   return 0;
@@ -961,6 +974,33 @@ void read_hist_file_1(char const *argv[], int arg_num, hist_data *last_game){
   if (b1>998) b1=0;
   sprintf(last_game->ID, "J%03d", a1);
   sprintf(last_game->player_ID, "J%03d", b1);
+  fclose(fptr);
+}
+
+
+void read_hist_file_2(char const *argv[], int arg_num, game_reg **registo_jogo) {
+  game_reg *current;
+  char name[50]="\0", key[10]="\0";
+  FILE *fptr=fopen(argv[arg_num], "r");
+  *registo_jogo=calloc(1, sizeof(game_reg));
+  current=*registo_jogo;
+  fscanf(fptr, "%d %s %s %d %d %c %s %d %f\n", current->game_ID, current->player_ID, name, current->colors,
+        current->key_size, current->repet, key, current->tentativas, current->game_time);
+  current->key=calloc(strlen(key)+1, sizeof(char));
+  current->player_name=calloc(strlen(name)+1, sizeof(char));
+  strcpy(current->key, key);
+  strcpy(current->player_name, name);
+  while(!feof(fptr)){
+    current->next=calloc(1, sizeof(game_reg));
+    fscanf(fptr, "%d %s %s %d %d %c %s %d %f\n", current->next->game_ID, current->next->player_ID, name, current->next->colors,
+          current->next->key_size, current->next->repet, key, current->next->tentativas, current->next->game_time);
+    current->key=calloc(strlen(key)+1, sizeof(char));
+    current->player_name=calloc(strlen(name)+1, sizeof(char));
+    strcpy(current->key, key);
+    strcpy(current->player_name, name);
+    current->next->next=NULL;
+    current=current->next;
+  }
   fclose(fptr);
 }
 
