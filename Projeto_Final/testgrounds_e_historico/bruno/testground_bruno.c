@@ -12,13 +12,15 @@
 
 typedef struct letras_t{
   char letra;
-  struct letras_t * next;
+  struct letras_t *next;
 } letras;
 
 typedef struct tentativas_t{
+  int tent_ID;
   char *tentativa;
+  char resultado[5];
   int pretas, brancas;
-  struct tentativas_t * next, *prev;
+  struct tentativas_t *next, *prev;
 } tentativas;
 
 void reset(letras **index, letras **lista_cores, int size);
@@ -32,12 +34,12 @@ int main(int argc, char const *argv[]) {
   int size=8;
   letras **lista_cores, **index;
   char *tentativa;
-  int num_alea = 0;
+  int num_alea = 4;
   tentativas *lista_tentativas=NULL, *aux=NULL;
   reply * answer;
   int pretas;
   int brancas;
-  int valid=0, count=0;
+  int valid=0, count=num_alea;
 
 
 
@@ -49,13 +51,13 @@ int main(int argc, char const *argv[]) {
 
   lista_cores = (letras **)calloc(size,sizeof(letras*));
   index = (letras **)calloc(size,sizeof(letras*));
-  tentativa = (char *)calloc(size,sizeof(char));
+  tentativa = (char *)calloc(size+1,sizeof(char));
 
   if(num_alea>0){
     lista_tentativas = calloc(1,sizeof(tentativas));
     aux = lista_tentativas;
 
-    aux -> tentativa = calloc(size,sizeof(char));
+    aux -> tentativa = calloc(size+1,sizeof(char));
     for(int a=0;a<size;a++){
       aux -> tentativa[a] = 'A'+(rand()%colors);
     }
@@ -65,17 +67,20 @@ int main(int argc, char const *argv[]) {
 
     pretas = get_blacks(answer);
     brancas = get_whites(answer);
+
+    aux->tent_ID = 1;
     aux->pretas = pretas;
     aux->brancas = brancas;
+    sprintf(aux->resultado,"P%dB%d",pretas,brancas);
     aux->next=NULL;
     aux->prev=NULL;
 
-    printf("%s P%dB%d\n", aux->tentativa, aux->pretas, aux->brancas);
+    printf("%d: %s %s\n", aux->tent_ID, aux->tentativa, aux->resultado);
 
     for(int i=1;i<num_alea;i++){
 
       aux->next = calloc(1,sizeof(tentativas));
-      aux->next-> tentativa = calloc(size,sizeof(char));
+      aux->next->tentativa = calloc(size+1,sizeof(char));
       for(int a=0;a<size;a++){
         aux -> next -> tentativa[a] = 'A'+(rand()%colors);
       }
@@ -85,11 +90,14 @@ int main(int argc, char const *argv[]) {
 
       pretas = get_blacks(answer);
       brancas = get_whites(answer);
+
+      aux->next->tent_ID = i+1;
       aux->next->pretas = pretas;
       aux->next->brancas = brancas;
+      sprintf(aux->next->resultado,"P%dB%d",pretas,brancas);
       aux->next->next = NULL;
       aux->next->prev = aux;
-      printf("%s P%dB%d\n", aux->next->tentativa, aux->next->pretas, aux->next->brancas);
+      printf("%d: %s %s\n", aux->next->tent_ID, aux->next->tentativa, aux->next->resultado);
       aux = aux->next;
     }
   }
@@ -124,10 +132,8 @@ int main(int argc, char const *argv[]) {
 
     if(lista_tentativas==NULL){
 
-      printf("%s\n", tentativa);
-
       lista_tentativas = calloc(1,sizeof(tentativas));
-      lista_tentativas -> tentativa = calloc(size,sizeof(char));
+      lista_tentativas -> tentativa = calloc(size+1,sizeof(char));
       strcpy(lista_tentativas -> tentativa, tentativa);
 
       answer = validate_key(tentativa);
@@ -135,12 +141,15 @@ int main(int argc, char const *argv[]) {
 
       lista_tentativas -> pretas = get_blacks(answer);
       lista_tentativas -> brancas = get_whites(answer);
+      sprintf(lista_tentativas->resultado,"P%dB%d",lista_tentativas->pretas, lista_tentativas->brancas);
       lista_tentativas -> next = NULL;
       lista_tentativas -> prev = NULL;
       count++;
+      lista_tentativas -> tent_ID = count;
+
+      printf("%d: %s %s\n", count, tentativa, lista_tentativas->resultado);
 
       if(lista_tentativas -> pretas==size){
-        printf("%s\n", tentativa);
         break;
       }
 
@@ -175,8 +184,6 @@ int main(int argc, char const *argv[]) {
 
       if(valid == 1){
 
-        printf("%s\n", tentativa);
-
         aux = lista_tentativas;
         while(aux->next!=NULL) aux = aux->next;
 
@@ -187,11 +194,16 @@ int main(int argc, char const *argv[]) {
 
         aux->next->pretas = get_blacks(answer);
         aux->next->brancas = get_whites(answer);
-        aux->next->tentativa = calloc(size,sizeof(char));
+        sprintf(aux->next->resultado,"P%dB%d", aux->next->pretas, aux->next->brancas);
+        aux->next->tentativa = calloc(size+1,sizeof(char));
         strcpy(aux->next->tentativa,tentativa);
         aux->next->next = NULL;
         aux->next->prev=aux;
         count++;
+        aux->next->tent_ID = count;
+
+        printf("%d: %s %s\n", count, tentativa, aux->next->resultado);
+
         if(aux->next->pretas == size){
           break;
         }
@@ -212,8 +224,7 @@ int main(int argc, char const *argv[]) {
     reset(index,lista_cores,size-1);
   }
 
-  printf("done\n");
-  printf("%d\n", count);
+  printf("Numero de tentativas: %d\n", count);
   return 0;
 }
 
