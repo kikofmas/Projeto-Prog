@@ -1,6 +1,9 @@
 # Projeto-Prog
 
 
+passar os comentarios para os .h?
+
+
 supostamente a copia do projeto esta funcional, testa isso sff
 
 
