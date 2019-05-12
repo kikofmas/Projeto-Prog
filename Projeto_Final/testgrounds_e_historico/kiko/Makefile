@@ -1,11 +1,11 @@
 #make file example
 
 CC = gcc #compiler
-CFLAGS = -Wall -std=c99 -O3
-TARGET = tester #target file name
+CFLAGS = -Wall -std=c99
+TARGET = exe #target file name
 
-all: 
-	$(CC) $(CFLAGS) tester.c -o $(TARGET) oraculo.o 
+all:
+	$(CC) $(CFLAGS) copia_LOCAL_projeto_final.c -o $(TARGET) oraculo.o
 
-clean: 
+clean:
 	rm $(TARGET)
