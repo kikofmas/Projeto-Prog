@@ -32,15 +32,14 @@ int main(int argc, char const *argv[]) {
 
   int colors=12;
   int size=8;
-  letras **lista_cores, **index;
+  letras **lista_cores, **index, *color_aux=NULL, *aux_rm=NULL;
   char *tentativa;
   int num_alea = 4;
   tentativas *lista_tentativas=NULL, *aux=NULL;
-  reply * answer;
+  reply *answer;
   int pretas;
   int brancas;
   int valid=0, count=num_alea;
-
 
 
   activate_oracle(size, colors, 1);
@@ -52,57 +51,6 @@ int main(int argc, char const *argv[]) {
   lista_cores = (letras **)calloc(size,sizeof(letras*));
   index = (letras **)calloc(size,sizeof(letras*));
   tentativa = (char *)calloc(size+1,sizeof(char));
-
-  if(num_alea>0){
-    lista_tentativas = calloc(1,sizeof(tentativas));
-    aux = lista_tentativas;
-
-    aux -> tentativa = calloc(size+1,sizeof(char));
-    for(int a=0;a<size;a++){
-      aux -> tentativa[a] = 'A'+(rand()%colors);
-    }
-
-    answer = validate_key(aux->tentativa);
-    //answer = compare_keys("LLLLLLLL",aux->tentativa);
-
-    pretas = get_blacks(answer);
-    brancas = get_whites(answer);
-
-    aux->tent_ID = 1;
-    aux->pretas = pretas;
-    aux->brancas = brancas;
-    sprintf(aux->resultado,"P%dB%d",pretas,brancas);
-    aux->next=NULL;
-    aux->prev=NULL;
-
-    printf("%d: %s %s\n", aux->tent_ID, aux->tentativa, aux->resultado);
-
-    for(int i=1;i<num_alea;i++){
-
-      aux->next = calloc(1,sizeof(tentativas));
-      aux->next->tentativa = calloc(size+1,sizeof(char));
-      for(int a=0;a<size;a++){
-        aux -> next -> tentativa[a] = 'A'+(rand()%colors);
-      }
-
-      answer = validate_key(aux->next->tentativa);
-      //answer = compare_keys("LLLLLLLL",aux->next->tentativa);
-
-      pretas = get_blacks(answer);
-      brancas = get_whites(answer);
-
-      aux->next->tent_ID = i+1;
-      aux->next->pretas = pretas;
-      aux->next->brancas = brancas;
-      sprintf(aux->next->resultado,"P%dB%d",pretas,brancas);
-      aux->next->next = NULL;
-      aux->next->prev = aux;
-      printf("%d: %s %s\n", aux->next->tent_ID, aux->next->tentativa, aux->next->resultado);
-      aux = aux->next;
-    }
-  }
-
-  printf("\n\n");
 
   for(int i=0;i<size;i++){
     letras *aux;
@@ -119,6 +67,95 @@ int main(int argc, char const *argv[]) {
       aux = aux->next;
     }
   }
+
+  if(num_alea>0){
+    lista_tentativas = calloc(1,sizeof(tentativas));
+    aux = lista_tentativas;
+
+    aux -> tentativa = calloc(size+1,sizeof(char));
+    for(int a=0;a<size;a++){
+      aux -> tentativa[a] = 'A'+(rand()%colors);
+    }
+
+    answer = validate_key(aux->tentativa);
+    //answer = compare_keys("LLLLLLLL",aux->tentativa);
+
+    aux->tent_ID = 1;
+    aux->pretas = get_blacks(answer);
+    aux->brancas = get_whites(answer);
+    sprintf(aux->resultado,"P%dB%d", aux->pretas, aux->brancas);
+    aux->next=NULL;
+    aux->prev=NULL;
+
+    printf("%d: %s %s\n", aux->tent_ID, aux->tentativa, aux->resultado);
+
+    if(aux->pretas==size) exit(0);
+
+    if(aux->pretas==0){
+      for(int i=0;i<size;i++){
+        color_aux = lista_cores[i];
+        if(color_aux->letra == aux->tentativa[i]){
+          lista_cores[i] = lista_cores[i]->next;
+          free(color_aux);
+        }
+        else{
+          while(color_aux->next->letra!=aux->tentativa[i]){
+            color_aux = color_aux->next;
+          }
+          aux_rm = color_aux->next;
+          color_aux->next=color_aux->next->next;
+          free(aux_rm);
+        }
+      }
+    }
+
+    for(int i=1;i<num_alea;i++){
+
+      aux->next = calloc(1,sizeof(tentativas));
+      aux->next->tentativa = calloc(size+1,sizeof(char));
+      for(int a=0;a<size;a++){
+        aux -> next -> tentativa[a] = 'A'+(rand()%colors);
+      }
+
+      answer = validate_key(aux->next->tentativa);
+      //answer = compare_keys("LLLLLLLL",aux->next->tentativa);
+
+      aux->next->tent_ID = i+1;
+      aux->next->pretas = get_blacks(answer);
+      aux->next->brancas = get_whites(answer);
+      sprintf(aux->next->resultado,"P%dB%d", aux->next->pretas, aux->next->brancas);
+      aux->next->next = NULL;
+      aux->next->prev = aux;
+      printf("%d: %s %s\n", aux->next->tent_ID, aux->next->tentativa, aux->next->resultado);
+
+      if(aux->next->pretas==size) exit(0);
+
+      if(aux->next->pretas==0){
+        for(int index=0;index<size;index++){
+          color_aux = lista_cores[index];
+          if(color_aux->letra == aux->next->tentativa[index]){
+            lista_cores[index] = lista_cores[index]->next;
+            free(color_aux);
+          }
+          else{
+            while(color_aux->next->letra != aux->next->tentativa[index]){
+              color_aux = color_aux->next;
+              if(color_aux->next==NULL) break;
+            }
+            if(color_aux->next!=NULL){
+              aux_rm = color_aux->next;
+              color_aux->next=color_aux->next->next;
+              free(aux_rm);
+            }
+          }
+        }
+      }
+
+      aux = aux->next;
+    }
+  }
+
+  printf("\n\n");
 
   for(int i=0;i<size;i++){
     index[i] = lista_cores[i];
@@ -156,9 +193,10 @@ int main(int argc, char const *argv[]) {
       if(lista_tentativas -> pretas == 0 && lista_tentativas -> brancas==0){
         for(int i=0;i<size;i++){
           index[i] = index[i]->next;
+          aux_rm = lista_cores[i];
           lista_cores[i] = lista_cores[i] -> next;
+          free(aux_rm);
         }
-
       }
       else{
         index[size-1] = index[size-1]->next;
@@ -210,9 +248,10 @@ int main(int argc, char const *argv[]) {
         if(aux->next->pretas == 0 && aux->next->brancas==0){
           for(int i=0;i<size;i++){
             index[i] = index[i]->next;
+            aux_rm = lista_cores[i];
             lista_cores[i] = lista_cores[i] -> next;
+            free(aux_rm);
           }
-
         }
         else{
           index[size-1] = index[size-1]->next;
