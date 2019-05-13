@@ -1194,7 +1194,9 @@ game_reg *recursive_bubble_sort_short(game_reg *current, game_reg *limit){
     }
     return current;
   }
-  while (current->tentativas > current->next->tentativas) {
+  while (current->tentativas > current->next->tentativas && current->colors > current->next->colors &&\
+        current->key_size > current->next->key_size && !(tolower(current->repet)=='n' &&\
+        tolower(current->next->repet)=='s')) {
     reord_2_elements(current);
     while (current->tentativas < current->next->tentativas && current->next != limit) {
       current=current->next;
