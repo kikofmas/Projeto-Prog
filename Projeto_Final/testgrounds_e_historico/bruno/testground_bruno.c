@@ -30,11 +30,11 @@ int main(int argc, char const *argv[]) {
   time_t t;
   srand((unsigned) time(&t));
 
-  int colors=12;
-  int size=8;
+  int colors=6;
+  int size=4;
   letras **lista_cores, **index, *color_aux=NULL, *aux_rm=NULL;
   char *tentativa;
-  int num_alea = 4;
+  int num_alea = 3;
   tentativas *lista_tentativas=NULL, *aux=NULL;
   reply *answer;
   int pretas;
@@ -201,7 +201,6 @@ int main(int argc, char const *argv[]) {
       else{
         index[size-1] = index[size-1]->next;
       }
-
     }
     else{
       aux = lista_tentativas;
@@ -251,6 +250,27 @@ int main(int argc, char const *argv[]) {
             aux_rm = lista_cores[i];
             lista_cores[i] = lista_cores[i] -> next;
             free(aux_rm);
+          }
+        }
+        else if(aux->next->pretas == 0){
+          for(int i=0;i<size;i++){
+            index[i] = index[i]->next;
+            color_aux = lista_cores[i];
+            if(color_aux->letra == aux->next->tentativa[i]){
+              lista_cores[i] = lista_cores[i]->next;
+              free(color_aux);
+            }
+            else{
+              while(color_aux->next->letra != aux->next->tentativa[i]){
+                color_aux = color_aux->next;
+                if(color_aux->next==NULL) break;
+              }
+              if(color_aux->next!=NULL){
+                aux_rm = color_aux->next;
+                color_aux->next=color_aux->next->next;
+                free(aux_rm);
+              }
+            }
           }
         }
         else{
