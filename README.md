@@ -1,6 +1,9 @@
 # Projeto-Prog
 
 
+mudar a funcao intro para contemplar as mods para o modo interativo
+
+
 passar os comentarios para os .h?
 
 
