@@ -30,23 +30,31 @@ int main(int argc, char const *argv[]) {
   time_t t;
   srand((unsigned) time(&t));
 
-  int colors=6;
-  int size=4;
+  int colors=0;
+  int size=0;
   letras **lista_cores, **index, *color_aux=NULL, *aux_rm=NULL;
   char *tentativa;
-  int num_alea = 3;
+  int num_alea = 0;
   tentativas *lista_tentativas=NULL, *aux=NULL;
   reply *answer;
   int pretas;
   int brancas;
-  int valid=0, count=num_alea;
+  int valid=0, count=0;
 
+  printf("Indique a dimensao da chave: ");
+  scanf("%d", &size);
+  printf("Indique o numero de cores da chave: ");
+  scanf("%d", &colors);
+  printf("Indique o numero de tentativas aleatorias: ");
+  scanf("%d", &num_alea);
+  count = num_alea;
 
+  printf("\n");
   activate_oracle(size, colors, 1);
-  printf("\n\n\n");
+  printf("Chave: ");
   generate_key(1);
-  //printf("LLLLLLLL\n");
-  printf("\n\n\n");
+  //printf("LLLLLLLL");
+  printf("\n");
 
   lista_cores = (letras **)calloc(size,sizeof(letras*));
   index = (letras **)calloc(size,sizeof(letras*));
@@ -69,6 +77,7 @@ int main(int argc, char const *argv[]) {
   }
 
   if(num_alea>0){
+    printf("Tentativas aleatorias:\n");
     lista_tentativas = calloc(1,sizeof(tentativas));
     aux = lista_tentativas;
 
@@ -90,8 +99,8 @@ int main(int argc, char const *argv[]) {
     printf("%d: %s %s\n", aux->tent_ID, aux->tentativa, aux->resultado);
 
     if(aux->pretas==size) exit(0);
-
-    if(aux->pretas==0){
+    else if(aux->pretas==0 && aux->brancas==0){}
+    else if(aux->pretas==0){
       for(int i=0;i<size;i++){
         color_aux = lista_cores[i];
         if(color_aux->letra == aux->tentativa[i]){
@@ -153,18 +162,22 @@ int main(int argc, char const *argv[]) {
 
       aux = aux->next;
     }
-  }
 
-  printf("\n\n");
+    printf("\n");
+  }
 
   for(int i=0;i<size;i++){
     index[i] = lista_cores[i];
   }
 
+  printf("Tentativas logicas:\n");
+
   while(index[0]!=NULL){
+
     for(int i=0;i<size;i++){
-      tentativa[i] = index[i]->letra;
+      tentativa[i] = index[i]->letra; //problem here
     }
+
     valid = 0;
 
     if(lista_tentativas==NULL){
@@ -246,22 +259,39 @@ int main(int argc, char const *argv[]) {
         }
         if(aux->next->pretas == 0 && aux->next->brancas==0){
           for(int i=0;i<size;i++){
-            index[i] = index[i]->next;
-            aux_rm = lista_cores[i];
-            lista_cores[i] = lista_cores[i] -> next;
-            free(aux_rm);
+            for(int a=0;a<size;a++){
+              color_aux = lista_cores[a];
+              if(color_aux->letra == tentativa[i]){
+                lista_cores[a] = lista_cores[a]->next;
+                free(color_aux);
+              }
+              else{
+                while(color_aux->next->letra != tentativa[i]){
+                  color_aux = color_aux->next;
+                  if(color_aux->next==NULL) break;
+                }
+                if(color_aux->next!=NULL){
+                  aux_rm = color_aux->next;
+                  color_aux->next=color_aux->next->next;
+                  free(aux_rm);
+                }
+              }
+            }
+          }
+          index[0] = index[0]->next;
+          for(int i=1;i<size;i++){
+            index[i] = lista_cores[i];
           }
         }
         else if(aux->next->pretas == 0){
           for(int i=0;i<size;i++){
-            index[i] = index[i]->next;
             color_aux = lista_cores[i];
-            if(color_aux->letra == aux->next->tentativa[i]){
+            if(color_aux->letra == tentativa[i]){
               lista_cores[i] = lista_cores[i]->next;
               free(color_aux);
             }
             else{
-              while(color_aux->next->letra != aux->next->tentativa[i]){
+              while(color_aux->next->letra != tentativa[i]){
                 color_aux = color_aux->next;
                 if(color_aux->next==NULL) break;
               }
@@ -272,24 +302,30 @@ int main(int argc, char const *argv[]) {
               }
             }
           }
+          index[0] = index[0]->next;
+          for(int i=1;i<size;i++){
+            index[i] = lista_cores[i];
+          }
         }
         else{
           index[size-1] = index[size-1]->next;
         }
+
       }
       else index[size-1] = index[size-1]->next;
     }
 
     reset(index,lista_cores,size-1);
+
   }
 
   printf("Numero de tentativas: %d\n", count);
+
   return 0;
 }
 
 void reset(letras **index, letras **lista_cores, int size){
-  if(size==0) return;
-  else{
+  if(size>0){
     if(index[size]==NULL){
       index[size] = lista_cores[size];
       index[size-1] = index[size-1]->next;
