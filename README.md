@@ -1,6 +1,12 @@
 # Projeto-Prog
 
 
+fazer o makefile e decobrir porque e que o meu esta a dar merda
+
+
+fazer o modo interativo -- ver o meu testground e juntar
+
+
 mudar a funcao intro para contemplar as mods para o modo interativo
 
 
