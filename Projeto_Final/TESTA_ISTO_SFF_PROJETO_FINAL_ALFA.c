@@ -1208,12 +1208,11 @@ game_reg *recursive_bubble_sort_short(game_reg *current, game_reg *limit){
     reord_2_elements(current);
   } else if (current->colors > current->next->colors && current->key_size == current->next->key_size) {
     reord_2_elements(current);
-  } else if (tolower(current->repet)=='s' && tolower(current->next->repet)=='s' &&\
+  } else if (tolower(current->repet)=='s' && tolower(current->next->repet)=='n' &&
             current->colors == current->next->colors && current->key_size == current->next->key_size) {
-    reord_2_elements(current);
-  } else if (current->tentativas > current->next->tentativas && tolower(current->repet)=='s' &&\
-            tolower(current->next->repet)=='s' && current->colors == current->next->colors &&\
-            current->key_size == current->next->key_size) {
+    reord_2_elements(current);0
+  } else if (current->tentativas > current->next->tentativas && tolower(current->repet)==tolower(current->next->repet) &&
+            current->colors == current->next->colors && current->key_size == current->next->key_size) {
     reord_2_elements(current);
   } else {
     current=current->next;
