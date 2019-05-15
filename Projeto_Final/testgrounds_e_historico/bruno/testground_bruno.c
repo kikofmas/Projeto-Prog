@@ -27,9 +27,9 @@ letras ** listaCores(int size, int colors);
 tentativas * tentativasAlea(int num_alea, int size, int colors, int *count, letras ***lista_cores);
 void fillAlea(tentativas *ptr, int size, int colors, int *count, tentativas *prev);
 int verificaResult(tentativas *ptr, letras ***lista_cores, int size);
-int keyFinder();
-void fillLogic(int size, int *count, char *tentativa, tentativas **ptr, tentativas **prev);
-void reset(letras **index, letras **lista_cores, int size);
+int keyFinder(int size, letras ***lista_cores, tentativas **lista_tentativas, int *count);
+void fillLogic(int size, int *count, char *tentativa, tentativas *ptr, tentativas *prev);
+void reset(letras ***index, letras **lista_cores, int size);
 void clear(int size, tentativas **lista_tentativas, letras ***lista_cores);
 
 int main(int argc, char const *argv[]) {
@@ -39,12 +39,9 @@ int main(int argc, char const *argv[]) {
 
   int colors=0;
   int size=0;
-  letras **lista_cores, *color_aux=NULL, *aux_rm=NULL;
+  letras **lista_cores;
   int num_alea = 0;
-  tentativas *lista_tentativas=NULL, *aux=NULL;
-  reply *answer;
-  int pretas;
-  int brancas;
+  tentativas *lista_tentativas=NULL;
   int count=0;
 
   printf("Indique a dimensao da chave: ");
@@ -74,152 +71,11 @@ int main(int argc, char const *argv[]) {
 
   printf("Tentativas logicas:\n");
 
-  /*while(index[0]!=NULL){
-
-    for(int i=0;i<size;i++){
-      tentativa[i] = index[i]->letra;
-    }
-
-    valid = 0;
-
-    if(lista_tentativas==NULL){
-
-      lista_tentativas = calloc(1,sizeof(tentativas));
-      lista_tentativas -> tentativa = calloc(size+1,sizeof(char));
-      strcpy(lista_tentativas -> tentativa, tentativa);
-
-      answer = validate_key(tentativa);
-
-      lista_tentativas -> pretas = get_blacks(answer);
-      lista_tentativas -> brancas = get_whites(answer);
-      sprintf(lista_tentativas->resultado,"P%dB%d",lista_tentativas->pretas, lista_tentativas->brancas);
-      lista_tentativas -> next = NULL;
-      lista_tentativas -> prev = NULL;
-      count++;
-      lista_tentativas -> tent_ID = count;
-
-      printf("%d: %s %s\n", count, tentativa, lista_tentativas->resultado);
-
-      if(lista_tentativas -> pretas==size) break;
-      else if(lista_tentativas -> pretas == 0 && lista_tentativas -> brancas==0){
-        for(int i=0;i<size;i++){
-          index[i] = index[i]->next;
-          aux_rm = lista_cores[i];
-          lista_cores[i] = lista_cores[i] -> next;
-          free(aux_rm);
-        }
-      }
-      else index[size-1] = index[size-1]->next;
-    }
-    else{
-      aux = lista_tentativas;
-      while(aux->next!=NULL){
-        aux = aux->next;
-      }
-      while(aux != NULL){
-        answer = compare_keys(aux->tentativa,tentativa);
-        pretas = get_blacks(answer);
-        brancas = get_whites(answer);
-        if(pretas != aux->pretas || brancas != aux->brancas){
-          valid = 0;
-          break;
-        }
-        valid = 1;
-        aux=aux->prev;
-      }
-      if(valid == 1){
-
-        aux = lista_tentativas;
-        while(aux->next!=NULL) aux = aux->next;
-
-        aux->next = calloc(1,sizeof(tentativas));
-
-        answer = validate_key(tentativa);
-
-        aux->next->pretas = get_blacks(answer);
-        aux->next->brancas = get_whites(answer);
-        sprintf(aux->next->resultado,"P%dB%d", aux->next->pretas, aux->next->brancas);
-        aux->next->tentativa = calloc(size+1,sizeof(char));
-        strcpy(aux->next->tentativa,tentativa);
-        aux->next->next = NULL;
-        aux->next->prev=aux;
-        count++;
-        aux->next->tent_ID = count;
-
-        printf("%d: %s %s\n", count, tentativa, aux->next->resultado);
-
-        if(aux->next->pretas == size) break;
-        else if(aux->next->pretas == 0 && aux->next->brancas==0){
-          index[0] = index[0]->next;
-          for(int i=1;i<size;i++){
-            if(index[0]->letra == tentativa[i]){
-              index[0] = index[0]->next;
-            }
-          }
-
-          for(int i=0;i<size;i++){
-            for(int a=0;a<size;a++){
-              color_aux = lista_cores[a];
-              if(color_aux->letra == tentativa[i]){
-                lista_cores[a] = lista_cores[a]->next;
-                free(color_aux);
-              }
-              else{
-                while(color_aux->next->letra != tentativa[i]){
-                  color_aux = color_aux->next;
-                  if(color_aux->next==NULL) break;
-                }
-                if(color_aux->next!=NULL){
-                  aux_rm = color_aux->next;
-                  color_aux->next=color_aux->next->next;
-                  free(aux_rm);
-                }
-              }
-            }
-          }
-          for(int i=1;i<size;i++){
-            index[i] = lista_cores[i];
-          }
-        }
-        else if(aux->next->pretas == 0){
-          index[0] = index[0]->next;
-          for(int i=0;i<size;i++){
-            color_aux = lista_cores[i];
-            if(color_aux->letra == tentativa[i]){
-              lista_cores[i] = lista_cores[i]->next;
-              free(color_aux);
-            }
-            else{
-              while(color_aux->next->letra != tentativa[i]){
-                color_aux = color_aux->next;
-                if(color_aux->next==NULL) break;
-              }
-              if(color_aux->next!=NULL){
-                aux_rm = color_aux->next;
-                color_aux->next=color_aux->next->next;
-                free(aux_rm);
-              }
-            }
-          }
-
-          for(int i=1;i<size;i++){
-            index[i] = lista_cores[i];
-          }
-
-        }
-        else index[size-1] = index[size-1]->next;
-
-      }
-      else index[size-1] = index[size-1]->next;
-    }
-
-    reset(index,lista_cores,size-1);
-
-  }*/
+  keyFinder(size, &lista_cores, &lista_tentativas, &count);
 
   printf("\nNumero de tentativas: %d\n", count);
 
-  clear(size, &lista_tentativas, &lista_cores, &tentativa);
+  clear(size, &lista_tentativas, &lista_cores);
 
   return 0;
 }
@@ -333,10 +189,11 @@ int verificaResult(tentativas *ptr, letras ***lista_cores, int size){
   return 0;
 }
 
-int keyFinder(int size, letras ***lista_cores){
+int keyFinder(int size, letras ***lista_cores, tentativas **lista_tentativas, int *count){
+  reply *answer;
   letras **index = (letras **)calloc(size,sizeof(letras*));
   char *tentativa = (char *)calloc(size+1,sizeof(char));
-  int valid=0;
+  int valid=0, pretas=0, brancas=0;
   tentativas *aux = NULL;
 
   for(int i=0;i<size;i++){
@@ -344,33 +201,20 @@ int keyFinder(int size, letras ***lista_cores){
   }
 
   while(index[0]!=NULL){
-
     for(int i=0;i<size;i++){
       tentativa[i] = index[i]->letra;
     }
-
     valid = 0;
+    if((*lista_tentativas)==NULL){
 
-    if(lista_tentativas==NULL){
+      (*lista_tentativas) = calloc(1,sizeof(tentativas));
 
-      lista_tentativas = calloc(1,sizeof(tentativas));
-      lista_tentativas -> tentativa = calloc(size+1,sizeof(char));
-      strcpy(lista_tentativas -> tentativa, tentativa);
+      fillLogic(size, count, tentativa, *lista_tentativas, NULL);
 
-      answer = validate_key(tentativa);
+      printf("%d: %s %s\n", *count, tentativa, (*lista_tentativas)->resultado);
 
-      lista_tentativas -> pretas = get_blacks(answer);
-      lista_tentativas -> brancas = get_whites(answer);
-      sprintf(lista_tentativas->resultado,"P%dB%d",lista_tentativas->pretas, lista_tentativas->brancas);
-      lista_tentativas -> next = NULL;
-      lista_tentativas -> prev = NULL;
-      count++;
-      lista_tentativas -> tent_ID = count;
-
-      printf("%d: %s %s\n", count, tentativa, lista_tentativas->resultado);
-
-      if(lista_tentativas -> pretas==size) break;
-      else if(lista_tentativas -> pretas == 0 && lista_tentativas -> brancas==0){
+      if((*lista_tentativas)->pretas==size) return 1;
+      /*else if(lista_tentativas -> pretas == 0 && lista_tentativas -> brancas==0){
         for(int i=0;i<size;i++){
           index[i] = index[i]->next;
           aux_rm = lista_cores[i];
@@ -378,10 +222,10 @@ int keyFinder(int size, letras ***lista_cores){
           free(aux_rm);
         }
       }
-      else index[size-1] = index[size-1]->next;
+      else index[size-1] = index[size-1]->next;*/
     }
     else{
-      aux = lista_tentativas;
+      aux = (*lista_tentativas);
       while(aux->next!=NULL){
         aux = aux->next;
       }
@@ -397,18 +241,13 @@ int keyFinder(int size, letras ***lista_cores){
         aux=aux->prev;
       }
       if(valid == 1){
-
-        aux = lista_tentativas;
+        aux = (*lista_tentativas);
         while(aux->next!=NULL) aux = aux->next;
-
         aux->next = calloc(1,sizeof(tentativas));
-
-        fillLogic(size, &count, tentativa, aux->next, aux);
-
-        printf("%d: %s %s\n", count, tentativa, aux->next->resultado);
-
-        if(aux->next->pretas == size) break;
-        else if(aux->next->pretas == 0 && aux->next->brancas==0){
+        fillLogic(size, count, tentativa, aux->next, aux);
+        printf("%d: %s %s\n", *count, tentativa, aux->next->resultado);
+        if(aux->next->pretas == size) return 1;
+        /*else if(aux->next->pretas == 0 && aux->next->brancas==0){
           index[0] = index[0]->next;
           for(int i=1;i<size;i++){
             if(index[0]->letra == tentativa[i]){
@@ -465,40 +304,38 @@ int keyFinder(int size, letras ***lista_cores){
             index[i] = lista_cores[i];
           }
 
-        }
+        }*/
         else index[size-1] = index[size-1]->next;
-
       }
       else index[size-1] = index[size-1]->next;
     }
-
-    reset(index,lista_cores,size-1);
-
-    free(tentativa);
-    free(index);
-
+    reset(&index,*lista_cores,size-1);
   }
+
+  free(tentativa);
+  free(index);
+  return 0;
 }
 
-void fillLogic(int size, int *count, char *tentativa, tentativas **ptr, tentativas **prev){
+void fillLogic(int size, int *count, char *tentativa, tentativas *ptr, tentativas *prev){
   reply *answer = NULL;
   answer = validate_key(tentativa);
-  (*ptr)->pretas = get_blacks(answer);
-  (*ptr)->brancas = get_whites(answer);
-  sprintf(aux->next->resultado,"P%dB%d", (*ptr)->pretas, (*ptr)->brancas);
-  (*ptr)->tentativa = calloc(size+1,sizeof(char));
-  strcpy((*ptr)->tentativa,tentativa);
-  (*ptr)->next = NULL;
-  (*ptr)->prev=(*prev);
+  ptr->pretas = get_blacks(answer);
+  ptr->brancas = get_whites(answer);
+  sprintf(ptr->resultado,"P%dB%d", ptr->pretas, ptr->brancas);
+  ptr->tentativa = calloc(size+1,sizeof(char));
+  strcpy(ptr->tentativa,tentativa);
+  ptr->next = NULL;
+  ptr->prev=ptr;
   (*count)++;
-  (*ptr)->tent_ID = *count;
+  ptr->tent_ID = *count;
 }
 
-void reset(letras **index, letras **lista_cores, int size){
+void reset(letras ***index, letras **lista_cores, int size){
   if(size>0){
-    if(index[size]==NULL){
-      index[size] = lista_cores[size];
-      index[size-1] = index[size-1]->next;
+    if((*index)[size]==NULL){
+      (*index)[size] = lista_cores[size];
+      (*index)[size-1] = (*index)[size-1]->next;
       reset(index, lista_cores, size-1);
     }
   }
