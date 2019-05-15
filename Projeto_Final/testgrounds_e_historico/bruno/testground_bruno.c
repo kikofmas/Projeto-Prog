@@ -346,6 +346,7 @@ int main(int argc, char const *argv[]) {
   clear(size, &lista_tentativas, &lista_cores, &index, &tentativa);
 
   //free(answer);  confirmar este mambo
+  terminate_oracle();
 
   return 0;
 }
