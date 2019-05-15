@@ -337,7 +337,7 @@ int keyFinder(int size, letras ***lista_cores){
   letras **index = (letras **)calloc(size,sizeof(letras*));
   char *tentativa = (char *)calloc(size+1,sizeof(char));
   int valid=0;
-  tentativas **aux = NULL;
+  tentativas *aux = NULL;
 
   for(int i=0;i<size;i++){
     index[i] = (*lista_cores)[i];
