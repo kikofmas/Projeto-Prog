@@ -24,6 +24,9 @@ typedef struct tentativas_t{
 } tentativas;
 
 letras ** listaCores(int size, int colors);
+tentativas * tentativasAlea(int num_alea, int size, int colors, int *count, letras ***lista_cores);
+void fill(tentativas *ptr, int size, int colors, int *count, tentativas *prev);
+int verificaResult(tentativas *ptr, letras ***lista_cores, int size);
 void reset(letras **index, letras **lista_cores, int size);
 void clear(int size, tentativas **lista_tentativas, letras ***lista_cores, letras ***index, char **tentativa);
 
@@ -49,7 +52,6 @@ int main(int argc, char const *argv[]) {
   scanf("%d", &colors);
   printf("Indique o numero de tentativas aleatorias: ");
   scanf("%d", &num_alea);
-  count = num_alea;
 
   printf("\n");
   activate_oracle(size, colors, 1);
@@ -58,139 +60,18 @@ int main(int argc, char const *argv[]) {
   printf("\n");
 
   lista_cores = listaCores(size, colors);
+  lista_tentativas = tentativasAlea(num_alea, size, colors, &count, &lista_cores);
   index = (letras **)calloc(size,sizeof(letras*));
   tentativa = (char *)calloc(size+1,sizeof(char));
 
-  if(num_alea>0){
-    printf("Tentativas aleatorias:\n");
-    lista_tentativas = calloc(1,sizeof(tentativas));
-    aux = lista_tentativas;
-
-    aux -> tentativa = calloc(size+1,sizeof(char));
-    for(int a=0;a<size;a++){
-      aux -> tentativa[a] = 'A'+(rand()%colors);
+  /*for(int i=0;i<size;i++){
+    color_aux=lista_cores[i];
+    while(color_aux!=NULL){
+      printf("%c ", color_aux->letra);
+      color_aux = color_aux->next;
     }
-
-    answer = validate_key(aux->tentativa);
-
-    aux->tent_ID = 1;
-    aux->pretas = get_blacks(answer);
-    aux->brancas = get_whites(answer);
-    sprintf(aux->resultado,"P%dB%d", aux->pretas, aux->brancas);
-    aux->next=NULL;
-    aux->prev=NULL;
-
-    printf("%d: %s %s\n", aux->tent_ID, aux->tentativa, aux->resultado);
-
-    if(aux->pretas==size) exit(0);
-    else if(aux->pretas==0 && aux->brancas==0){
-      for(int i=0;i<size;i++){
-        for(int a=0;a<size;a++){
-          color_aux = lista_cores[a];
-          if(color_aux->letra == aux->tentativa[i]){
-            lista_cores[a] = lista_cores[a]->next;
-            free(color_aux);
-          }
-          else{
-            while(color_aux->next->letra != aux->tentativa[i]){
-              color_aux = color_aux->next;
-              if(color_aux->next==NULL) break;
-            }
-            if(color_aux->next!=NULL){
-              aux_rm = color_aux->next;
-              color_aux->next=color_aux->next->next;
-              free(aux_rm);
-            }
-          }
-        }
-      }
-    }
-    else if(aux->pretas==0){
-      for(int i=0;i<size;i++){
-        color_aux = lista_cores[i];
-        if(color_aux->letra == aux->tentativa[i]){
-          lista_cores[i] = lista_cores[i]->next;
-          free(color_aux);
-        }
-        else{
-          while(color_aux->next->letra!=aux->tentativa[i]){
-            color_aux = color_aux->next;
-          }
-          aux_rm = color_aux->next;
-          color_aux->next=color_aux->next->next;
-          free(aux_rm);
-        }
-      }
-    }
-
-    for(int i=1;i<num_alea;i++){
-
-      aux->next = calloc(1,sizeof(tentativas));
-      aux->next->tentativa = calloc(size+1,sizeof(char));
-      for(int a=0;a<size;a++){
-        aux -> next -> tentativa[a] = 'A'+(rand()%colors);
-      }
-
-      answer = validate_key(aux->next->tentativa);
-
-      aux->next->tent_ID = i+1;
-      aux->next->pretas = get_blacks(answer);
-      aux->next->brancas = get_whites(answer);
-      sprintf(aux->next->resultado,"P%dB%d", aux->next->pretas, aux->next->brancas);
-      aux->next->next = NULL;
-      aux->next->prev = aux;
-      printf("%d: %s %s\n", aux->next->tent_ID, aux->next->tentativa, aux->next->resultado);
-
-      if(aux->next->pretas==size) exit(0);
-      else if(aux->next->pretas==0 && aux->next->brancas==0){
-        for(int i=0;i<size;i++){
-          for(int a=0;a<size;a++){
-            color_aux = lista_cores[a];
-            if(color_aux->letra == aux->next->tentativa[i]){
-              lista_cores[a] = lista_cores[a]->next;
-              free(color_aux);
-            }
-            else{
-              while(color_aux->next->letra != aux->next->tentativa[i]){
-                color_aux = color_aux->next;
-                if(color_aux->next==NULL) break;
-              }
-              if(color_aux->next!=NULL){
-                aux_rm = color_aux->next;
-                color_aux->next=color_aux->next->next;
-                free(aux_rm);
-              }
-            }
-          }
-        }
-      }
-      else if(aux->next->pretas==0){
-        for(int index=0;index<size;index++){
-          color_aux = lista_cores[index];
-          if(color_aux->letra == aux->next->tentativa[index]){
-            lista_cores[index] = lista_cores[index]->next;
-            free(color_aux);
-          }
-          else{
-            while(color_aux->next->letra != aux->next->tentativa[index]){
-              color_aux = color_aux->next;
-              if(color_aux->next==NULL) break;
-            }
-            if(color_aux->next!=NULL){
-              aux_rm = color_aux->next;
-              color_aux->next=color_aux->next->next;
-              free(aux_rm);
-            }
-          }
-        }
-      }
-
-      aux = aux->next;
-
-    }
-
     printf("\n");
-  }
+  }*/ //print lista de cores para testes
 
   for(int i=0;i<size;i++){
     index[i] = lista_cores[i];
@@ -345,9 +226,6 @@ int main(int argc, char const *argv[]) {
 
   clear(size, &lista_tentativas, &lista_cores, &index, &tentativa);
 
-  //free(answer);  confirmar este mambo
-  terminate_oracle();
-
   return 0;
 }
 
@@ -369,6 +247,95 @@ letras ** listaCores(int size, int colors){
     }
   }
   return lista_cores;
+}
+
+tentativas * tentativasAlea(int num_alea, int size, int colors, int *count, letras ***lista_cores){
+  tentativas *lista_tentativas=NULL, *aux=NULL;
+  if(num_alea>0){
+    printf("Tentativas aleatorias:\n");
+
+    lista_tentativas = calloc(1,sizeof(tentativas));
+    aux = lista_tentativas;
+    fill(aux, size, colors, count, NULL);
+    printf("%d: %s %s\n", aux->tent_ID, aux->tentativa, aux->resultado);
+    if(verificaResult(aux, lista_cores, size)==1) exit(0);
+
+    for(int i=1;i<num_alea;i++){
+      aux->next = calloc(1,sizeof(tentativas));
+      fill(aux->next, size, colors, count, aux);
+      printf("%d: %s %s\n", aux->next->tent_ID, aux->next->tentativa, aux->next->resultado);
+      if(verificaResult(aux->next, lista_cores, size)==1) exit(0);
+      aux = aux->next;
+    }
+
+    printf("\n");
+    return lista_tentativas;
+  }
+  return NULL;
+}
+
+void fill(tentativas *ptr, int size, int colors, int *count, tentativas *prev){
+  reply *answer;
+  ptr->tentativa = calloc(size+1,sizeof(char));
+  for(int a=0;a<size;a++){
+    ptr->tentativa[a] = 'A'+(rand()%colors);
+  }
+  answer = validate_key(ptr->tentativa);
+  (*count)++;
+  ptr->tent_ID = *count;
+  ptr->pretas = get_blacks(answer);
+  ptr->brancas = get_whites(answer);
+  sprintf(ptr->resultado,"P%dB%d", ptr->pretas, ptr->brancas);
+  ptr->next=NULL;
+  ptr->prev=prev;
+}
+
+int verificaResult(tentativas *ptr, letras ***lista_cores, int size){
+  letras *color_aux=NULL, *aux_rm=NULL;
+  if(ptr->pretas==size) return 1;
+  else if(ptr->pretas==0 && ptr->brancas==0){
+    for(int i=0;i<size;i++){
+      for(int a=0;a<size;a++){
+        color_aux = (*lista_cores)[a];
+        if(color_aux->letra == ptr->tentativa[i]){
+          (*lista_cores)[a] = (*lista_cores)[a]->next;
+          free(color_aux);
+        }
+        else{
+          while(color_aux->next->letra != ptr->tentativa[i]){
+            color_aux = color_aux->next;
+            if(color_aux->next==NULL) break;
+          }
+          if(color_aux->next!=NULL){
+            aux_rm = color_aux->next;
+            color_aux->next=color_aux->next->next;
+            free(aux_rm);
+          }
+        }
+      }
+    }
+  }
+  else if(ptr->pretas==0){
+    for(int i=0;i<size;i++){
+      color_aux = (*lista_cores)[i];
+      if(color_aux->letra == ptr->tentativa[i]){
+        (*lista_cores)[i] = (*lista_cores)[i]->next;
+        free(color_aux);
+      }
+      else{
+        while(color_aux->next->letra!=ptr->tentativa[i]){
+          color_aux = color_aux->next;
+          if(color_aux->next==NULL) break;
+        }
+          if(color_aux->next!=NULL){
+          aux_rm = color_aux->next;
+          color_aux->next=color_aux->next->next;
+          free(aux_rm);
+        }
+      }
+    }
+  }
+  return 0;
 }
 
 void reset(letras **index, letras **lista_cores, int size){
@@ -404,4 +371,6 @@ void clear(int size, tentativas **lista_tentativas, letras ***lista_cores, letra
   free(*index);
   free(*tentativa);
   free(*lista_tentativas);
+
+  terminate_oracle();
 }
