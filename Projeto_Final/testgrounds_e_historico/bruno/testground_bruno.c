@@ -24,7 +24,7 @@ typedef struct tentativas_t{
 } tentativas;
 
 letras ** listaCores(int size, int colors);
-tentativas * tentativasAlea(int num_alea, int size, int colors, int *count, letras ***lista_cores);
+tentativas * tentativasAlea(int num_alea, int size, int colors, int *count, letras ***lista_cores, int *win);
 void fillAlea(tentativas *ptr, int size, int colors, int *count, tentativas *prev);
 int verificaResult(tentativas *ptr, letras ***lista_cores, int size);
 int keyFinder(int size, letras ***lista_cores, tentativas **lista_tentativas, int *count);
@@ -37,12 +37,9 @@ int main(int argc, char const *argv[]) {
   time_t t;
   srand((unsigned) time(&t));
 
-  int colors=0;
-  int size=0;
+  int colors=0, size=0, num_alea=0, count=0, win=0;
   letras **lista_cores;
-  int num_alea = 0;
   tentativas *lista_tentativas=NULL;
-  int count=0;
 
   printf("Indique a dimensao da chave: ");
   scanf("%d", &size);
@@ -58,20 +55,10 @@ int main(int argc, char const *argv[]) {
   printf("\n");
 
   lista_cores = listaCores(size, colors);
-  lista_tentativas = tentativasAlea(num_alea, size, colors, &count, &lista_cores);
-
-  /*for(int i=0;i<size;i++){
-    color_aux=lista_cores[i];
-    while(color_aux!=NULL){
-      printf("%c ", color_aux->letra);
-      color_aux = color_aux->next;
-    }
-    printf("\n");
-  }*/ //print lista de cores para testes
-
-  printf("Tentativas logicas:\n");
-
-  keyFinder(size, &lista_cores, &lista_tentativas, &count);
+  lista_tentativas = tentativasAlea(num_alea, size, colors, &count, &lista_cores, &win);
+  if(win==0){
+    win = keyFinder(size, &lista_cores, &lista_tentativas, &count);
+  }
 
   printf("\nNumero de tentativas: %d\n", count);
 
@@ -100,7 +87,7 @@ letras ** listaCores(int size, int colors){
   return lista_cores;
 }
 
-tentativas * tentativasAlea(int num_alea, int size, int colors, int *count, letras ***lista_cores){
+tentativas * tentativasAlea(int num_alea, int size, int colors, int *count, letras ***lista_cores, int *win){
   tentativas *lista_tentativas=NULL, *aux=NULL;
   if(num_alea>0){
     printf("Tentativas aleatorias:\n");
@@ -109,13 +96,19 @@ tentativas * tentativasAlea(int num_alea, int size, int colors, int *count, letr
     aux = lista_tentativas;
     fillAlea(aux, size, colors, count, NULL);
     printf("%d: %s %s\n", aux->tent_ID, aux->tentativa, aux->resultado);
-    if(verificaResult(aux, lista_cores, size)==1) exit(0);
+    if(verificaResult(aux, lista_cores, size)==1){
+      *win=1;
+      return lista_tentativas;
+    }
 
     for(int i=1;i<num_alea;i++){
       aux->next = calloc(1,sizeof(tentativas));
       fillAlea(aux->next, size, colors, count, aux);
       printf("%d: %s %s\n", aux->next->tent_ID, aux->next->tentativa, aux->next->resultado);
-      if(verificaResult(aux->next, lista_cores, size)==1) exit(0);
+      if(verificaResult(aux->next, lista_cores, size)==1){
+        *win=1;
+        return lista_tentativas;
+      }
       aux = aux->next;
     }
 
@@ -195,6 +188,8 @@ int keyFinder(int size, letras ***lista_cores, tentativas **lista_tentativas, in
   char *tentativa = (char *)calloc(size+1,sizeof(char));
   int valid=0, pretas=0, brancas=0;
   tentativas *aux = NULL;
+
+  printf("Tentativas logicas:\n");
 
   for(int i=0;i<size;i++){
     index[i] = (*lista_cores)[i];
