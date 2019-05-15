@@ -28,7 +28,7 @@ tentativas * tentativasAlea(int num_alea, int size, int colors, int *count, letr
 void fillAlea(tentativas *ptr, int size, int colors, int *count, tentativas *prev);
 int verificaResult(tentativas *ptr, letras ***lista_cores, int size);
 int keyFinder(int size, letras ***lista_cores, tentativas **lista_tentativas, int *count);
-void fillLogic(int size, int *count, char *tentativa, tentativas *ptr, tentativas *prev);
+void fillLogic(int size, int *count, char *tentativa, tentativas **ptr, tentativas *prev);
 void reset(letras ***index, letras **lista_cores, int size);
 void clear(int size, tentativas **lista_tentativas, letras ***lista_cores);
 
@@ -205,15 +205,19 @@ int keyFinder(int size, letras ***lista_cores, tentativas **lista_tentativas, in
       tentativa[i] = index[i]->letra;
     }
     valid = 0;
-    if((*lista_tentativas)==NULL){
+    if(*lista_tentativas==NULL){
 
-      (*lista_tentativas) = calloc(1,sizeof(tentativas));
+      *lista_tentativas = calloc(1,sizeof(tentativas));
 
-      fillLogic(size, count, tentativa, *lista_tentativas, NULL);
+      fillLogic(size, count, tentativa, lista_tentativas, NULL);
 
       printf("%d: %s %s\n", *count, tentativa, (*lista_tentativas)->resultado);
 
-      if((*lista_tentativas)->pretas==size) return 1;
+      if((*lista_tentativas)->pretas==size){
+        free(tentativa);
+        free(index);
+        return 1;
+      }
       /*else if(lista_tentativas -> pretas == 0 && lista_tentativas -> brancas==0){
         for(int i=0;i<size;i++){
           index[i] = index[i]->next;
@@ -225,7 +229,7 @@ int keyFinder(int size, letras ***lista_cores, tentativas **lista_tentativas, in
       else index[size-1] = index[size-1]->next;*/
     }
     else{
-      aux = (*lista_tentativas);
+      aux = *lista_tentativas;
       while(aux->next!=NULL){
         aux = aux->next;
       }
@@ -241,12 +245,16 @@ int keyFinder(int size, letras ***lista_cores, tentativas **lista_tentativas, in
         aux=aux->prev;
       }
       if(valid == 1){
-        aux = (*lista_tentativas);
+        aux = *lista_tentativas;
         while(aux->next!=NULL) aux = aux->next;
         aux->next = calloc(1,sizeof(tentativas));
-        fillLogic(size, count, tentativa, aux->next, aux);
+        fillLogic(size, count, tentativa, &(aux->next), aux);
         printf("%d: %s %s\n", *count, tentativa, aux->next->resultado);
-        if(aux->next->pretas == size) return 1;
+        if(aux->next->pretas == size){
+          free(tentativa);
+          free(index);
+          return 1;
+        }
         /*else if(aux->next->pretas == 0 && aux->next->brancas==0){
           index[0] = index[0]->next;
           for(int i=1;i<size;i++){
@@ -311,24 +319,23 @@ int keyFinder(int size, letras ***lista_cores, tentativas **lista_tentativas, in
     }
     reset(&index,*lista_cores,size-1);
   }
-
   free(tentativa);
   free(index);
   return 0;
 }
 
-void fillLogic(int size, int *count, char *tentativa, tentativas *ptr, tentativas *prev){
+void fillLogic(int size, int *count, char *tentativa, tentativas **ptr, tentativas *prev){
   reply *answer = NULL;
   answer = validate_key(tentativa);
-  ptr->pretas = get_blacks(answer);
-  ptr->brancas = get_whites(answer);
-  sprintf(ptr->resultado,"P%dB%d", ptr->pretas, ptr->brancas);
-  ptr->tentativa = calloc(size+1,sizeof(char));
-  strcpy(ptr->tentativa,tentativa);
-  ptr->next = NULL;
-  ptr->prev=ptr;
+  (*ptr)->pretas = get_blacks(answer);
+  (*ptr)->brancas = get_whites(answer);
+  sprintf((*ptr)->resultado,"P%dB%d", (*ptr)->pretas, (*ptr)->brancas);
+  (*ptr)->tentativa = calloc(size+1,sizeof(char));
+  strcpy((*ptr)->tentativa,tentativa);
+  (*ptr)->next = NULL;
+  (*ptr)->prev=prev;
   (*count)++;
-  ptr->tent_ID = *count;
+  (*ptr)->tent_ID = *count;
 }
 
 void reset(letras ***index, letras **lista_cores, int size){
@@ -353,7 +360,7 @@ void clear(int size, tentativas **lista_tentativas, letras ***lista_cores){
     }
   }
 
-  while ((*lista_tentativas)!=NULL) {
+  while (*lista_tentativas!=NULL) {
     aux_tenta=(*lista_tentativas);
     (*lista_tentativas)=(*lista_tentativas)->next;
     free(aux_tenta->tentativa);

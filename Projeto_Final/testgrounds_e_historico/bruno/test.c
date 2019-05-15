@@ -23,26 +23,26 @@ typedef struct tentativas_t{
   struct tentativas_t *next, *prev;
 } tentativas;
 
-void fill(tentativas *ptr);
+void fill(tentativas **ptr);
+
+void try(tentativas **ptr);
 
 int main(int argc, char const *argv[]) {
-  tentativas *aux = calloc(1,sizeof(tentativas));
-  printf("%d\n", aux->tent_ID);
-  fill(aux);
-  printf("%d\n", aux->tent_ID);
+  tentativas *aux = calloc(1,sizeof(tentativas));;
+
+  fill(&aux);
+  printf("%d\n", aux->next->next->tent_ID);
   return 0;
 }
 
-void fill(tentativas *ptr, int size, int colors, int *count){
-  ptr->tentativa = calloc(size+1,sizeof(char));
-  for(int a=0;a<size;a++){
-    ptr->tentativa[a] = 'A'+(rand()%colors);
-  }
-  answer = validate_key(ptr->tentativa);
-  (*count)++;
-  ptr->tent_ID = *count;
-  ptr->pretas = get_blacks(answer);
-  ptr->brancas = get_whites(answer);
-  sprintf(ptr->resultado,"P%dB%d", ptr->pretas, ptr->brancas);
-  ptr->next=NULL;
+void fill(tentativas **ptr){
+  tentativas *aux;
+  (*ptr)->next = calloc(1,sizeof(tentativas));
+  aux = (*ptr)->next;
+  aux -> next = calloc(1,sizeof(tentativas));
+  try(&(aux->next));
+}
+
+void try(tentativas **ptr){
+  (*ptr)->tent_ID=1;
 }
