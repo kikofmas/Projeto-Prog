@@ -33,15 +33,13 @@ int main(int argc, char const *argv[]) {
   printf("Chave: ");
   generate_key(1);
   printf("\n");
-
+  
   lista_cores = listaCores(size, colors);
   lista_tentativas = tentativasAlea(num_alea, size, colors, &count, &lista_cores, &win);
   if(win==0){
     win = keyFinder(size, &lista_cores, &lista_tentativas, &count);
   }
-
   printf("\nNumero de tentativas: %d\n", count);
-
   clear(size, &lista_tentativas, &lista_cores);
   return 0;
 }
