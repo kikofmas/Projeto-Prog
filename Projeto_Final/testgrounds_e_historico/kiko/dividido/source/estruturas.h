@@ -1,5 +1,5 @@
-#ifndef estrutuas_included
-#define estrutuas_included
+#ifndef estruturas_included
+#define estruturas_included
 
 
 //DECLARACAO DE ESTRUTURAS
