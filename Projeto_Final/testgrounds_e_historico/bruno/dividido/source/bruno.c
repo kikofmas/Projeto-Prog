@@ -14,7 +14,6 @@
 #include "key.h"
 
 int main(int argc, char const *argv[]) {
-
   time_t t;
   srand((unsigned) time(&t));
 
@@ -44,6 +43,5 @@ int main(int argc, char const *argv[]) {
   printf("\nNumero de tentativas: %d\n", count);
 
   clear(size, &lista_tentativas, &lista_cores);
-
   return 0;
 }
