@@ -23,7 +23,9 @@ typedef struct tentativas_t{
   struct tentativas_t *next, *prev;
 } tentativas;
 
+letras ** listaCores(int size, int colors);
 void reset(letras **index, letras **lista_cores, int size);
+void clear(int size, tentativas **lista_tentativas, letras ***lista_cores, letras ***index, char **tentativa);
 
 int main(int argc, char const *argv[]) {
 
@@ -55,25 +57,9 @@ int main(int argc, char const *argv[]) {
   generate_key(1);
   printf("\n");
 
-  lista_cores = (letras **)calloc(size,sizeof(letras*));
+  lista_cores = listaCores(size, colors);
   index = (letras **)calloc(size,sizeof(letras*));
   tentativa = (char *)calloc(size+1,sizeof(char));
-
-  for(int i=0;i<size;i++){
-    letras *aux;
-    lista_cores[i] = calloc(1,sizeof(letras));
-    aux=lista_cores[i];
-
-    aux->letra = 'A';
-    aux->next = NULL;
-
-    for(int a=1;a<colors;a++){
-      aux->next = calloc(1,sizeof(letras));
-      aux->next->letra = 'A'+a;
-      aux->next->next = NULL;
-      aux = aux->next;
-    }
-  }
 
   if(num_alea>0){
     printf("Tentativas aleatorias:\n");
@@ -98,11 +84,26 @@ int main(int argc, char const *argv[]) {
 
     if(aux->pretas==size) exit(0);
     else if(aux->pretas==0 && aux->brancas==0){
-
-
-
-
-
+      for(int i=0;i<size;i++){
+        for(int a=0;a<size;a++){
+          color_aux = lista_cores[a];
+          if(color_aux->letra == aux->tentativa[i]){
+            lista_cores[a] = lista_cores[a]->next;
+            free(color_aux);
+          }
+          else{
+            while(color_aux->next->letra != aux->tentativa[i]){
+              color_aux = color_aux->next;
+              if(color_aux->next==NULL) break;
+            }
+            if(color_aux->next!=NULL){
+              aux_rm = color_aux->next;
+              color_aux->next=color_aux->next->next;
+              free(aux_rm);
+            }
+          }
+        }
+      }
     }
     else if(aux->pretas==0){
       for(int i=0;i<size;i++){
@@ -142,11 +143,26 @@ int main(int argc, char const *argv[]) {
 
       if(aux->next->pretas==size) exit(0);
       else if(aux->next->pretas==0 && aux->next->brancas==0){
-
-
-
-
-
+        for(int i=0;i<size;i++){
+          for(int a=0;a<size;a++){
+            color_aux = lista_cores[a];
+            if(color_aux->letra == aux->next->tentativa[i]){
+              lista_cores[a] = lista_cores[a]->next;
+              free(color_aux);
+            }
+            else{
+              while(color_aux->next->letra != aux->next->tentativa[i]){
+                color_aux = color_aux->next;
+                if(color_aux->next==NULL) break;
+              }
+              if(color_aux->next!=NULL){
+                aux_rm = color_aux->next;
+                color_aux->next=color_aux->next->next;
+                free(aux_rm);
+              }
+            }
+          }
+        }
       }
       else if(aux->next->pretas==0){
         for(int index=0;index<size;index++){
@@ -170,6 +186,7 @@ int main(int argc, char const *argv[]) {
       }
 
       aux = aux->next;
+
     }
 
     printf("\n");
@@ -326,28 +343,31 @@ int main(int argc, char const *argv[]) {
 
   printf("\nNumero de tentativas: %d\n", count);
 
+  clear(size, &lista_tentativas, &lista_cores, &index, &tentativa);
 
-
-  for(int i=0;i<size;i++){
-    while(lista_cores[i]!=NULL){
-      aux_rm = lista_cores[i];
-      lista_cores[i]=lista_cores[i]->next;
-      free(aux_rm);
-    }
-  }
-  while (lista_tentativas!=NULL) {
-    aux=lista_tentativas;
-    lista_tentativas=lista_tentativas->next;
-    free(aux->tentativa);
-    free(aux);
-  }
-  free(lista_cores);
-  free(index);
-  free(tentativa);
-  free(lista_tentativas);
-
+  //free(answer);  confirmar este mambo
 
   return 0;
+}
+
+letras ** listaCores(int size, int colors){
+  letras *aux;
+  letras **lista_cores = (letras **)calloc(size,sizeof(letras*));
+  for(int index=0;index<size;index++){
+    lista_cores[index] = calloc(1,sizeof(letras));
+    aux=lista_cores[index];
+
+    aux->letra = 'A';
+    aux->next = NULL;
+
+    for(int offset=1;offset<colors;offset++){
+      aux->next = calloc(1,sizeof(letras));
+      aux->next->letra = 'A'+offset;
+      aux->next->next = NULL;
+      aux = aux->next;
+    }
+  }
+  return lista_cores;
 }
 
 void reset(letras **index, letras **lista_cores, int size){
@@ -358,4 +378,29 @@ void reset(letras **index, letras **lista_cores, int size){
       reset(index, lista_cores, size-1);
     }
   }
+}
+
+void clear(int size, tentativas **lista_tentativas, letras ***lista_cores, letras ***index, char **tentativa){
+  tentativas *aux_tenta;
+  letras *aux_letras;
+
+  for(int index=0;index<size;index++){
+    while((*lista_cores)[index]!=NULL){
+      aux_letras = (*lista_cores)[index];
+      (*lista_cores)[index]=(*lista_cores)[index]->next;
+      free(aux_letras);
+    }
+  }
+
+  while ((*lista_tentativas)!=NULL) {
+    aux_tenta=(*lista_tentativas);
+    (*lista_tentativas)=(*lista_tentativas)->next;
+    free(aux_tenta->tentativa);
+    free(aux_tenta);
+  }
+
+  free(*lista_cores);
+  free(*index);
+  free(*tentativa);
+  free(*lista_tentativas);
 }
