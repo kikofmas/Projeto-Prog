@@ -298,6 +298,4 @@ void clear(int size, tentativas **lista_tentativas, letras ***lista_cores){
 
   free(*lista_cores);
   free(*lista_tentativas);
-
-  terminate_oracle();
 }

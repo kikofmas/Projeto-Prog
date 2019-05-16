@@ -14,4 +14,9 @@ typedef struct tentativas_t{
   struct tentativas_t *next, *prev;
 } tentativas;
 
+typedef struct {
+  char repeticao_cores;
+  int num_jogadores, duracao_jogo, num_jogos, num_cores, tamanho_chave, tentativas, tentativas_alea;
+} defs;
+
 #endif
