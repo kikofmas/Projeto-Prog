@@ -23,6 +23,8 @@ int main(int argc, char const *argv[]) {
   defs defs_jogo={'\0',0,0,0,0,0,0};
   char *nome_jogador=NULL;
 
+  int tempo;
+
   FILE *fptr = fopen("init.dat","rb");
 
   if(fptr!=NULL){
@@ -66,23 +68,24 @@ int main(int argc, char const *argv[]) {
 
   activate_oracle(defs_jogo.tamanho_chave, defs_jogo.num_cores, repet);
 
-  for(int i=0;i<defs_jogo.num_jogos;i++){
-    printf("\nJogo %d\n",i);
+  //for(int i=0;i<defs_jogo.num_jogos;i++){
+    //printf("\nJogo %d\n",i);
     printf("Chave: ");
     generate_key(1);
     printf("\n");
 
     lista_cores = listaCores(defs_jogo.tamanho_chave, defs_jogo.num_cores);
-    lista_tentativas = tentativasAlea(defs_jogo.tentativas_alea, defs_jogo.tamanho_chave, defs_jogo.num_cores, &num_total_tent, &lista_cores, &win);
+    lista_tentativas = tentativasAlea(defs_jogo.tentativas_alea, defs_jogo.tamanho_chave, defs_jogo.num_cores, &num_total_tent, &lista_cores, &win, &tempo);
     if(win==0){
-      win = keyFinder(defs_jogo.tamanho_chave, &lista_cores, &lista_tentativas, &num_total_tent);
+      win = keyFinder(defs_jogo.tamanho_chave, &lista_cores, &lista_tentativas, &num_total_tent, &tempo);
     }
     printf("\nNumero de tentativas: %d\n", num_total_tent);
     clear(defs_jogo.tamanho_chave, &lista_tentativas, &lista_cores);
     num_total_tent = 0;
-    sleep(2);
-  }
+    //sleep(1);
+  //}
 
+  printf("%d\n", tempo);
   terminate_oracle();
   free(nome_jogador);
   return 0;

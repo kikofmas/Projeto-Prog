@@ -5,6 +5,7 @@
 #include <ctype.h>    //toupper and tolower functions
 #include <unistd.h>   //permite usar a funcao sleep
 #include <termios.h>  //permite usar a funcao tcflush
+#include <sys/time.h>
 
 #include "oraculo.h"
 #include "estruturas.h"
@@ -30,9 +31,11 @@ letras ** listaCores(int size, int colors){
   return lista_cores;
 }
 
-tentativas * tentativasAlea(int num_alea, int size, int colors, int *count, letras ***lista_cores, int *win){
+tentativas * tentativasAlea(int num_alea, int size, int colors, int *count, letras ***lista_cores, int *win, int *tempo_exec){
   tentativas *lista_tentativas=NULL, *aux=NULL;
+  struct timeval stop, start;
   if(num_alea>0){
+    gettimeofday(&start, NULL);
     printf("Tentativas aleatorias:\n");
 
     lista_tentativas = calloc(1,sizeof(tentativas));
@@ -41,6 +44,8 @@ tentativas * tentativasAlea(int num_alea, int size, int colors, int *count, letr
     printf("%d: %s %s\n", aux->tent_ID, aux->tentativa, aux->resultado);
     if(verificaResultAlea(aux, lista_cores, size)==1){
       *win=1;
+      gettimeofday(&stop, NULL);
+      *tempo_exec = stop.tv_usec-start.tv_usec;
       return lista_tentativas;
     }
 
@@ -51,12 +56,16 @@ tentativas * tentativasAlea(int num_alea, int size, int colors, int *count, letr
       if(verificaResultAlea(aux->next, lista_cores, size)==1){
         *win=1;
         return lista_tentativas;
+        gettimeofday(&stop, NULL);
+        *tempo_exec = stop.tv_usec-start.tv_usec;
       }
       aux = aux->next;
     }
 
     printf("\n");
     return lista_tentativas;
+    gettimeofday(&stop, NULL);
+    *tempo_exec = stop.tv_usec-start.tv_usec;
   }
   return NULL;
 }
@@ -125,12 +134,13 @@ int verificaResultAlea(tentativas *ptr, letras ***lista_cores, int size){
   return 0;
 }
 
-int keyFinder(int size, letras ***lista_cores, tentativas **lista_tentativas, int *count){
+int keyFinder(int size, letras ***lista_cores, tentativas **lista_tentativas, int *count, int *tempo_exec){
   reply *answer;
   letras **index = (letras **)calloc(size,sizeof(letras*));
   char *tentativa = (char *)calloc(size+1,sizeof(char));
   int valid=0, pretas=0, brancas=0;
-  tentativas *aux = NULL;
+  tentativas *aux=NULL;
+  struct timeval stop, start;
 
   printf("Tentativas logicas:\n");
 
@@ -143,6 +153,7 @@ int keyFinder(int size, letras ***lista_cores, tentativas **lista_tentativas, in
       tentativa[i] = index[i]->letra;
     }
     valid = 0;
+    gettimeofday(&start, NULL);
     if(*lista_tentativas==NULL){
 
       *lista_tentativas = calloc(1,sizeof(tentativas));
@@ -154,6 +165,8 @@ int keyFinder(int size, letras ***lista_cores, tentativas **lista_tentativas, in
       if(verificaResultLogic(*lista_tentativas, tentativa, lista_cores, size, &index)==1){
         free(tentativa);
         free(index);
+        gettimeofday(&stop, NULL);
+        *tempo_exec = stop.tv_usec-start.tv_usec;
         return 1;
       }
     }
@@ -182,6 +195,8 @@ int keyFinder(int size, letras ***lista_cores, tentativas **lista_tentativas, in
         if(verificaResultLogic(aux->next, tentativa, lista_cores, size, &index)==1){
           free(tentativa);
           free(index);
+          gettimeofday(&stop, NULL);
+          *tempo_exec = *tempo_exec + stop.tv_usec-start.tv_usec;
           return 1;
         }
       }
@@ -191,6 +206,8 @@ int keyFinder(int size, letras ***lista_cores, tentativas **lista_tentativas, in
   }
   free(tentativa);
   free(index);
+  gettimeofday(&stop, NULL);
+  *tempo_exec = *tempo_exec + stop.tv_usec-start.tv_usec;
   return 0;
 }
 

@@ -2,10 +2,10 @@
 #define clear_memory_included
 
 letras ** listaCores(int size, int colors);
-tentativas * tentativasAlea(int num_alea, int size, int colors, int *count, letras ***lista_cores, int *win);
+tentativas * tentativasAlea(int num_alea, int size, int colors, int *count, letras ***lista_cores, int *win, int *tempo_exec);
 void fillAlea(tentativas *ptr, int size, int colors, int *count, tentativas *prev);
 int verificaResultAlea(tentativas *ptr, letras ***lista_cores, int size);
-int keyFinder(int size, letras ***lista_cores, tentativas **lista_tentativas, int *count);
+int keyFinder(int size, letras ***lista_cores, tentativas **lista_tentativas, int *count,  int *tempo_exec);
 void fillLogic(int size, int *count, char *tentativa, tentativas **ptr, tentativas *prev);
 int verificaResultLogic(tentativas *ptr, char *tentativa, letras ***lista_cores, int size, letras ***index);
 void reset(letras ***index, letras **lista_cores, int size);
