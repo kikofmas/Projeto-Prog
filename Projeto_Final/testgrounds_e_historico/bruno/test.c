@@ -14,24 +14,7 @@
 int main(int argc, char const *argv[]) {
   activate_oracle(4,6,1);
   generate_key(1);
-  generate_key(1);
-  generate_key(1);
-  generate_key(1);
-  generate_key(1);
-  generate_key(1);
-  generate_key(1);
-  generate_key(1);
-  generate_key(1);
-  generate_key(1);
-  generate_key(1);
-  generate_key(1);
-  generate_key(1);
-  generate_key(1);
-  generate_key(1);
-  generate_key(1);
-  generate_key(1);
-  generate_key(1);
-  generate_key(1);
+  sleep(3);
   generate_key(1);
   terminate_oracle();
 

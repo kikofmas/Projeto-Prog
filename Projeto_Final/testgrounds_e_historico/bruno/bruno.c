@@ -67,8 +67,7 @@ int main(int argc, char const *argv[]) {
   activate_oracle(defs_jogo.tamanho_chave, defs_jogo.num_cores, repet);
 
   for(int i=0;i<defs_jogo.num_jogos;i++){
-
-    printf("\n");
+    printf("\nJogo %d\n",i);
     printf("Chave: ");
     generate_key(1);
     printf("\n");
@@ -81,7 +80,7 @@ int main(int argc, char const *argv[]) {
     printf("\nNumero de tentativas: %d\n", num_total_tent);
     clear(defs_jogo.tamanho_chave, &lista_tentativas, &lista_cores);
     num_total_tent = 0;
-
+    sleep(2);
   }
 
   terminate_oracle();
