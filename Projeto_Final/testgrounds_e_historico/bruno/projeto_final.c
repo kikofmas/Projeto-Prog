@@ -63,49 +63,33 @@ int main(int argc, char const *argv[]) {
 
     //INICIALIZACAO DAS VARIAVEIS DE JOGO
       introducao();
-
       //numero de jogadores
       initialization(&defs_jogo.num_jogadores, 1, 4, "o numero de jogadores");
-
       //nome dos jogadores
       nome_jogadores=initializationNames(defs_jogo.num_jogadores);
-
       //numero de jogos
       initialization(&defs_jogo.num_jogos, 1, 5, "o numero de jogos");
-
       //numero maximo de tentivas por jogo
       initialization(&defs_jogo.tentativas, 10, 20, "o numero maximo de tentativas");
-
       //duracao de cada jogo
       initialization(&defs_jogo.duracao_jogo, 60, 300, "o tempo de jogo (em segundos)");
-
       do{
       //dimensao da chave
         initialization(&defs_jogo.tamanho_chave, 4, 8, "a dimensao da chave com que deseja jogar");
-
       //numero de cores em jogo
         initialization(&defs_jogo.num_cores, 6, 12, "o numero de cores com que deseja jogar");
-
       //repeticao de cores
         initializationRepetitions(&defs_jogo.repeticao_cores);
-
       //verificacao de que a combinacao de parametros e possivel
         combo_possivel=checkCombinacao(&defs_jogo.num_cores, &defs_jogo.tamanho_chave, &defs_jogo.repeticao_cores);
       }while(combo_possivel==-1);
-
       if(tolower(defs_jogo.repeticao_cores)=='s') rep=1;
-
       clearScreen(1);
 
-
     //JOGO
-
-      activate_oracle(defs_jogo.tamanho_chave, defs_jogo.num_cores, rep);
-
+      //activate_oracle(defs_jogo.tamanho_chave, defs_jogo.num_cores, rep);
       ptr_dados=jogo(defs_jogo.num_jogadores, defs_jogo.num_jogos, defs_jogo.num_cores, defs_jogo.tamanho_chave,
                      defs_jogo.duracao_jogo, defs_jogo.tentativas, defs_jogo.repeticao_cores, nome_jogadores);
-
-
     //ESTATISTICAS: calculo dos resultados e apresentacao das estatisticas
 
       criaDados(defs_jogo.num_jogadores, defs_jogo.num_jogos, ptr_dados, &mediaTempos, &numVitorias);
@@ -161,7 +145,7 @@ int main(int argc, char const *argv[]) {
       defs_jogo.tentativas_alea = atoi(token);
       token = strtok(NULL,"\n");
       defs_jogo.tentativas = atoi(token);
-      if(defs_jogo.repeticao_cores=='S') rep=1;
+      if(tolower(defs_jogo.repeticao_cores)=='s') rep=1;
       free(text);
     }
     else{
@@ -198,6 +182,8 @@ int main(int argc, char const *argv[]) {
 
 }
 
+
+
 void clear_memory(char **vect1, int v1, dados **ptr_dados, float *vect3, int *vect4){
   for (int i = 0; i < v1; i++) {
     free(vect1[i]);
@@ -210,10 +196,6 @@ void clear_memory(char **vect1, int v1, dados **ptr_dados, float *vect3, int *ve
   free(vect3);
   free(vect4);
 }
-
-
-
-
 
 int mode_check(int argc, char const *argv[], flags *cmd_flag){
   int func_valid=0;

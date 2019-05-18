@@ -8,6 +8,8 @@
 #include <termios.h>  //permite usar a funcao tcflush
 
 #include "estruturas.h"
+#include "oraculo.h"
+#include "intermedio.h"
 
 /******************************************************************************
 * Nome da funcao: introducao()
@@ -411,13 +413,12 @@ int userAttempt(dados **ptr_dados, char ultima_cor, char *jogada, int tamanho_ch
 dados **jogo(int num_jogadores, int num_jogos, int num_cores, int tamanho_chave, int duracao_jogo,
           int tentativas, char repeticao_cores, char **nome_jogadores){
 
-  int verificacao=0, lugar_certo=0, lugar_errado=0;
+  int verificacao=0, lugar_certo=0, lugar_errado=0, rep=0;
+  time_t tempo_inicial=0, tempo_restante=0, tempo_jogo=0;
+  char ultima_cor='\0';
   char *chave = (char *)calloc(tamanho_chave,sizeof(char));
   char *copia_chave = (char *)calloc(tamanho_chave,sizeof(char));
   char *jogada = (char *)calloc(tamanho_chave,sizeof(char));
-  char ultima_cor='\0';
-  time_t tempo_inicial=0, tempo_restante=0, tempo_jogo=0;
-
   dados **ptr_dados=calloc(num_jogadores, sizeof(dados *));
 
   for(int jogador=0; jogador<num_jogadores; jogador++){   //passagem por cada jogador
