@@ -224,12 +224,12 @@ void initializationRepetitions(char *repeticao_cores){
 *            os parametros definidos
 *
 ******************************************************************************/
-int checkCombinacao(int *num_cores, int *tamanho_chave, char *repeticao_cores){
-  if (*num_cores < *tamanho_chave && tolower(*repeticao_cores)=='n') {
+int checkCombinacao(defs *def){
+  if (def->num_cores < def->tamanho_chave && tolower(def->repeticao_cores)=='n') {
     printf("A combinacao dos parametros 'tamanho chave', 'numero cores' e\n'repeticao de cores' esta invalida, tente outra vez.\n\n" );
-    *num_cores=0;
-    *tamanho_chave=0;
-    *repeticao_cores='\0';
+    def->num_cores=0;
+    def->tamanho_chave=0;
+    def->repeticao_cores='\0';
     return -1;
   }
   return 0;
@@ -410,63 +410,62 @@ int userAttempt(dados **ptr_dados, char ultima_cor, char *jogada, int tamanho_ch
 * Descricao: funcao que realiza todo o processo de jogo
 *
 ******************************************************************************/
-dados **jogo(int num_jogadores, int num_jogos, int num_cores, int tamanho_chave, int duracao_jogo,
-          int tentativas, char repeticao_cores, char **nome_jogadores){
+dados **jogo(defs def, char **nome_jogadores){
 
   int verificacao=0, lugar_certo=0, lugar_errado=0, rep=0;
   time_t tempo_inicial=0, tempo_restante=0, tempo_jogo=0;
   char ultima_cor='\0';
-  char *chave = (char *)calloc(tamanho_chave,sizeof(char));
-  char *copia_chave = (char *)calloc(tamanho_chave,sizeof(char));
-  char *jogada = (char *)calloc(tamanho_chave,sizeof(char));
-  dados **ptr_dados=calloc(num_jogadores, sizeof(dados *));
+  char *chave = (char *)calloc(def.tamanho_chave,sizeof(char));
+  char *copia_chave = (char *)calloc(def.tamanho_chave,sizeof(char));
+  char *jogada = (char *)calloc(def.tamanho_chave,sizeof(char));
+  dados **ptr_dados=calloc(def.num_jogadores, sizeof(dados *));
 
-  for(int jogador=0; jogador<num_jogadores; jogador++){   //passagem por cada jogador
-    ptr_dados[jogador]=calloc(num_jogos, sizeof(dados));
+  for(int jogador=0; jogador<def.num_jogadores; jogador++){   //passagem por cada jogador
+    ptr_dados[jogador]=calloc(def.num_jogos, sizeof(dados));
 
-    for(int jogo=0; jogo<num_jogos; jogo++){   //passagem por cada jogo a fazer
+    for(int jogo=0; jogo<def.num_jogos; jogo++){   //passagem por cada jogo a fazer
       printf("Jogador %d: %s, e a sua vez\n\n", jogador+1, *(nome_jogadores+jogador));
       countdown(jogador+1, (nome_jogadores+jogador));
-      printf("Tamanho da chave: %d; Numero de cores: %d; Repeticao de cores: %c;\n", tamanho_chave, num_cores, repeticao_cores);
-      printf("Tem %d tentativas e %ds disponiveis\n\n", tentativas, duracao_jogo);
+      printf("Tamanho da chave: %d; Numero de cores: %d; Repeticao de cores: %c;\n", def.tamanho_chave, def.num_cores, def.repeticao_cores);
+      printf("Tem %d tentativas e %ds disponiveis\n\n", def.tentativas, def.duracao_jogo);
       printf("Jogador %d: %s, e a sua vez\n\n", jogador+1, *(nome_jogadores+jogador));
       tempo_inicial = time(NULL);   //guarda o valor do tempo no inicio do jogo
       printf("Jogo numero %d\n", jogo+1);
 
       //criacao da chave no inicio de cada jogo
-      ultima_cor = createKey(chave, repeticao_cores, tamanho_chave, num_cores);
+      ultima_cor = createKey(chave, def.repeticao_cores, def.tamanho_chave, def.num_cores);
 
-      for(int tentativa=0; tentativa<tentativas; tentativa++){  //ate maximo tentativas
+      for(int tentativa=0; tentativa<def.tentativas; tentativa++){  //ate maximo tentativas
         lugar_certo=0;     //inicialização das variaveis com o valor 0 no inicio de cada jogo
         lugar_errado=0;
         (ptr_dados[jogador][jogo]).tentativas=tentativa+1;  //grava o numero de jogadas efetuadas
 
-        verificacao = userAttempt(ptr_dados, ultima_cor, jogada, tamanho_chave, tempo_inicial, &tempo_jogo,
-                    &tempo_restante, duracao_jogo, num_cores, jogador, jogo);
+        verificacao = userAttempt(ptr_dados, ultima_cor, jogada, def.tamanho_chave, tempo_inicial, &tempo_jogo,
+                    &tempo_restante, def.duracao_jogo, def.num_cores, jogador, jogo);
 
         if(verificacao==-1) {
-          tentativa=tentativas;
+          tentativa=def.tentativas;
         }
         else{
-          for(int index1=0; index1<tamanho_chave; index1++){   //copia da chave para se fazer a comparacao
+          for(int index1=0; index1<def.tamanho_chave; index1++){   //copia da chave para se fazer a comparacao
             copia_chave[index1]=chave[index1];
           }
 
         //verificacao da igualdade entre a chave de jogo e a tentativa do jogador
-          comparaChave(tamanho_chave, jogada, copia_chave, &lugar_certo, &lugar_errado);
+          comparaChave(def.tamanho_chave, jogada, copia_chave, &lugar_certo, &lugar_errado);
 
-          if(lugar_certo==tamanho_chave){
+          if(lugar_certo==def.tamanho_chave){
             printf("PARABENS por ter conseguido acabar o jogo!\n");
             (ptr_dados[jogador][jogo]).vitoria=1;  //guarda se o jogador conseguiu completar a partida
             printf("Acabou o jogo apos %lis e em %d jogada(s)\n\n", tempo_jogo, tentativa+1);
-            tentativa=tentativas;
+            tentativa=def.tentativas;
           }
-          else if(tentativas-(tentativa +1)!=0){
-            printf("Ainda tem %lis de jogo e %d jogada(s) restante(s)\n", tempo_restante, tentativas-(tentativa +1));
+          else if(def.tentativas-(tentativa +1)!=0){
+            printf("Ainda tem %lis de jogo e %d jogada(s) restante(s)\n", tempo_restante, def.tentativas-(tentativa +1));
           }
         }
       }
-      if(lugar_certo!=tamanho_chave){
+      if(lugar_certo!=def.tamanho_chave){
         (ptr_dados[jogador][jogo]).vitoria=0;  //guarda se o jogador conseguiu completar a partida
         printf("Lamentamos mas nao conseguiu acabar o jogo...\n");
         printf("A chave correta era: %s\n\n", chave);

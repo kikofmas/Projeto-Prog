@@ -6,7 +6,9 @@
 * Frederico Maria Almeida Santos - 93065
 *
 ******************************************************************************/
-
+for (size_t i = 0; i < count; i++) {
+  /* code */
+}
 //LIBRARIES
 #include <stdlib.h>
 #include <errno.h>    //library de error handling
@@ -55,7 +57,6 @@ int main(int argc, char const *argv[]) {
   error=mode_check(argc, argv, &cmd_flag);
   if (error==-1) exit(-1);
 
-  //passar para funcao??
   if (cmd_flag.init==0 && cmd_flag.hist==0 && cmd_flag.ord==0) {
     printf("MODO INTERATIVO\n\n");
     printf("1) Jogador Vs. Jogador\n");
@@ -64,7 +65,9 @@ int main(int argc, char const *argv[]) {
     scanf("%d", &mod_inter);
     printf("\n");
 
-    if(mod_inter==1){
+    cleanslate();
+
+    if (mod_inter==1) {
     //INICIALIZACAO DAS VARIAVEIS DE JOGO
       introducao();
       //numero de jogadores
@@ -77,7 +80,7 @@ int main(int argc, char const *argv[]) {
       initialization(&defs_jogo.tentativas, 10, 20, "o numero maximo de tentativas");
       //duracao de cada jogo
       initialization(&defs_jogo.duracao_jogo, 60, 300, "o tempo de jogo (em segundos)");
-      do{
+      do {
       //dimensao da chave
         initialization(&defs_jogo.tamanho_chave, 4, 8, "a dimensao da chave com que deseja jogar");
       //numero de cores em jogo
@@ -85,15 +88,14 @@ int main(int argc, char const *argv[]) {
       //repeticao de cores
         initializationRepetitions(&defs_jogo.repeticao_cores);
       //verificacao de que a combinacao de parametros e possivel
-        combo_possivel=checkCombinacao(&defs_jogo.num_cores, &defs_jogo.tamanho_chave, &defs_jogo.repeticao_cores);
-      }while(combo_possivel==-1);
-      if(tolower(defs_jogo.repeticao_cores)=='s') rep=1;
+        combo_possivel=checkCombinacao(&defs_jogo);
+      } while(combo_possivel == -1);
+      if(tolower(defs_jogo.repeticao_cores) == 's') rep=1;
       clearScreen(1);
 
     //JOGO
       //activate_oracle(defs_jogo.tamanho_chave, defs_jogo.num_cores, rep);
-      ptr_dados=jogo(defs_jogo.num_jogadores, defs_jogo.num_jogos, defs_jogo.num_cores, defs_jogo.tamanho_chave,
-                     defs_jogo.duracao_jogo, defs_jogo.tentativas, defs_jogo.repeticao_cores, nome_jogadores);
+      ptr_dados=jogo(defs_jogo, nome_jogadores);
     //ESTATISTICAS: calculo dos resultados e apresentacao das estatisticas
 
       criaDados(defs_jogo.num_jogadores, defs_jogo.num_jogos, ptr_dados, &mediaTempos, &numVitorias);
@@ -105,8 +107,7 @@ int main(int argc, char const *argv[]) {
       printf("\nESPERAMOS QUE SE TENHA DIVERTIDO!!!\n");
 
       clear_memory(nome_jogadores, defs_jogo.num_jogadores, ptr_dados, mediaTempos, numVitorias);
-    }
-    else if(mod_inter==2){
+    } else if(mod_inter == 2) {
       read_init(argv[cmd_flag.init], &defs_jogo, &nome_jogadores);
 
       if(tolower(defs_jogo.repeticao_cores)=='s') rep=1;
@@ -117,7 +118,7 @@ int main(int argc, char const *argv[]) {
         lista_cores = listaCores(defs_jogo.tamanho_chave, defs_jogo.num_cores);
         lista_tentativas = tentativasAlea(defs_jogo.tentativas_alea, defs_jogo.tamanho_chave, defs_jogo.num_cores, &num_total_tent, &lista_cores, &win, &tempo, mod_inter);
 
-        if(win==0){
+        if (win==0) {
           win = keyFinder(defs_jogo.tamanho_chave, &lista_cores, &lista_tentativas, &num_total_tent, &tempo, mod_inter);
         }
         printf("\nNumero de tentativas: %d\n", num_total_tent);
@@ -133,34 +134,31 @@ int main(int argc, char const *argv[]) {
 
     }
 
-}
-  else if(cmd_flag.init==0 && cmd_flag.hist!=0 && cmd_flag.ord!=0){
-    printf("MODO TESTE\n\nAPENAS REORDENAÇAO");
+} else if (cmd_flag.init == 0  &&  cmd_flag.hist != 0  &&  cmd_flag.ord != 0) {
+    printf("MODO TESTE\nAPENAS REORDENAÇAO\n\n");
     /* fazer so o algoritmo de reordenaçao */
     /* load -h file and reord*/
-  }
-  else if(cmd_flag.init==0 && ((cmd_flag.hist!=0 && cmd_flag.ord==0) || (cmd_flag.hist==0 && cmd_flag.ord!=0))){
+  } else if (cmd_flag.init==0 && ((cmd_flag.hist != 0  &&  cmd_flag.ord == 0) || (cmd_flag.hist == 0  &&  cmd_flag.ord != 0))) {
     printf("ERRO: Falta o ficheiro das inicializações\n");
     exit(-1);
-  }
-  else if(cmd_flag.init!=0){
+  } else if (cmd_flag.init!=0) {
     printf("MODO TESTE\n\n");
     /* jogar EvE */
     /*load init files and others if needed -- use ifs to allow or not passage*/
     read_init("init.dat", &defs_jogo, &nome_jogadores);
-    if(tolower(defs_jogo.repeticao_cores)=='s') rep=1;
+    if(tolower(defs_jogo.repeticao_cores) == 's') rep=1;
 
     activate_oracle(defs_jogo.tamanho_chave, defs_jogo.num_cores, rep);
 
-    for(int i=0;i<defs_jogo.num_jogos;i++){
-      printf("\nJogo %d\n",i);
+    for (int i = 0; i < defs_jogo.num_jogos; i++) {
+      printf("\nJogo %d\n", i);
       printf("Chave: ");
       generate_key(1);
       printf("\n");
 
       lista_cores = listaCores(defs_jogo.tamanho_chave, defs_jogo.num_cores);
       lista_tentativas = tentativasAlea(defs_jogo.tentativas_alea, defs_jogo.tamanho_chave, defs_jogo.num_cores, &num_total_tent, &lista_cores, &win, &tempo, 1);
-      if(win==0){
+      if(win == 0) {
         win = keyFinder(defs_jogo.tamanho_chave, &lista_cores, &lista_tentativas, &num_total_tent, &tempo, 1);
       }
       printf("\nNumero de tentativas: %d\n", num_total_tent);
@@ -173,18 +171,16 @@ int main(int argc, char const *argv[]) {
     terminate_oracle();
     free(nome_jogadores[0]);
     free(nome_jogadores);
-
   }
 
   return 0;
-
 }
 
 
 
 
 
-int mode_check(int argc, char const *argv[], flags *cmd_flag){
+int mode_check (int argc, char const *argv[], flags *cmd_flag) {
   int func_valid=0;
 
   switch (argc) {
@@ -210,7 +206,7 @@ int mode_check(int argc, char const *argv[], flags *cmd_flag){
   return 0;
 }
 
-int test_mode_config(int k, char const *argv[], flags **cmd_flag) {
+int test_mode_config (int k, char const *argv[], flags **cmd_flag) {
   char ini[] = "-i", hist[] = "-h", ord[] = "-o";
 
   for (int i = 1; i < k; i += 2) {
