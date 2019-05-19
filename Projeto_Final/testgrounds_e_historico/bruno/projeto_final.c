@@ -17,11 +17,11 @@
 #include <unistd.h>   //permite usar a funcao sleep
 #include <termios.h>  //permite usar a funcao tcflush
 
-#include "estruturas.h"
-#include "oraculo.h"
-#include "intermedio.h"
-#include "key.h"
-#include "files.h"
+#include "headers/estruturas.h"
+#include "headers/oraculo.h"
+#include "headers/intermedio.h"
+#include "headers/key.h"
+#include "headers/files.h"
 
 
 
