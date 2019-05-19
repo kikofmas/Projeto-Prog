@@ -13,5 +13,9 @@
 #include "estruturas.h"
 
 int main(int argc, char const *argv[]) {
+  FILE *fptr = fopen("historico.dat","rb");
+  if(fptr==NULL) exit(-1);
+  
+
   return 0;
 }
