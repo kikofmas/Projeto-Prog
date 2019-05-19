@@ -22,11 +22,11 @@
 #include "intermedio.h"
 #include "key.h"
 #include "files.h"
+#include "mode.h"
 
 //DECLARACAO DE FUNCOES
 
-int mode_check(int argc, char const *argv[], flags *cmd_flag);
-int test_mode_config(int k, char const *argv[], flags **cmd_flag);
+
 
 void save_game_ini(game_reg **registo_jogo, int hist_file, int ord, hist_data last_game, char **nome_jogadores, defs defs_jogo, int jogador);
 void save_key(int k, game_reg *registo_jogo, char jogada[]);
@@ -59,7 +59,7 @@ int main(int argc, char const *argv[]) {
   int *numVitorias=NULL;
   float *mediaTempos=NULL;
   game_reg *registo_jogo;
-  hist_data last_game={0, "J000", NULL};
+  hist_data last_game={0, 0, NULL};
 
 //inicializacao da funcao srand:
   time_t t;
@@ -159,10 +159,12 @@ int main(int argc, char const *argv[]) {
     /* jogar EvE */
     /*load init files and others if needed -- use ifs to allow or not passage*/
 
-
     if (cmd_flag.hist != 0) {
       hist_max_values(argv, cmd_flag.hist, &last_game);
-      if (cmd_flag.ord != 0) read_hist(argv, cmd_flag.hist, &registo_jogo);
+      FILE *fptr = fopen(argv[cmd_flag.hist],"ab");
+    }
+    else{
+      FILE *fptr = fopen("game_history.dat","ab");
     }
 
     read_init("init.dat", &defs_jogo, &nome_jogadores);
@@ -172,6 +174,8 @@ int main(int argc, char const *argv[]) {
 
     for (int i = 0; i < defs_jogo.num_jogos; i++) {
       win = 0;
+      tempo=0;
+      num_total_tent = 0;
       printf("\nJogo %d\n", i);
       printf("Chave: ");
       generate_key(1);
@@ -183,15 +187,22 @@ int main(int argc, char const *argv[]) {
         win = keyFinder(defs_jogo.tamanho_chave, &lista_cores, &lista_tentativas, &num_total_tent, &tempo, 1);
       }
       printf("\nNumero de tentativas: %d\n", num_total_tent);
+
+      fprintf(fptr, "%d J%03d %s %d %d %c %s %d %f\n", ++last_game.ID, ++last_game.player_ID, nome_jogadores[0], "in", 2012);
+
+
+
       clear(defs_jogo.tamanho_chave, &lista_tentativas, &lista_cores);
-      num_total_tent = 0;
       printf("%d\n", tempo);
       sleep(1);
     }
 
     terminate_oracle();
+    fclose(fptr);
     free(nome_jogadores[0]);
     free(nome_jogadores);
+
+    if(cmd_flag.ord != 0) read_hist(argv, cmd_flag.hist, &registo_jogo);
   }
 
   if (cmd_flag.ord != 0) {
@@ -201,54 +212,7 @@ int main(int argc, char const *argv[]) {
   return 0;
 }
 
-int mode_check (int argc, char const *argv[], flags *cmd_flag) {
-  int func_valid=0;
 
-  switch (argc) {
-    case 1:
-      cmd_flag->init=0;
-      cmd_flag->hist=0;
-      cmd_flag->ord=0;
-      break;
-    case 3:
-      func_valid = test_mode_config(3, argv, &cmd_flag);
-      break;
-    case 5:
-      func_valid = test_mode_config(5, argv, &cmd_flag);
-      break;
-    case 7:
-      func_valid = test_mode_config(7, argv, &cmd_flag);
-      break;
-    default:
-      printf("ERRO: Numero de argumentos inválido\n");
-  }
-
-  if (func_valid == -1) exit(-1);
-  else if (cmd_flag->init==0 && cmd_flag->hist==0 && cmd_flag->ord==0) return 1;
-  else if (cmd_flag->init == 0  &&  cmd_flag->hist != 0  &&  cmd_flag->ord != 0) return 2;
-  else if (cmd_flag->init==0 && ((cmd_flag->hist != 0  &&  cmd_flag->ord == 0) || (cmd_flag->hist == 0  &&  cmd_flag->ord != 0))) return 3;
-  else if (cmd_flag->init!=0) return 4;
-  return 0;
-}
-
-int test_mode_config (int k, char const *argv[], flags **cmd_flag) {
-  char ini[] = "-i", hist[] = "-h", ord[] = "-o";
-
-  for (int i = 1; i < k; i += 2) {
-    if (strcmp(ini, argv[i]) == 0) {
-      (*cmd_flag)->init = i+1;
-    } else if (strcmp(hist, argv[i]) == 0) {
-      (*cmd_flag)->hist = i+1;
-    } else if (strcmp(ord, argv[i]) == 0) {
-      (*cmd_flag)->ord = i+1;
-    } else {
-      printf("ERRO: Argumentos incorretos ou não identificados\n");
-      exit(-1);
-    }
-  }
-
-  return 0;
-}
 
 
 

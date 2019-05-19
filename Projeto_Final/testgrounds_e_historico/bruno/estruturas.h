@@ -48,7 +48,7 @@ typedef struct game_reg_t {
 
 typedef struct {
   int ID;
-  char player_ID[5];
+  int player_ID;
   game_reg *last;
 }hist_data;
 

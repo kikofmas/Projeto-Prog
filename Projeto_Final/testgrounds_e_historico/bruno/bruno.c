@@ -12,10 +12,17 @@
 #include "oraculo.h"
 #include "estruturas.h"
 
+
+typedef struct{
+  int a;
+} aaa;
+
 int main(int argc, char const *argv[]) {
-  FILE *fptr = fopen("historico.dat","rb");
-  if(fptr==NULL) exit(-1);
-  
+  aaa b={0};
+
+  b.a++;
+  printf("%d\n", ++b.a);
+
 
   return 0;
 }

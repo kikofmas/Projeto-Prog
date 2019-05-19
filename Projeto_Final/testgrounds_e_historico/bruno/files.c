@@ -67,7 +67,7 @@ void hist_max_values(char const *argv[], int arg_num, hist_data *last_game){
   }
   if (b1>998) b1=0;
   last_game->ID=a1;
-  sprintf(last_game->player_ID, "J%03d", b1);
+  last_game->player_ID = b1;
   fclose(fptr);
 }
 
