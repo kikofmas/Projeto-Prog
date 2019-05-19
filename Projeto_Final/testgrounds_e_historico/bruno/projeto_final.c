@@ -111,7 +111,6 @@ int main(int argc, char const *argv[]) {
     printf("Opcao: ");
     scanf("%d", &mod_inter);
     printf("\n");
-
     cleanslate();
 
     if (mod_inter==1) {

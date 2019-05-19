@@ -677,13 +677,6 @@ void showData(dados **ptr_dados, float *mediaTempos, int num_jogadores, int *num
 }
 
 
-
-
-
-
-
-
-
 void clear_memory_intermedio(char **vect1, int v1, dados **ptr_dados, float *vect3, int *vect4){
   for (int i = 0; i < v1; i++) {
     free(vect1[i]);
