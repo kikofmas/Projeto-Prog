@@ -162,10 +162,14 @@ int main(int argc, char const *argv[]) {
     /*load init files and others if needed -- use ifs to allow or not passage*/
 
     if (cmd_flag.hist != 0) {
-      hist_max_values(argv, cmd_flag.hist, &last_game);
+      hist_max_values(argv, cmd_flag.hist, &last_game, "", 0);
       fptr = fopen(argv[cmd_flag.hist],"ab");
     }
     else{
+      fptr = fopen("game_history.dat","ab");
+      fclose(fptr);
+      hist_max_values(argv, cmd_flag.hist, &last_game, "game_history.dat", 1);
+      exit(0);
       fptr = fopen("game_history.dat","ab");
     }
 
@@ -190,18 +194,25 @@ int main(int argc, char const *argv[]) {
       }
       printf("\nNumero de tentativas: %d\n", num_total_tent);
 
+
+
+
       aux=lista_tentativas;
       while(aux->next!=NULL){
         aux=aux->next;
       }
 
       fprintf(fptr, "%d J%03d %s %d %d %c %s %d %.3f\n", ++last_game.ID, ++last_game.player_ID, nome_jogadores[0], defs_jogo.tamanho_chave,
-                                                       defs_jogo.num_cores, defs_jogo.repeticao_cores, aux->tentativa, num_total_tent, (double)tempo/1000);
+                                                       defs_jogo.num_cores, defs_jogo.repeticao_cores, aux->tentativa, num_total_tent, (float)tempo/1000);
       aux=lista_tentativas;
       while(aux->next!=NULL){
         fprintf(fptr, "%d %s %s\n", aux->tent_ID, aux->tentativa, aux->resultado);
         aux=aux->next;
       }
+
+
+
+
 
       clear(defs_jogo.tamanho_chave, &lista_tentativas, &lista_cores);
       printf("%d\n", tempo);
@@ -212,13 +223,12 @@ int main(int argc, char const *argv[]) {
     fclose(fptr);
     free(nome_jogadores[0]);
     free(nome_jogadores);
-
-    if(cmd_flag.ord != 0) read_hist(argv, cmd_flag.hist, &registo_jogo);
   }
 
-  if (cmd_flag.ord != 0) {
+  /*if (cmd_flag.ord != 0) {
+    //read_hist(argv, cmd_flag.hist, &registo_jogo);
     //sort_registry(&registo_jogo, cmd_flag.ord, argv);
-  }
+  }*/
 
   return 0;
 }

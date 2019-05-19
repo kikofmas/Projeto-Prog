@@ -29,6 +29,7 @@ int mode_check (int argc, char const *argv[], flags *cmd_flag) {
       func_valid = test_mode_config(7, argv, &cmd_flag);
       break;
     default:
+      func_valid=-1;
       printf("ERRO: Numero de argumentos inválido\n");
   }
 

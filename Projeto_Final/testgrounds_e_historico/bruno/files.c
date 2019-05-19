@@ -52,15 +52,20 @@ void read_init(char const * file, defs *ptr, char ***nome){
 }
 
 
-void hist_max_values(char const *argv[], int arg_num, hist_data *last_game){
+void hist_max_values(char const *argv[], int arg_num, hist_data *last_game, char *file, int mode){
   int k=0, a=0, b=0, a1=0, b1=0;
 
-  FILE *fptr=fopen(argv[arg_num], "rb");
+  FILE *fptr;
+  if(mode==0) fptr=fopen(argv[arg_num], "rb");
+  else if(mode==1) fptr=fopen(file, "rb");
+
+  if(fptr==NULL) exit(-1);
 
   while(!feof(fptr)){
-    fscanf(fptr, "%d J%d %*s %*s %*s %*s %*s %d %*[^\n]\n", &a, &b, &k);
+    fscanf(fptr, "%d J%d %*s %*s %*s %*s %*s %d %*[^\n]", &a, &b, &k);
+    printf("%d\n", a);
     for (int i = 0; i < k; i++) {
-      fscanf(fptr, "%*[^\n]\n");
+      fscanf(fptr, "%[^\n]");
     }
     if (a>a1) a1=a;
     if (b>b1) b1=b;
