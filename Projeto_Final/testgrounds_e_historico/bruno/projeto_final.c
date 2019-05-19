@@ -156,6 +156,7 @@ int main(int argc, char const *argv[]) {
     exit(-1);}
   else if (mod == 4) {
     FILE *fptr;
+    tentativas *aux;
     printf("MODO TESTE\n\n");
     /* jogar EvE */
     /*load init files and others if needed -- use ifs to allow or not passage*/
@@ -189,8 +190,18 @@ int main(int argc, char const *argv[]) {
       }
       printf("\nNumero de tentativas: %d\n", num_total_tent);
 
+      aux=lista_tentativas;
+      while(aux->next!=NULL){
+        aux=aux->next;
+      }
+
       fprintf(fptr, "%d J%03d %s %d %d %c %s %d %.3f\n", ++last_game.ID, ++last_game.player_ID, nome_jogadores[0], defs_jogo.tamanho_chave,
-                                                       defs_jogo.num_cores, defs_jogo.repeticao_cores, "", num_total_tent, (double)tempo/1000);
+                                                       defs_jogo.num_cores, defs_jogo.repeticao_cores, aux->tentativa, num_total_tent, (double)tempo/1000);
+      aux=lista_tentativas;
+      while(aux->next!=NULL){
+        fprintf(fptr, "%d %s %s\n", aux->tent_ID, aux->tentativa, aux->resultado);
+        aux=aux->next;
+      }
 
       clear(defs_jogo.tamanho_chave, &lista_tentativas, &lista_cores);
       printf("%d\n", tempo);
