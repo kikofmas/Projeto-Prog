@@ -155,16 +155,17 @@ int main(int argc, char const *argv[]) {
     printf("ERRO: Falta o ficheiro das inicializações\n");
     exit(-1);}
   else if (mod == 4) {
+    FILE *fptr;
     printf("MODO TESTE\n\n");
     /* jogar EvE */
     /*load init files and others if needed -- use ifs to allow or not passage*/
 
     if (cmd_flag.hist != 0) {
       hist_max_values(argv, cmd_flag.hist, &last_game);
-      FILE *fptr = fopen(argv[cmd_flag.hist],"ab");
+      fptr = fopen(argv[cmd_flag.hist],"ab");
     }
     else{
-      FILE *fptr = fopen("game_history.dat","ab");
+      fptr = fopen("game_history.dat","ab");
     }
 
     read_init("init.dat", &defs_jogo, &nome_jogadores);
@@ -188,9 +189,8 @@ int main(int argc, char const *argv[]) {
       }
       printf("\nNumero de tentativas: %d\n", num_total_tent);
 
-      fprintf(fptr, "%d J%03d %s %d %d %c %s %d %f\n", ++last_game.ID, ++last_game.player_ID, nome_jogadores[0], "in", 2012);
-
-
+      fprintf(fptr, "%d J%03d %s %d %d %c %s %d %.3f\n", ++last_game.ID, ++last_game.player_ID, nome_jogadores[0], defs_jogo.tamanho_chave,
+                                                       defs_jogo.num_cores, defs_jogo.repeticao_cores, "", num_total_tent, (double)tempo/1000);
 
       clear(defs_jogo.tamanho_chave, &lista_tentativas, &lista_cores);
       printf("%d\n", tempo);
@@ -247,8 +247,7 @@ void save_game_ini(game_reg **registo_jogo, int hist_file, int ord, hist_data la
     current_game->game_ID=((last_game.ID)+1);
     current_game->player_name=calloc(strlen(*(nome_jogadores+jogador))+1, sizeof(char));
     strcpy(current_game->player_name, *(nome_jogadores+jogador));
-    last_game.player_ID[0]='0';
-    pid=atoi(last_game.player_ID);
+    pid=last_game.player_ID;
     pid++;
     sprintf(current_game->player_ID, "J%03d", pid);
     current_game->player_ID[0]='J';
@@ -267,8 +266,7 @@ void save_game_ini(game_reg **registo_jogo, int hist_file, int ord, hist_data la
     if (strcmp(current_game->player_name, current_game->next->player_name) == 0) {
       strcpy(current_game->next->player_ID, current_game->player_ID);
     } else {
-      last_game.player_ID[0]='0';
-      pid=atoi(last_game.player_ID);
+      pid=last_game.player_ID;
       pid++;
       sprintf(current_game->next->player_ID, "J%03d", pid);
     }
