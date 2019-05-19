@@ -2,7 +2,7 @@
 #define key_included
 
 letras ** listaCores(int size, int colors);
-tentativas * tentativasAlea(int num_alea, int size, int colors, int *count, letras ***lista_cores, int *win, int *tempo_exec, int modo_jogo);
+tentativas * tentativasAlea(defs def, int *count, letras ***lista_cores, int *win, int *tempo_exec, int modo_jogo);
 void fillAlea(tentativas *ptr, int size, int colors, int *count, tentativas *prev, int modo_jogo);
 int verificaResultAlea(tentativas *ptr, letras ***lista_cores, int size);
 int keyFinder(int size, letras ***lista_cores, tentativas **lista_tentativas, int *count,  int *tempo_exec, int modo_jogo);

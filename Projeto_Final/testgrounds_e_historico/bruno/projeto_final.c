@@ -81,7 +81,7 @@ void free_game_registry(game_reg *current);
 int main(int argc, char const *argv[]) {
 
 //declaracao das variaveis para o modo de funcionamento do programa
-  int mod_inter=0;
+  int mod=0, mod_inter=0;
   flags cmd_flag={0, 0, 0};
 
 //declaracao das variaveis da inicializacao:
@@ -102,9 +102,9 @@ int main(int argc, char const *argv[]) {
   time_t t;
   srand((unsigned) time(&t)); //inicializa o gerador aleatorio
 
-  mode_check(argc, argv, &cmd_flag);
+  mod = mode_check(argc, argv, &cmd_flag);
 
-  if (cmd_flag.init==0 && cmd_flag.hist==0 && cmd_flag.ord==0) {
+  if (mod == 1) {
     printf("MODO INTERATIVO\n\n");
     printf("1) Jogador Vs. Jogador\n");
     printf("2) Jogador Vs. Computador\n\n");
@@ -153,8 +153,10 @@ int main(int argc, char const *argv[]) {
 
       printf("\nESPERAMOS QUE SE TENHA DIVERTIDO!!!\n");
 
-      clear_memory_intermedio(nome_jogadores, defs_jogo.num_jogadores, ptr_dados, mediaTempos, numVitorias);
-    } else if(mod_inter == 2) {
+      clear_memory_intermedio(nome_jogadores, defs_jogo.num_jogadores, ptr_dados, mediaTempos, numVitorias); //esta funcao ta aqui bem a toa....
+
+}
+    else if(mod_inter == 2) {
       read_init(argv[cmd_flag.init], &defs_jogo, &nome_jogadores);
 
       if(tolower(defs_jogo.repeticao_cores)=='s') rep=1;
@@ -163,7 +165,7 @@ int main(int argc, char const *argv[]) {
       //for(int i=0;i<defs_jogo.num_jogos;i++){
         //printf("\nJogo %d\n",i);
         lista_cores = listaCores(defs_jogo.tamanho_chave, defs_jogo.num_cores);
-        lista_tentativas = tentativasAlea(defs_jogo.tentativas_alea, defs_jogo.tamanho_chave, defs_jogo.num_cores, &num_total_tent, &lista_cores, &win, &tempo, mod_inter);
+        lista_tentativas = tentativasAlea(defs_jogo, &num_total_tent, &lista_cores, &win, &tempo, mod_inter);
 
         if (win==0) {
           win = keyFinder(defs_jogo.tamanho_chave, &lista_cores, &lista_tentativas, &num_total_tent, &tempo, mod_inter);
@@ -181,16 +183,16 @@ int main(int argc, char const *argv[]) {
 
     }
   }
-  else if (cmd_flag.init == 0  &&  cmd_flag.hist != 0  &&  cmd_flag.ord != 0) {
+  else if (mod == 2) {
     printf("MODO TESTE\nAPENAS REORDENAÇAO\n\n");
     read_hist_file_2(argv, cmd_flag.hist, &registo_jogo);
     sort_registry(&registo_jogo, cmd_flag.ord, argv);
     return 0;
   }
-  else if (cmd_flag.init==0 && ((cmd_flag.hist != 0  &&  cmd_flag.ord == 0) || (cmd_flag.hist == 0  &&  cmd_flag.ord != 0))) {
+  else if (mod == 3) {
     printf("ERRO: Falta o ficheiro das inicializações\n");
     exit(-1);}
-  else if (cmd_flag.init!=0) {
+  else if (mod == 4) {
     printf("MODO TESTE\n\n");
     /* jogar EvE */
     /*load init files and others if needed -- use ifs to allow or not passage*/
@@ -209,13 +211,14 @@ int main(int argc, char const *argv[]) {
     activate_oracle(defs_jogo.tamanho_chave, defs_jogo.num_cores, rep);
 
     for (int i = 0; i < defs_jogo.num_jogos; i++) {
+      win = 0;
       printf("\nJogo %d\n", i);
       printf("Chave: ");
       generate_key(1);
       printf("\n");
 
       lista_cores = listaCores(defs_jogo.tamanho_chave, defs_jogo.num_cores);
-      lista_tentativas = tentativasAlea(defs_jogo.tentativas_alea, defs_jogo.tamanho_chave, defs_jogo.num_cores, &num_total_tent, &lista_cores, &win, &tempo, 1);
+      lista_tentativas = tentativasAlea(defs_jogo, &num_total_tent, &lista_cores, &win, &tempo, 1);
       if(win == 0) {
         win = keyFinder(defs_jogo.tamanho_chave, &lista_cores, &lista_tentativas, &num_total_tent, &tempo, 1);
       }
@@ -261,10 +264,10 @@ int mode_check (int argc, char const *argv[], flags *cmd_flag) {
   }
 
   if (func_valid == -1) exit(-1);
-
-
-
-
+  else if (cmd_flag->init==0 && cmd_flag->hist==0 && cmd_flag->ord==0) return 1;
+  else if (cmd_flag->init == 0  &&  cmd_flag->hist != 0  &&  cmd_flag->ord != 0) return 2;
+  else if (cmd_flag->init==0 && ((cmd_flag->hist != 0  &&  cmd_flag->ord == 0) || (cmd_flag->hist == 0  &&  cmd_flag->ord != 0))) return 3;
+  else if (cmd_flag->init!=0) return 4;
   return 0;
 }
 
@@ -316,7 +319,7 @@ void read_hist_file_1(char const *argv[], int arg_num, hist_data *last_game){
 void read_hist_file_2(char const *argv[], int arg_num, game_reg **registo_jogo) {
   game_reg *current;
   char name[50]="\0", key[10]="\0";
-  FILE *fptr=fopen(argv[arg_num], "r");
+  FILE *fptr=fopen(argv[arg_num], "rb");
   *registo_jogo=calloc(1, sizeof(game_reg));
   current=*registo_jogo;
   fscanf(fptr, "%d %s %s %d %d %c %s %d %f\n", &current->game_ID, current->player_ID, name, &current->colors,
