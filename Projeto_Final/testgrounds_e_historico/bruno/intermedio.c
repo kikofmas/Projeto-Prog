@@ -676,3 +676,24 @@ void showData(dados **ptr_dados, float *mediaTempos, int num_jogadores, int *num
     clearScreen(0);
   }
 }
+
+
+
+
+
+
+
+
+
+void clear_memory(char **vect1, int v1, dados **ptr_dados, float *vect3, int *vect4){
+  for (int i = 0; i < v1; i++) {
+    free(vect1[i]);
+  }
+  free(vect1);
+  for (int i = 0; i < v1; i++) {
+    free(ptr_dados[i]);
+  }
+  free(ptr_dados);
+  free(vect3);
+  free(vect4);
+}

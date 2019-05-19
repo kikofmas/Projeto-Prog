@@ -25,8 +25,6 @@
 
 //DECLARACAO DE FUNCOES
 
-void clear_memory(char **vect1, int v1, dados **ptr_dados, float *vect3, int *vect4);
-
 int mode_check(int argc, char const *argv[], flags *cmd_flag);
 int test_mode_config(int k, char const *argv[], flags **cmd_flag);
 
@@ -34,7 +32,7 @@ int test_mode_config(int k, char const *argv[], flags **cmd_flag);
 int main(int argc, char const *argv[]) {
 
 //declaracao das variaveis para o modo de funcionamento do programa
-  int error=0;
+  int error=0, mod_inter=0;
   flags cmd_flag={0, 0, 0};
 
 //declaracao das variaveis da inicializacao:
@@ -59,8 +57,13 @@ int main(int argc, char const *argv[]) {
 
   //passar para funcao??
   if (cmd_flag.init==0 && cmd_flag.hist==0 && cmd_flag.ord==0) {
-    printf("MODO INTERATIVO\n");
+    printf("MODO INTERATIVO\n\n");
+    printf("1) Jogador Vs. Jogador\n");
+    printf("2) Jogador Vs. Computador\n\n");
+    printf("Opcao: ");
+    scanf("%d", &mod_inter);
 
+    if(mod_inter==1){
     //INICIALIZACAO DAS VARIAVEIS DE JOGO
       introducao();
       //numero de jogadores
@@ -101,6 +104,71 @@ int main(int argc, char const *argv[]) {
       printf("\nESPERAMOS QUE SE TENHA DIVERTIDO!!!\n");
 
       clear_memory(nome_jogadores, defs_jogo.num_jogadores, ptr_dados, mediaTempos, numVitorias);
+    }
+    else if(mod_inter==2){
+      FILE *fptr = fopen("init.dat","rb");
+      if(fptr!=NULL){
+        char *text=NULL, *token=NULL, c='\0';
+        int counter=1;
+        text = (char *)malloc(sizeof(char));
+        while((c=fgetc(fptr))!=EOF){
+          text = (char *)realloc(text,counter);
+          text[counter-1]=c;
+          counter++;
+        }
+        fclose(fptr);
+
+        token = strtok(text,"\n");
+        nome_jogadores = (char **)malloc(sizeof(char*));
+        if(nome_jogadores==NULL) exit(-1);
+        *nome_jogadores = (char *)malloc((strlen(token)+1)*sizeof(char));
+        if(*nome_jogadores==NULL) exit(-1);
+        strcpy(nome_jogadores[0],token);
+        token = strtok(NULL,"\n");
+        defs_jogo.num_jogos = atoi(token);
+        token = strtok(NULL,"\n");
+        defs_jogo.num_cores = atoi(token);
+        token = strtok(NULL,"\n");
+        defs_jogo.tamanho_chave = atoi(token);
+        token = strtok(NULL,"\n");
+        defs_jogo.repeticao_cores = token[0];
+        token = strtok(NULL,"\n");
+        defs_jogo.tentativas_alea = atoi(token);
+        token = strtok(NULL,"\n");
+        defs_jogo.tentativas = atoi(token);
+        if(tolower(defs_jogo.repeticao_cores)=='s') rep=1;
+        free(text);
+      }
+      else{
+        perror("ERRO:");
+        exit(-1);
+      }
+      activate_oracle(defs_jogo.tamanho_chave, defs_jogo.num_cores, rep);
+
+      //for(int i=0;i<defs_jogo.num_jogos;i++){
+        //printf("\nJogo %d\n",i);
+        printf("Chave: ");
+        generate_key(1);
+        printf("\n");
+
+        lista_cores = listaCores(defs_jogo.tamanho_chave, defs_jogo.num_cores);
+        lista_tentativas = tentativasAlea(defs_jogo.tentativas_alea, defs_jogo.tamanho_chave, defs_jogo.num_cores, &num_total_tent, &lista_cores, &win, &tempo);
+        if(win==0){
+          win = keyFinder(defs_jogo.tamanho_chave, &lista_cores, &lista_tentativas, &num_total_tent, &tempo);
+        }
+        printf("\nNumero de tentativas: %d\n", num_total_tent);
+        clear(defs_jogo.tamanho_chave, &lista_tentativas, &lista_cores);
+        num_total_tent = 0;
+        //sleep(1);
+      //}
+
+      printf("%d\n", tempo);
+      terminate_oracle();
+      free(nome_jogadores[0]);
+      free(nome_jogadores);
+
+    }
+
 }
   else if(cmd_flag.init==0 && cmd_flag.hist!=0 && cmd_flag.ord!=0){
     printf("MODO TESTE\n\nAPENAS REORDENAÇAO");
@@ -154,8 +222,8 @@ int main(int argc, char const *argv[]) {
     }
     activate_oracle(defs_jogo.tamanho_chave, defs_jogo.num_cores, rep);
 
-    //for(int i=0;i<defs_jogo.num_jogos;i++){
-      //printf("\nJogo %d\n",i);
+    for(int i=0;i<defs_jogo.num_jogos;i++){
+      printf("\nJogo %d\n",i);
       printf("Chave: ");
       generate_key(1);
       printf("\n");
@@ -168,8 +236,8 @@ int main(int argc, char const *argv[]) {
       printf("\nNumero de tentativas: %d\n", num_total_tent);
       clear(defs_jogo.tamanho_chave, &lista_tentativas, &lista_cores);
       num_total_tent = 0;
-      //sleep(1);
-    //}
+      sleep(1);
+    }
 
     printf("%d\n", tempo);
     terminate_oracle();
@@ -184,18 +252,7 @@ int main(int argc, char const *argv[]) {
 
 
 
-void clear_memory(char **vect1, int v1, dados **ptr_dados, float *vect3, int *vect4){
-  for (int i = 0; i < v1; i++) {
-    free(vect1[i]);
-  }
-  free(vect1);
-  for (int i = 0; i < v1; i++) {
-    free(ptr_dados[i]);
-  }
-  free(ptr_dados);
-  free(vect3);
-  free(vect4);
-}
+
 
 int mode_check(int argc, char const *argv[], flags *cmd_flag){
   int func_valid=0;

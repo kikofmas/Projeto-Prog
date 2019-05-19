@@ -31,7 +31,7 @@ letras ** listaCores(int size, int colors){
   return lista_cores;
 }
 
-tentativas * tentativasAlea(int num_alea, int size, int colors, int *count, letras ***lista_cores, int *win, int *tempo_exec){
+tentativas * tentativasAlea(int num_alea, int size, int colors, int *count, letras ***lista_cores, int *win, int *tempo_exec, int modo_jogo){
   tentativas *lista_tentativas=NULL, *aux=NULL;
   struct timeval stop, start;
   if(num_alea>0){
@@ -40,7 +40,7 @@ tentativas * tentativasAlea(int num_alea, int size, int colors, int *count, letr
 
     lista_tentativas = calloc(1,sizeof(tentativas));
     aux = lista_tentativas;
-    fillAlea(aux, size, colors, count, NULL);
+    fillAlea(aux, size, colors, count, NULL, modo_jogo);
     printf("%d: %s %s\n", aux->tent_ID, aux->tentativa, aux->resultado);
     if(verificaResultAlea(aux, lista_cores, size)==1){
       *win=1;
@@ -51,7 +51,7 @@ tentativas * tentativasAlea(int num_alea, int size, int colors, int *count, letr
 
     for(int i=1;i<num_alea;i++){
       aux->next = calloc(1,sizeof(tentativas));
-      fillAlea(aux->next, size, colors, count, aux);
+      fillAlea(aux->next, size, colors, count, aux, modo_jogo);
       printf("%d: %s %s\n", aux->next->tent_ID, aux->next->tentativa, aux->next->resultado);
       if(verificaResultAlea(aux->next, lista_cores, size)==1){
         *win=1;
@@ -70,7 +70,7 @@ tentativas * tentativasAlea(int num_alea, int size, int colors, int *count, letr
   return NULL;
 }
 
-void fillAlea(tentativas *ptr, int size, int colors, int *count, tentativas *prev){
+void fillAlea(tentativas *ptr, int size, int colors, int *count, tentativas *prev, int modo_jogo){
   reply *answer = NULL;
   ptr->tentativa = calloc(size+1,sizeof(char));
   for(int a=0;a<size;a++){
@@ -79,8 +79,18 @@ void fillAlea(tentativas *ptr, int size, int colors, int *count, tentativas *pre
   answer = validate_key(ptr->tentativa);
   (*count)++;
   ptr->tent_ID = *count;
-  ptr->pretas = get_blacks(answer);
-  ptr->brancas = get_whites(answer);
+  if(modo_jogo == 1){
+    ptr->pretas = get_blacks(answer);
+    ptr->brancas = get_whites(answer);
+  }
+  else if(modo_jogo == 2){
+    printf("Pretas: ");
+    scanf("%d", ptr->pretas);
+    printf("\n");
+    printf("Brancas: ");
+    scanf("%d", ptr->brancas);
+    printf("\n");
+  }
   sprintf(ptr->resultado,"P%dB%d", ptr->pretas, ptr->brancas);
   ptr->next=NULL;
   ptr->prev=prev;
@@ -134,7 +144,7 @@ int verificaResultAlea(tentativas *ptr, letras ***lista_cores, int size){
   return 0;
 }
 
-int keyFinder(int size, letras ***lista_cores, tentativas **lista_tentativas, int *count, int *tempo_exec){
+int keyFinder(int size, letras ***lista_cores, tentativas **lista_tentativas, int *count, int *tempo_exec, int modo_jogo){
   reply *answer;
   letras **index = (letras **)calloc(size,sizeof(letras*));
   char *tentativa = (char *)calloc(size+1,sizeof(char));
@@ -158,7 +168,7 @@ int keyFinder(int size, letras ***lista_cores, tentativas **lista_tentativas, in
 
       *lista_tentativas = calloc(1,sizeof(tentativas));
 
-      fillLogic(size, count, tentativa, lista_tentativas, NULL);
+      fillLogic(size, count, tentativa, lista_tentativas, NULL, modo_jogo);
 
       printf("%d: %s %s\n", *count, tentativa, (*lista_tentativas)->resultado);
 
@@ -190,7 +200,7 @@ int keyFinder(int size, letras ***lista_cores, tentativas **lista_tentativas, in
         aux = *lista_tentativas;
         while(aux->next!=NULL) aux = aux->next;
         aux->next = calloc(1,sizeof(tentativas));
-        fillLogic(size, count, tentativa, &(aux->next), aux);
+        fillLogic(size, count, tentativa, &(aux->next), aux, modo_jogo);
         printf("%d: %s %s\n", *count, tentativa, aux->next->resultado);
         if(verificaResultLogic(aux->next, tentativa, lista_cores, size, &index)==1){
           free(tentativa);
@@ -211,11 +221,21 @@ int keyFinder(int size, letras ***lista_cores, tentativas **lista_tentativas, in
   return 0;
 }
 
-void fillLogic(int size, int *count, char *tentativa, tentativas **ptr, tentativas *prev){
+void fillLogic(int size, int *count, char *tentativa, tentativas **ptr, tentativas *prev, int modo_jogo){
   reply *answer = NULL;
   answer = validate_key(tentativa);
-  (*ptr)->pretas = get_blacks(answer);
-  (*ptr)->brancas = get_whites(answer);
+  if(modo_jogo == 1){
+    (*ptr)->pretas = get_blacks(answer);
+    (*ptr)->brancas  = get_whites(answer);
+  }
+  else if(modo_jogo == 2){
+    printf("Pretas: ");
+    scanf("%d", (*ptr)->pretas);
+    printf("\n");
+    printf("Brancas: ");
+    scanf("%d", (*ptr)->brancas );
+    printf("\n");
+  }
   sprintf((*ptr)->resultado,"P%dB%d", (*ptr)->pretas, (*ptr)->brancas);
   (*ptr)->tentativa = calloc(size+1,sizeof(char));
   strcpy((*ptr)->tentativa,tentativa);
