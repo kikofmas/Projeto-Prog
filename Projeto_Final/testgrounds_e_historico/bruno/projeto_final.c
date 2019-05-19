@@ -6,9 +6,7 @@
 * Frederico Maria Almeida Santos - 93065
 *
 ******************************************************************************/
-for (size_t i = 0; i < count; i++) {
-  /* code */
-}
+
 //LIBRARIES
 #include <stdlib.h>
 #include <errno.h>    //library de error handling
