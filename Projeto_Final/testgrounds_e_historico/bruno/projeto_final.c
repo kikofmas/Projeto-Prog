@@ -28,11 +28,6 @@
 int mode_check(int argc, char const *argv[], flags *cmd_flag);
 int test_mode_config(int k, char const *argv[], flags **cmd_flag);
 
-
-
-void hist_max_values(char const *argv[], int arg_num, hist_data *last_game);
-void read_hist(char const *argv[], int arg_num, game_reg **registo_jogo);
-
 void save_game_ini(game_reg **registo_jogo, int hist_file, int ord, hist_data last_game, char **nome_jogadores, defs defs_jogo, int jogador);
 void save_key(int k, game_reg *registo_jogo, char jogada[]);
 void save_guess_ini(game_reg *top, int lugar_certo, int lugar_errado, int tentativa, defs defs_jogo, char jogada[]);
@@ -263,70 +258,7 @@ int test_mode_config (int k, char const *argv[], flags **cmd_flag) {
 
 
 
-void read_hist(char const *argv[], int arg_num, game_reg **registo_jogo) {
-  game_reg *current;
-  tentativas *aux;
-  char name[50]="\0", key[10]="\0", tentativa[10]="\0";
-  FILE *fptr=fopen(argv[arg_num], "rb");
-  *registo_jogo=calloc(1, sizeof(game_reg));
-  current=*registo_jogo;
-  fscanf(fptr, "%d %s %s %d %d %c %s %d %f\n", &(current->game_ID), current->player_ID, name, &(current->colors), &(current->key_size),
-                                               &(current->repet), key, &(current->tentativas), &(current->game_time));
-  current->key=calloc(strlen(key)+1, sizeof(char));
-  current->player_name=calloc(strlen(name)+1, sizeof(char));
-  strcpy(current->key, key);
-  strcpy(current->player_name, name);
-  current->next=NULL;
 
-  current->first = calloc(1,sizeof(tentativas));
-  fscanf(fptr, "%d %s %s", &(current->first->tent_ID), tentativa, current->first->resultado);
-  current->first->tentativa = calloc(strlen(tentativa)+1,sizeof(char));
-  strcpy(current->first->tentativa, tentativa);
-  current->first->next = NULL;
-  current->first->prev = NULL;
-  aux = current->first;
-  for(int i=1;i<(current->tentativas);i++){
-    aux->next = calloc(1,sizeof(tentativas));
-    fscanf(fptr, "%d %s %s", &(aux->next->tent_ID), tentativa, aux->next->resultado);
-    aux->next->tentativa = calloc(strlen(tentativa)+1,sizeof(char));
-    strcpy(aux->next->tentativa, tentativa);
-    aux->next->next = NULL;
-    aux->next->prev = aux;
-    aux=aux->next;
-  }
-
-  while(!feof(fptr)){
-    current->next=calloc(1, sizeof(game_reg));
-    fscanf(fptr, "%d %s %s %d %d %c %s %d %f\n", &(current->next->game_ID), current->next->player_ID, name, &(current->next->colors),
-                                                 &(current->next->key_size), &(current->next->repet), key, &(current->next->tentativas),
-                                                 &(current->next->game_time));
-    current->next->key=calloc(strlen(key)+1, sizeof(char));
-    current->next->player_name=calloc(strlen(name)+1, sizeof(char));
-    strcpy(current->next->key, key);
-    strcpy(current->next->player_name, name);
-    current->next->next=NULL;
-
-    current->next->first = calloc(1,sizeof(tentativas));
-    fscanf(fptr, "%d %s %s", &(current->next->first->tent_ID), tentativa, current->next->first->resultado);
-    current->next->first->tentativa = calloc(strlen(tentativa)+1,sizeof(char));
-    strcpy(current->next->first->tentativa, tentativa);
-    current->next->first->next = NULL;
-    current->next->first->prev = NULL;
-    aux = current->next->first;
-    for(int i=1;i<(current->next->tentativas);i++){
-      aux->next = calloc(1,sizeof(tentativas));
-      fscanf(fptr, "%d %s %s", &(aux->next->tent_ID), tentativa, aux->next->resultado);
-      aux->next->tentativa = calloc(strlen(tentativa)+1,sizeof(char));
-      strcpy(aux->next->tentativa, tentativa);
-      aux->next->next = NULL;
-      aux->next->prev = aux;
-      aux=aux->next;
-    }
-
-    current=current->next;
-  }
-  fclose(fptr);
-}
 
 
 
