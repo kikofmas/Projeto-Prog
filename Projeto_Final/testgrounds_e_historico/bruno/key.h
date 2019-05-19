@@ -1,5 +1,5 @@
-#ifndef clear_memory_included
-#define clear_memory_included
+#ifndef key_included
+#define key_included
 
 letras ** listaCores(int size, int colors);
 tentativas * tentativasAlea(int num_alea, int size, int colors, int *count, letras ***lista_cores, int *win, int *tempo_exec, int modo_jogo);

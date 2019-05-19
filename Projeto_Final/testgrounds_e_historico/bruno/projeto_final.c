@@ -21,6 +21,7 @@
 #include "oraculo.h"
 #include "intermedio.h"
 #include "key.h"
+#include "files.h"
 
 
 //DECLARACAO DE FUNCOES
@@ -54,7 +55,6 @@ int main(int argc, char const *argv[]) {
   error=mode_check(argc, argv, &cmd_flag);
   if (error==-1) exit(-1);
 
-
   //passar para funcao??
   if (cmd_flag.init==0 && cmd_flag.hist==0 && cmd_flag.ord==0) {
     printf("MODO INTERATIVO\n\n");
@@ -62,6 +62,7 @@ int main(int argc, char const *argv[]) {
     printf("2) Jogador Vs. Computador\n\n");
     printf("Opcao: ");
     scanf("%d", &mod_inter);
+    printf("\n");
 
     if(mod_inter==1){
     //INICIALIZACAO DAS VARIAVEIS DE JOGO
@@ -106,55 +107,18 @@ int main(int argc, char const *argv[]) {
       clear_memory(nome_jogadores, defs_jogo.num_jogadores, ptr_dados, mediaTempos, numVitorias);
     }
     else if(mod_inter==2){
-      FILE *fptr = fopen("init.dat","rb");
-      if(fptr!=NULL){
-        char *text=NULL, *token=NULL, c='\0';
-        int counter=1;
-        text = (char *)malloc(sizeof(char));
-        while((c=fgetc(fptr))!=EOF){
-          text = (char *)realloc(text,counter);
-          text[counter-1]=c;
-          counter++;
-        }
-        fclose(fptr);
+      read_init(argv[cmd_flag.init], &defs_jogo, &nome_jogadores);
 
-        token = strtok(text,"\n");
-        nome_jogadores = (char **)malloc(sizeof(char*));
-        if(nome_jogadores==NULL) exit(-1);
-        *nome_jogadores = (char *)malloc((strlen(token)+1)*sizeof(char));
-        if(*nome_jogadores==NULL) exit(-1);
-        strcpy(nome_jogadores[0],token);
-        token = strtok(NULL,"\n");
-        defs_jogo.num_jogos = atoi(token);
-        token = strtok(NULL,"\n");
-        defs_jogo.num_cores = atoi(token);
-        token = strtok(NULL,"\n");
-        defs_jogo.tamanho_chave = atoi(token);
-        token = strtok(NULL,"\n");
-        defs_jogo.repeticao_cores = token[0];
-        token = strtok(NULL,"\n");
-        defs_jogo.tentativas_alea = atoi(token);
-        token = strtok(NULL,"\n");
-        defs_jogo.tentativas = atoi(token);
-        if(tolower(defs_jogo.repeticao_cores)=='s') rep=1;
-        free(text);
-      }
-      else{
-        perror("ERRO:");
-        exit(-1);
-      }
+      if(tolower(defs_jogo.repeticao_cores)=='s') rep=1;
       activate_oracle(defs_jogo.tamanho_chave, defs_jogo.num_cores, rep);
 
       //for(int i=0;i<defs_jogo.num_jogos;i++){
         //printf("\nJogo %d\n",i);
-        printf("Chave: ");
-        generate_key(1);
-        printf("\n");
-
         lista_cores = listaCores(defs_jogo.tamanho_chave, defs_jogo.num_cores);
-        lista_tentativas = tentativasAlea(defs_jogo.tentativas_alea, defs_jogo.tamanho_chave, defs_jogo.num_cores, &num_total_tent, &lista_cores, &win, &tempo);
+        lista_tentativas = tentativasAlea(defs_jogo.tentativas_alea, defs_jogo.tamanho_chave, defs_jogo.num_cores, &num_total_tent, &lista_cores, &win, &tempo, mod_inter);
+
         if(win==0){
-          win = keyFinder(defs_jogo.tamanho_chave, &lista_cores, &lista_tentativas, &num_total_tent, &tempo);
+          win = keyFinder(defs_jogo.tamanho_chave, &lista_cores, &lista_tentativas, &num_total_tent, &tempo, mod_inter);
         }
         printf("\nNumero de tentativas: %d\n", num_total_tent);
         clear(defs_jogo.tamanho_chave, &lista_tentativas, &lista_cores);
@@ -183,43 +147,9 @@ int main(int argc, char const *argv[]) {
     printf("MODO TESTE\n\n");
     /* jogar EvE */
     /*load init files and others if needed -- use ifs to allow or not passage*/
-    FILE *fptr = fopen("init.dat","rb");
-    if(fptr!=NULL){
-      char *text=NULL, *token=NULL, c='\0';
-      int counter=1;
-      text = (char *)malloc(sizeof(char));
-      while((c=fgetc(fptr))!=EOF){
-        text = (char *)realloc(text,counter);
-        text[counter-1]=c;
-        counter++;
-      }
-      fclose(fptr);
+    read_init("init.dat", &defs_jogo, &nome_jogadores);
+    if(tolower(defs_jogo.repeticao_cores)=='s') rep=1;
 
-      token = strtok(text,"\n");
-      nome_jogadores = (char **)malloc(sizeof(char*));
-      if(nome_jogadores==NULL) exit(-1);
-      *nome_jogadores = (char *)malloc((strlen(token)+1)*sizeof(char));
-      if(*nome_jogadores==NULL) exit(-1);
-      strcpy(nome_jogadores[0],token);
-      token = strtok(NULL,"\n");
-      defs_jogo.num_jogos = atoi(token);
-      token = strtok(NULL,"\n");
-      defs_jogo.num_cores = atoi(token);
-      token = strtok(NULL,"\n");
-      defs_jogo.tamanho_chave = atoi(token);
-      token = strtok(NULL,"\n");
-      defs_jogo.repeticao_cores = token[0];
-      token = strtok(NULL,"\n");
-      defs_jogo.tentativas_alea = atoi(token);
-      token = strtok(NULL,"\n");
-      defs_jogo.tentativas = atoi(token);
-      if(tolower(defs_jogo.repeticao_cores)=='s') rep=1;
-      free(text);
-    }
-    else{
-      perror("ERRO:");
-      exit(-1);
-    }
     activate_oracle(defs_jogo.tamanho_chave, defs_jogo.num_cores, rep);
 
     for(int i=0;i<defs_jogo.num_jogos;i++){
@@ -229,9 +159,9 @@ int main(int argc, char const *argv[]) {
       printf("\n");
 
       lista_cores = listaCores(defs_jogo.tamanho_chave, defs_jogo.num_cores);
-      lista_tentativas = tentativasAlea(defs_jogo.tentativas_alea, defs_jogo.tamanho_chave, defs_jogo.num_cores, &num_total_tent, &lista_cores, &win, &tempo);
+      lista_tentativas = tentativasAlea(defs_jogo.tentativas_alea, defs_jogo.tamanho_chave, defs_jogo.num_cores, &num_total_tent, &lista_cores, &win, &tempo, 1);
       if(win==0){
-        win = keyFinder(defs_jogo.tamanho_chave, &lista_cores, &lista_tentativas, &num_total_tent, &tempo);
+        win = keyFinder(defs_jogo.tamanho_chave, &lista_cores, &lista_tentativas, &num_total_tent, &tempo, 1);
       }
       printf("\nNumero de tentativas: %d\n", num_total_tent);
       clear(defs_jogo.tamanho_chave, &lista_tentativas, &lista_cores);
