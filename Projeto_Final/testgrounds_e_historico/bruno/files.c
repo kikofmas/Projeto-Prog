@@ -102,7 +102,7 @@ void read_hist(char const *argv[], int arg_num, game_reg **registo_jogo, char *f
   strcpy(current->key, key);
   strcpy(current->player_name, name);
   current->next=NULL;
-
+  current->prev=NULL;
   current->first = calloc(1,sizeof(tentativas));
   fscanf(fptr, "%d %s %s\n", &(current->first->tent_ID), tentativa, current->first->resultado);
   current->first->tentativa = calloc(strlen(tentativa)+1,sizeof(char));
@@ -130,7 +130,7 @@ void read_hist(char const *argv[], int arg_num, game_reg **registo_jogo, char *f
     strcpy(current->next->key, key);
     strcpy(current->next->player_name, name);
     current->next->next=NULL;
-
+    current->next->prev=current;
     current->next->first = calloc(1,sizeof(tentativas));
     fscanf(fptr, "%d %s %s\n", &(current->next->first->tent_ID), tentativa, current->next->first->resultado);
     current->next->first->tentativa = calloc(strlen(tentativa)+1,sizeof(char));

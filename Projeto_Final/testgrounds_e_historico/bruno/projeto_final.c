@@ -293,35 +293,35 @@ int main(int argc, char const *argv[]) {
 
 
 void ordena(game_reg **reg){
-  game_reg *atual, *check, *aux_atual, *aux_check;
+  game_reg *atual, *check;
   atual = *reg;
   check = *reg;
   while(atual!=NULL){
     while(check!=NULL){
       if(atual->key_size > check->key_size){
-
+        swap(&atual,&check);
       }
       else if(atual->key_size == check->key_size &&
               atual->colors > check->colors){
-
+        swap(&atual,&check);
       }
       else if(atual->key_size == check->key_size &&
               atual->colors == check->colors &&
               atual->repet=='S' && check->repet=='N'){
-
+        swap(&atual,&check);
       }
       else if(atual->key_size == check->key_size &&
               atual->colors == check->colors &&
               atual->repet == check->repet &&
               atual->tentativas > check->tentativas){
-
+        swap(&atual,&check);
       }
       else if(atual->key_size == check->key_size &&
               atual->colors == check->colors &&
               atual->repet == check->repet &&
               atual->tentativas == check->tentativas &&
               atual->game_time == check->game_time){
-
+        swap(&atual,&check);
       }
       check = check->next;
     }
@@ -336,8 +336,12 @@ void swap(game_reg **ptr1, game_reg **ptr2){
   aux_check = *ptr2;
 
   *ptr1 = (*ptr1)->prev;
-  (*ptr1)->next = aux_check;
-  (*ptr2)->next = 
+  /*(*ptr1)->next=aux_check;
+  aux_check->prev = *ptr1;
+  aux_atual->next = aux_check->next;
+  aux_check->next=aux_atual;
+  aux_atual->prev = aux_check;
+  aux_atual->next->prev = aux_atual;*/
   *ptr1 = (*ptr1)->next;
 }
 
