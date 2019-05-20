@@ -218,7 +218,7 @@ int main(int argc, char const *argv[]) {
 
   if (cmd_flag.ord != 0) {
     read_hist(argv, cmd_flag.hist, &registo_jogo, "game_history.dat", cmd_flag.hist);
-    sort_registry(&registo_jogo, cmd_flag.ord, argv);
+    //sort_registry(&registo_jogo, cmd_flag.ord, argv);
 
 
     FILE *fptr = fopen("game_history.dat","wb");
