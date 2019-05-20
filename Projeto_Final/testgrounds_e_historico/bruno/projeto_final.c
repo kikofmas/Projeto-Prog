@@ -193,9 +193,6 @@ int main(int argc, char const *argv[]) {
       }
       printf("\nNumero de tentativas: %d\n", num_total_tent);
 
-
-
-
       aux=lista_tentativas;
       while(aux->next!=NULL){
         aux=aux->next;
@@ -208,8 +205,6 @@ int main(int argc, char const *argv[]) {
         fprintf(fptr, "%d %s %s\n", aux->tent_ID, aux->tentativa, aux->resultado);
         aux=aux->next;
       }
-
-
 
       clear(defs_jogo.tamanho_chave, &lista_tentativas, &lista_cores);
       sleep(1);
