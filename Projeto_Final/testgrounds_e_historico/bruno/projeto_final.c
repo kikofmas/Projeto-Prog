@@ -31,8 +31,8 @@ void save_key(int k, game_reg *registo_jogo, char jogada[]);
 void save_guess_ini(game_reg *top, int lugar_certo, int lugar_errado, int tentativa, defs defs_jogo, char jogada[]);
 void sort_registry(game_reg **registo_jogo, int pos, char const *argv[]);
 //game_reg *recursive_bubble_sort_fast(game_reg *current, game_reg *limit);
-game_reg *recursive_bubble_sort_short(game_reg *current, game_reg *limit);
-game_reg * reord_2_elements(game_reg **ptr, game_reg *top);
+game_reg *recursive_bubble_sort_short(game_reg **top, game_reg *limit);
+game_reg *reord_2_elements(game_reg **ptr, game_reg **top);
 
 void clear_memory(char **vect1, int v1, dados **ptr_dados, float *vect3, int *vect4, game_reg *registo_jogo);
 void free_guess_list(tentativas *current);
@@ -258,7 +258,7 @@ int main(int argc, char const *argv[]) {
 
     if (cmd_flag.ord != 0) {
       read_hist(argv, cmd_flag.hist, &registo_jogo, "game_history.dat", cmd_flag.hist);
-      sort_registry(&registo_jogo, cmd_flag.ord, argv);
+      //sort_registry(&registo_jogo, cmd_flag.ord, argv);
 
       FILE *fptr;
       if(cmd_flag.hist==0) fptr= fopen("game_history.dat","wb");
@@ -396,7 +396,7 @@ void sort_registry(game_reg **registo_jogo, int pos, char const *argv[]){
   if (strcmp(fst, argv[pos]) == 0) {
   //  *registo_jogo=recursive_bubble_sort_fast(*registo_jogo, NULL);
   } else if (strcmp(shrt, argv[pos]) == 0) {
-    *registo_jogo=recursive_bubble_sort_short(*registo_jogo, NULL);
+    *registo_jogo=recursive_bubble_sort_short(registo_jogo, NULL);
   } else {
     printf("ERRO: impossivel ordenar. Instrucao errada\n");
   }
@@ -404,9 +404,9 @@ void sort_registry(game_reg **registo_jogo, int pos, char const *argv[]){
 
 
 game_reg *recursive_bubble_sort_short(game_reg **top, game_reg *limit){
-  game_reg *current=top;
+  game_reg *current=*top;
   if (current == limit) { //base case
-    while (top->prev != NULL) {
+    while ((*top)->prev != NULL) {
       *top=(*top)->prev;
     }
     return *top;
@@ -421,17 +421,13 @@ game_reg *recursive_bubble_sort_short(game_reg **top, game_reg *limit){
       top=reord_2_elements(current, top);
     } else */if (current->tentativas > current->next->tentativas /*&& tolower(current->repet)==tolower(current->next->repet) &&
             current->colors == current->next->colors && current->key_size == current->next->key_size*/) {
-<<<<<<< HEAD
-      top=reord_2_elements(&current, top);
-=======
       *top=reord_2_elements(&current, top);
->>>>>>> fcb3c07fbf50c45547b13e6afd5080c344d1e722
     } else {
       current=current->next;
     }
   }
   *top=recursive_bubble_sort_short(top, current);//recursion
-  return top;//return "new" first element of list
+  return *top;//return "new" first element of list
 }
 
 
@@ -445,11 +441,11 @@ game_reg *reord_2_elements(game_reg **ptr, game_reg **top) {
   if (aux->prev != NULL) {
     aux->prev->next=aux;
   } else {
-    while (top->prev != NULL) {
+    while ((*top)->prev != NULL) {
       *top=(*top)->prev;
     }
   }
-  return top;
+  return *top;
 }
 
 
