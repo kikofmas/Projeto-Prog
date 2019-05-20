@@ -32,7 +32,7 @@ void save_guess_ini(game_reg *top, int lugar_certo, int lugar_errado, int tentat
 void sort_registry(game_reg **registo_jogo, int pos, char const *argv[]);
 //game_reg *recursive_bubble_sort_fast(game_reg *current, game_reg *limit);
 game_reg *recursive_bubble_sort_short(game_reg *current, game_reg *limit);
-game_reg * reord_2_elements(game_reg *ptr, game_reg *top);
+game_reg * reord_2_elements(game_reg **ptr, game_reg *top);
 
 void clear_memory(char **vect1, int v1, dados **ptr_dados, float *vect3, int *vect4, game_reg *registo_jogo);
 void free_guess_list(tentativas *current);
@@ -384,13 +384,13 @@ game_reg *recursive_bubble_sort_short(game_reg *top, game_reg *limit){
 }
 
 
-game_reg *reord_2_elements(game_reg *ptr, game_reg *top) {
-  game_reg *aux = ptr->next;
-  ptr->next=aux->next;
-  aux->prev=ptr->prev;
-  ptr->prev=aux;
-  aux->next=ptr;
-  if (ptr->next != NULL) ptr->next->prev=ptr;
+game_reg *reord_2_elements(game_reg **ptr, game_reg *top) {
+  game_reg *aux = (*ptr)->next;
+  (*ptr)->next=aux->next;
+  aux->prev=(*ptr)->prev;
+  (*ptr)->prev=aux;
+  aux->next=(*ptr);
+  if ((*ptr)->next != NULL) (*ptr)->next->prev=(*ptr);
   if (aux->prev != NULL) {
     aux->prev->next=aux;
   } else {
