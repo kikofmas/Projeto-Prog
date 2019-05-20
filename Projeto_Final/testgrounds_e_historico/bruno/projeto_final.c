@@ -73,7 +73,7 @@ int main(int argc, char const *argv[]) {
     scanf("%d", &mod_inter);
     printf("\n");
     cleanslate();
-
+    if (mod_inter==1) {
     //INICIALIZACAO DAS VARIAVEIS DE JOGO
       introducao();
       //numero de jogadores
@@ -99,7 +99,6 @@ int main(int argc, char const *argv[]) {
       if(tolower(defs_jogo.repeticao_cores) == 's') rep=1;
       clearScreen(1);
 
-    if (mod_inter==1) {
     //JOGO
       //activate_oracle(defs_jogo.tamanho_chave, defs_jogo.num_cores, rep);
       ptr_dados=jogo(defs_jogo, nome_jogadores);
@@ -116,27 +115,74 @@ int main(int argc, char const *argv[]) {
       clear_memory_intermedio(nome_jogadores, defs_jogo.num_jogadores, ptr_dados, mediaTempos, numVitorias); //esta funcao ta aqui bem a toa....
     }
     else if(mod_inter == 2) {
+      tentativas *aux;
+      FILE *fptr;
+      
+      fptr = fopen("game_history.dat","ab");
+      fclose(fptr);
+      hist_max_values(argv, cmd_flag.hist, &last_game, "game_history.dat", 1);
+      fptr = fopen("game_history.dat","ab");
 
-      //esta merda esta mal feita estupido de merda
+      defs_jogo.num_jogadores=1;
+      //nome dos jogadores
+      nome_jogadores=calloc(1,sizeof(char*));
+      nome_jogadores[0]=calloc(strlen("computer")+1,sizeof(char));
+      strcpy(nome_jogadores[0],"computer");
+      //numero de jogos
+      initialization(&defs_jogo.num_jogos, 1, 5, "o numero de jogos");
+      //numero maximo de tentivas por jogo
+      initialization(&defs_jogo.tentativas, 10, 20, "o numero maximo de tentativas");
+      //numero maximo de tentivas aleatorias por jogo
+      initialization(&defs_jogo.tentativas_alea, 0, 20-defs_jogo.tentativas, "o numero maximo de tentativas aleatorias");
+      do {
+      //dimensao da chave
+        initialization(&defs_jogo.tamanho_chave, 4, 8, "a dimensao da chave com que deseja jogar");
+      //numero de cores em jogo
+        initialization(&defs_jogo.num_cores, 6, 12, "o numero de cores com que deseja jogar");
+      //repeticao de cores
+        initializationRepetitions(&defs_jogo.repeticao_cores);
+      //verificacao de que a combinacao de parametros e possivel
+        combo_possivel=checkCombinacao(&defs_jogo);
+      } while(combo_possivel == -1);
 
       if(tolower(defs_jogo.repeticao_cores)=='s') rep=1;
       activate_oracle(defs_jogo.tamanho_chave, defs_jogo.num_cores, rep);
 
-      //for(int i=0;i<defs_jogo.num_jogos;i++){
-        //printf("\nJogo %d\n",i);
+      for(int i=0;i<defs_jogo.num_jogos;i++){
+        win = 0;
+        tempo=0;
+        num_total_tent = 0;
+        printf("\nJogo %d\n",i);
         lista_cores = listaCores(defs_jogo.tamanho_chave, defs_jogo.num_cores);
         lista_tentativas = tentativasAlea(defs_jogo, &num_total_tent, &lista_cores, &win, &tempo, mod_inter);
+
+
 
         if (win==0) {
           win = keyFinder(defs_jogo.tamanho_chave, &lista_cores, &lista_tentativas, &num_total_tent, &tempo, mod_inter);
         }
         printf("\nNumero de tentativas: %d\n", num_total_tent);
-        clear(defs_jogo.tamanho_chave, &lista_tentativas, &lista_cores);
-        num_total_tent = 0;
-        //sleep(1);
-      //}
 
-      printf("%d\n", tempo);
+        aux=lista_tentativas;
+        while(aux->next!=NULL){
+          aux=aux->next;
+        }
+
+        fprintf(fptr, "%d J%03d %s %d %d %c %s %d %.3f\n", ++last_game.ID, ++last_game.player_ID, nome_jogadores[0], defs_jogo.num_cores,
+                                                         defs_jogo.tamanho_chave, defs_jogo.repeticao_cores, aux->tentativa, num_total_tent, (float)tempo/1000);
+        aux=lista_tentativas;
+        while(aux!=NULL){
+          fprintf(fptr, "%d %s %s\n", aux->tent_ID, aux->tentativa, aux->resultado);
+          aux=aux->next;
+        }
+
+
+
+        clear(defs_jogo.tamanho_chave, &lista_tentativas, &lista_cores);
+        sleep(1);
+      }
+
+      fclose(fptr);
       terminate_oracle();
       free(nome_jogadores[0]);
       free(nome_jogadores);
@@ -214,32 +260,38 @@ int main(int argc, char const *argv[]) {
     fclose(fptr);
     free(nome_jogadores[0]);
     free(nome_jogadores);
-  }
 
-  if (cmd_flag.ord != 0) {
-    read_hist(argv, cmd_flag.hist, &registo_jogo, "game_history.dat", cmd_flag.hist);
-    sort_registry(&registo_jogo, cmd_flag.ord, argv);
+    if (cmd_flag.ord != 0) {
+      read_hist(argv, cmd_flag.hist, &registo_jogo, "game_history.dat", cmd_flag.hist);
+      //sort_registry(&registo_jogo, cmd_flag.ord, argv);
 
+      FILE *fptr;
+      if(cmd_flag.hist==0) fptr= fopen("game_history.dat","wb");
+      else fptr= fopen(argv[cmd_flag.hist],"wb");
 
-    FILE *fptr = fopen("game_history.dat","wb");
-    game_reg *current = registo_jogo;
-    while(current!=NULL){
-      fprintf(fptr, "%d %s %s %d %d %c %s %d %.3f\n", current->game_ID, current->player_ID, current->player_name,
-                                                      current->colors, current->key_size, current->repet,
-                                                      current->key, current->tentativas, current->game_time);
-      tentativas *aux = current->first;
-      while(aux!=NULL){
-        fprintf(fptr, "%d %s %s\n", aux->tent_ID, aux->tentativa, aux->resultado);
-        aux=aux->next;
+      if(fptr==NULL) exit(-1);
+
+      game_reg *current = registo_jogo;
+      while(current!=NULL){
+        fprintf(fptr, "%d %s %s %d %d %c %s %d %.3f\n", current->game_ID, current->player_ID, current->player_name,
+                                                        current->colors, current->key_size, current->repet,
+                                                        current->key, current->tentativas, current->game_time);
+        tentativas *aux = current->first;
+        while(aux!=NULL){
+          fprintf(fptr, "%d %s %s\n", aux->tent_ID, aux->tentativa, aux->resultado);
+          aux=aux->next;
+        }
+        current=current->next;
       }
-      current=current->next;
-    }
-    fclose(fptr);
+      fclose(fptr);
 
+    }
   }
 
   return 0;
 }
+
+
 
 
 void save_game_ini(game_reg **registo_jogo, int hist_file, int ord, hist_data last_game, char **nome_jogadores, defs defs_jogo, int jogador){
@@ -365,15 +417,15 @@ game_reg *recursive_bubble_sort_short(game_reg *top, game_reg *limit){
     return top;
   }
   while (current->next != limit) {
-    if (current->key_size > current->next->key_size) {
+    /*if (current->key_size > current->next->key_size) {
       top=reord_2_elements(current, top);
     } else if (current->colors > current->next->colors && current->key_size == current->next->key_size) {
       top=reord_2_elements(current, top);
     } else if (tolower(current->repet)=='s' && tolower(current->next->repet)=='n' &&
             current->colors == current->next->colors && current->key_size == current->next->key_size) {
       top=reord_2_elements(current, top);
-    } else if (current->tentativas > current->next->tentativas && tolower(current->repet)==tolower(current->next->repet) &&
-            current->colors == current->next->colors && current->key_size == current->next->key_size) {
+    } else */if (current->tentativas > current->next->tentativas /*&& tolower(current->repet)==tolower(current->next->repet) &&
+            current->colors == current->next->colors && current->key_size == current->next->key_size*/) {
       top=reord_2_elements(current, top);
     } else {
       current=current->next;

@@ -70,18 +70,18 @@ tentativas * tentativasAlea(defs def, int *count, letras ***lista_cores, int *wi
   tentativas *lista_tentativas=NULL, *aux=NULL;
   struct timeval stop, start;
   if(def.tentativas_alea>0){
-    gettimeofday(&start, NULL);
     printf("Tentativas aleatorias:\n");
 
     lista_tentativas = calloc(1,sizeof(tentativas));
     if(lista_tentativas==NULL) exit(-1);
     aux = lista_tentativas;
+    gettimeofday(&start, NULL);
     fillAlea(aux, def.tamanho_chave, def.num_cores, count, NULL, modo_jogo);
     printf("%d: %s %s\n", aux->tent_ID, aux->tentativa, aux->resultado);
     if(verificaResultAlea(aux, lista_cores, def.tamanho_chave)==1){
       *win=1;
       gettimeofday(&stop, NULL);
-      *tempo_exec = stop.tv_usec-start.tv_usec;
+      *tempo_exec = *tempo_exec + stop.tv_usec-start.tv_usec;
       return lista_tentativas;
     }
 
@@ -94,7 +94,7 @@ tentativas * tentativasAlea(defs def, int *count, letras ***lista_cores, int *wi
         *win=1;
         return lista_tentativas;
         gettimeofday(&stop, NULL);
-        *tempo_exec = stop.tv_usec-start.tv_usec;
+        *tempo_exec = *tempo_exec + stop.tv_usec-start.tv_usec;
       }
       aux = aux->next;
     }
@@ -102,7 +102,7 @@ tentativas * tentativasAlea(defs def, int *count, letras ***lista_cores, int *wi
     printf("\n");
     return lista_tentativas;
     gettimeofday(&stop, NULL);
-    *tempo_exec = stop.tv_usec-start.tv_usec;
+    *tempo_exec = *tempo_exec + stop.tv_usec-start.tv_usec;
   }
   return NULL;
 }
@@ -275,7 +275,7 @@ int keyFinder(int size, letras ***lista_cores, tentativas **lista_tentativas, in
         free(tentativa);
         free(index);
         gettimeofday(&stop, NULL);
-        *tempo_exec = stop.tv_usec-start.tv_usec;
+        *tempo_exec = *tempo_exec + stop.tv_usec-start.tv_usec;
         return 1;
       }
     }
