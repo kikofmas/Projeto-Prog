@@ -31,7 +31,7 @@ all: objFolder $(PROJ_NAME)
 
 $(PROJ_NAME): $(OBJ)
 	@ echo 'Building binary using GCC linker: $@'
-	$(CC) $^ ./objects/oraculo.o -o $@
+	$(CC) $^ objects/oraculo.o -o $@
 	@ echo 'Finished building binary: $@'
 	@ echo ' '
 
