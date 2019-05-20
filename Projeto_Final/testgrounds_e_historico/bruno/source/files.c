@@ -214,10 +214,10 @@ game_reg *recursive_bubble_sort_short(game_reg *top, game_reg *limit){
     } else if (current->tentativas > current->next->tentativas && tolower(current->repet)==tolower(current->next->repet) &&
             current->colors == current->next->colors && current->key_size == current->next->key_size) {
       reord_2_elements(current);
-    } else if (current->game_time > current->next->game_time && current->tentativas == current->next->tentativas && tolower(current->repet)==tolower(current->next->repet) &&
+    } /*else if (current->game_time > current->next->game_time && current->tentativas == current->next->tentativas && tolower(current->repet)==tolower(current->next->repet) &&
             current->colors == current->next->colors && current->key_size == current->next->key_size) {
       reord_2_elements(current);
-    } else {
+    } */else {
       current=current->next;
     }
   }
@@ -225,6 +225,9 @@ game_reg *recursive_bubble_sort_short(game_reg *top, game_reg *limit){
     top=top->prev;
   }
   recursive_bubble_sort_short(top, current);//recursion
+  while (top->prev!=NULL) {
+    top=top->prev;
+  }
   return top;//return "new" first element of list
 }
 

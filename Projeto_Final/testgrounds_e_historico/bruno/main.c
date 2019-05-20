@@ -187,13 +187,27 @@ int main(int argc, char const *argv[]) {
   else if (mod == 2) {
     printf("MODO TESTE\nAPENAS REORDENAÇAO\n\n");
     read_hist(argv, cmd_flag.hist, &registo_jogo, "", cmd_flag.hist);
+    game_reg *current = registo_jogo;
+    while(current!=NULL){
+      printf("%d %s %s %d %d %c %s %d %.3f\n", current->game_ID, current->player_ID, current->player_name,
+                                                      current->colors, current->key_size, current->repet,
+                                                      current->key, current->tentativas, current->game_time);
+      current=current->next;
+    }
     sort_registry(&registo_jogo, cmd_flag.ord, argv);
-
     FILE *fptr = fopen(argv[cmd_flag.hist],"wb");
 
     if(fptr==NULL) exit(-1);
 
-    game_reg *current = registo_jogo;
+    current = registo_jogo;
+    while(current!=NULL){
+      printf("%d %s %s %d %d %c %s %d %.3f\n", current->game_ID, current->player_ID, current->player_name,
+                                                      current->colors, current->key_size, current->repet,
+                                                      current->key, current->tentativas, current->game_time);
+      current=current->next;
+    }
+
+    current = registo_jogo;
     while(current!=NULL){
       fprintf(fptr, "%d %s %s %d %d %c %s %d %.3f\n", current->game_ID, current->player_ID, current->player_name,
                                                       current->colors, current->key_size, current->repet,
@@ -230,8 +244,6 @@ int main(int argc, char const *argv[]) {
       hist_max_values(argv, cmd_flag.hist, &last_game, "game_history.dat", 1);
       fptr = fopen("game_history.dat","ab");
     }
-
-    printf("1\n");
 
     read_init("init.dat", &defs_jogo, &nome_jogadores);
     if(tolower(defs_jogo.repeticao_cores) == 's') rep=1;
