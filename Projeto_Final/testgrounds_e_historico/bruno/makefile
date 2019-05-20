@@ -1,11 +1,11 @@
 #make file example
 
 CC = gcc #compiler
-CFLAGS = -Wall -ansi -pedantic -std=c99 -Wextra
+CFLAGS = -Wall -std=c99 -O3
 TARGET = proj #target file name
 
 all:
-	$(CC) $(CFLAGS) projeto_final.c -o $(TARGET) oraculo.o key.o intermedio.o files.o mode.o
+	$(CC) $(CFLAGS) projeto_final.c -o $(TARGET) key.o files.o mode.o oraculo.o intermedio.o
 
 clean:
 	rm $(TARGET)

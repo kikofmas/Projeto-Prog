@@ -27,21 +27,15 @@
 //DECLARACAO DE FUNCOES
 
 
-
-
-
-
 void save_game_ini(game_reg **registo_jogo, int hist_file, int ord, hist_data last_game, char **nome_jogadores, defs defs_jogo, int jogador);
 void save_key(int k, game_reg *registo_jogo, char jogada[]);
 void save_guess_ini(game_reg *top, int lugar_certo, int lugar_errado, int tentativa, defs defs_jogo, char jogada[]);
-void sort_registry(game_reg **registo_jogo, int pos, char const *argv[]);
-game_reg *recursive_bubble_sort_fast(game_reg *top, game_reg *limit);
-game_reg *recursive_bubble_sort_short(game_reg *top, game_reg *limit);
-void reord_2_elements(game_reg *ptr);
+
+
 
 void clear_memory(char **vect1, int v1, dados **ptr_dados, float *vect3, int *vect4, game_reg *registo_jogo);
 void free_guess_list(tentativas *current);
-void free_game_registry(game_reg *current);
+void free_game_registry(game_reg **reg);
 
 
 
@@ -194,6 +188,7 @@ int main(int argc, char const *argv[]) {
     printf("MODO TESTE\nAPENAS REORDENAÇAO\n\n");
     read_hist(argv, cmd_flag.hist, &registo_jogo, "", cmd_flag.hist);
     sort_registry(&registo_jogo, cmd_flag.ord, argv);
+    free_game_registry(&registo_jogo);
     return 0;
   }
   else if (mod == 3) {
@@ -228,7 +223,7 @@ int main(int argc, char const *argv[]) {
       win = 0;
       tempo=0;
       num_total_tent = 0;
-      printf("\nJogo %d\n", i);
+      printf("\nJogo %d\n", i+1);
       printf("Chave: ");
       generate_key(1);
       printf("\n");
@@ -266,7 +261,6 @@ int main(int argc, char const *argv[]) {
       read_hist(argv, cmd_flag.hist, &registo_jogo, "game_history.dat", cmd_flag.hist);
       sort_registry(&registo_jogo, cmd_flag.ord, argv);
 
-
       FILE *fptr;
       if(cmd_flag.hist==0) fptr= fopen("game_history.dat","wb");
       else fptr= fopen(argv[cmd_flag.hist],"wb");
@@ -286,12 +280,16 @@ int main(int argc, char const *argv[]) {
         current=current->next;
       }
       fclose(fptr);
-
+      free_game_registry(&registo_jogo);
     }
   }
 
   return 0;
 }
+
+
+
+
 
 
 
@@ -344,7 +342,6 @@ void save_game_ini(game_reg **registo_jogo, int hist_file, int ord, hist_data la
   }
 }
 
-
 void save_key(int k, game_reg *registo_jogo, char jogada[]){
   game_reg *current_game = registo_jogo;
   char travessao[] = "-";
@@ -356,7 +353,6 @@ void save_key(int k, game_reg *registo_jogo, char jogada[]){
   /*onde se mete a derrota*/
   if(k==0) strcpy(current_game->key, travessao);
 }
-
 
 void save_guess_ini(game_reg *top, int lugar_certo, int lugar_errado, int tentativa, defs defs_jogo, char jogada[]) {
   int k=0;//flag que verifica se existe o primeiro elemento da lista
@@ -398,85 +394,7 @@ void save_guess_ini(game_reg *top, int lugar_certo, int lugar_errado, int tentat
 
 
 
-void sort_registry(game_reg **registo_jogo, int pos, char const *argv[]){
-  char shrt[]="short", fst[]="fast";
-  if (strcmp(fst, argv[pos]) == 0) {
-    *registo_jogo=recursive_bubble_sort_fast(*registo_jogo, NULL);
-  } else if (strcmp(shrt, argv[pos]) == 0) {
-    *registo_jogo=recursive_bubble_sort_short(*registo_jogo, NULL);
-  } else {
-    printf("ERRO: impossivel ordenar. Instrucao errada\n");
-  }
-}
 
-game_reg *recursive_bubble_sort_fast(game_reg *top, game_reg *limit){
-  game_reg *current=top;
-  if (current == limit) { //base case
-    return current;
-  }
-  while (current->next != limit) {
-    if (current->key_size > current->next->key_size) {
-      reord_2_elements(current);
-    } else if (current->colors > current->next->colors && current->key_size == current->next->key_size) {
-      reord_2_elements(current);
-    } else if (tolower(current->repet)=='s' && tolower(current->next->repet)=='n' &&
-            current->colors == current->next->colors && current->key_size == current->next->key_size) {
-      reord_2_elements(current);
-    } else if (current->game_time > current->next->game_time && tolower(current->repet)==tolower(current->next->repet) &&
-            current->colors == current->next->colors && current->key_size == current->next->key_size) {
-      reord_2_elements(current);
-    } else if (current->tentativas > current->next->tentativas && current->game_time == current->next->game_time && tolower(current->repet)==tolower(current->next->repet) &&
-            current->colors == current->next->colors && current->key_size == current->next->key_size) {
-      reord_2_elements(current);
-    } else {
-      current=current->next;
-    }
-  }
-  while (top->prev!=NULL) {
-    top=top->prev;
-  }
-  recursive_bubble_sort_fast(top, current);//recursion
-  return top;//return "new" first element of list
-}
-
-
-game_reg *recursive_bubble_sort_short(game_reg *top, game_reg *limit){
-  game_reg *current=top;
-  if (current == limit) { //base case
-    return current;
-  }
-  while (current->next != limit) {
-    if (current->key_size > current->next->key_size) {
-      reord_2_elements(current);
-    } else if (current->colors > current->next->colors && current->key_size == current->next->key_size) {
-      reord_2_elements(current);
-    } else if (tolower(current->repet)=='s' && tolower(current->next->repet)=='n' &&
-            current->colors == current->next->colors && current->key_size == current->next->key_size) {
-      reord_2_elements(current);
-    } else if (current->tentativas > current->next->tentativas && tolower(current->repet)==tolower(current->next->repet) &&
-            current->colors == current->next->colors && current->key_size == current->next->key_size) {
-      reord_2_elements(current);
-    } else {
-      current=current->next;
-    }
-  }
-  while (top->prev!=NULL) {
-    top=top->prev;
-  }
-  recursive_bubble_sort_short(top, current);//recursion
-  return top;//return "new" first element of list
-}
-
-
-void reord_2_elements(game_reg *ptr) {
-  game_reg *aux = ptr->next;
-  ptr->next=aux->next;
-  aux->prev=ptr->prev;
-  ptr->prev=aux;
-  aux->next=ptr;
-  if (ptr->next != NULL) ptr->next->prev=ptr;
-  if (aux->prev != NULL) aux->prev->next=aux;
-}
 
 
 void clear_memory(char **vect1, int v1, dados **ptr_dados, float *vect3, int *vect4, game_reg *registo_jogo){
@@ -490,16 +408,27 @@ void clear_memory(char **vect1, int v1, dados **ptr_dados, float *vect3, int *ve
   free(ptr_dados);
   free(vect3);
   free(vect4);
-  free_game_registry(registo_jogo);
+  //free_game_registry(registo_jogo);
 }
 
 
-void free_game_registry(game_reg *current){
-  if (current->next != NULL) {
-    free_game_registry(current->next);
+void free_game_registry(game_reg **reg){
+  game_reg *aux_reg;
+  tentativas *aux_tent1, *aux_tent2;
+  while(*reg!=NULL){
+    aux_tent1 = (*reg)->first;
+    while(aux_tent1!=NULL){
+      aux_tent2 = aux_tent1;
+      free(aux_tent1->tentativa);
+      aux_tent1 = aux_tent1->next;
+      free(aux_tent2);
+    }
+    aux_reg = *reg;
+    *reg=(*reg)->next;
+    free(aux_reg->key);
+    free(aux_reg->player_name);
+    free(aux_reg);
   }
-  free_guess_list(current->first);
-  free(current);
 }
 
 

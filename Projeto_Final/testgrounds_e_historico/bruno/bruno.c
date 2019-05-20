@@ -71,7 +71,9 @@ void ordena(game_reg **reg){
 
 
 void swap(game_reg **ptr1, game_reg **ptr2){
+  game_reg
   (*ptr2)->prev = (*ptr1)->prev;
   (*ptr1)->next = (*ptr2)->next;
+  (*ptr2)->next
 
 }
