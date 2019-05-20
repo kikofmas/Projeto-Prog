@@ -117,7 +117,7 @@ int main(int argc, char const *argv[]) {
     else if(mod_inter == 2) {
       tentativas *aux;
       FILE *fptr;
-      
+
       fptr = fopen("game_history.dat","ab");
       fclose(fptr);
       hist_max_values(argv, cmd_flag.hist, &last_game, "game_history.dat", 1);
@@ -408,13 +408,13 @@ void sort_registry(game_reg **registo_jogo, int pos, char const *argv[]){
 }
 
 
-game_reg *recursive_bubble_sort_short(game_reg *top, game_reg *limit){
+game_reg *recursive_bubble_sort_short(game_reg **top, game_reg *limit){
   game_reg *current=top;
   if (current == limit) { //base case
     while (top->prev != NULL) {
-      top=top->prev;
+      *top=(*top)->prev;
     }
-    return top;
+    return *top;
   }
   while (current->next != limit) {
     /*if (current->key_size > current->next->key_size) {
@@ -426,17 +426,17 @@ game_reg *recursive_bubble_sort_short(game_reg *top, game_reg *limit){
       top=reord_2_elements(current, top);
     } else */if (current->tentativas > current->next->tentativas /*&& tolower(current->repet)==tolower(current->next->repet) &&
             current->colors == current->next->colors && current->key_size == current->next->key_size*/) {
-      top=reord_2_elements(current, top);
+      *top=reord_2_elements(&current, top);
     } else {
       current=current->next;
     }
   }
-  top=recursive_bubble_sort_short(top, current);//recursion
+  *top=recursive_bubble_sort_short(top, current);//recursion
   return top;//return "new" first element of list
 }
 
 
-game_reg *reord_2_elements(game_reg **ptr, game_reg *top) {
+game_reg *reord_2_elements(game_reg **ptr, game_reg **top) {
   game_reg *aux = (*ptr)->next;
   (*ptr)->next=aux->next;
   aux->prev=(*ptr)->prev;
@@ -447,7 +447,7 @@ game_reg *reord_2_elements(game_reg **ptr, game_reg *top) {
     aux->prev->next=aux;
   } else {
     while (top->prev != NULL) {
-      top=top->prev;
+      *top=(*top)->prev;
     }
   }
   return top;
