@@ -343,6 +343,19 @@ void swap(game_reg **ptr1, game_reg **ptr2){
   aux_atual->prev = aux_check;
   aux_atual->next->prev = aux_atual;*/
   *ptr1 = (*ptr1)->next;
+
+  (*ptr)->next=(*aux)->next;
+  (*aux)->prev=(*ptr)->prev;
+  (*ptr)->prev=(*aux);
+  (*aux)->next=(*ptr);
+  if ((*ptr)->next != NULL) (*ptr)->next->prev=(*ptr);
+  if ((*aux)->prev != NULL) {
+    (*aux)->prev->next=*aux;
+  } else {
+    while ((*top)->prev != NULL) {
+      *top=(*top)->prev;
+    }
+  }
 }
 
 
