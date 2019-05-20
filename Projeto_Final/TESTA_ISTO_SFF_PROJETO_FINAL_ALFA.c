@@ -83,7 +83,7 @@ void read_hist_file_1(char const *argv[], int arg_num, hist_data *last_game){
 
   int k=0, a=0, b=0, a1=0, b1=0;
 
-  FILE *fptr=fopen(argv[arg_num], "r");
+  FILE *fptr=fopen(argv[arg_num], "rb");
 
   while(!feof(fptr)){
     fscanf(fptr, "%d J%d %*s %*s %*s %*s %*s %d %*[^\n]\n", &a, &b, &k);
@@ -103,7 +103,7 @@ void read_hist_file_1(char const *argv[], int arg_num, hist_data *last_game){
 void read_hist_file_2(char const *argv[], int arg_num, game_reg **registo_jogo) {
   game_reg *current;
   char name[50]="\0", key[10]="\0";
-  FILE *fptr=fopen(argv[arg_num], "r");
+  FILE *fptr=fopen(argv[arg_num], "rb");
   *registo_jogo=calloc(1, sizeof(game_reg));
   current=*registo_jogo;
   fscanf(fptr, "%d %s %s %d %d %c %s %d %f\n", &current->game_ID, current->player_ID, name, &current->colors,
