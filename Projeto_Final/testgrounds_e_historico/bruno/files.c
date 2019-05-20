@@ -78,11 +78,17 @@ void hist_max_values(char const *argv[], int arg_num, hist_data *last_game, char
   fclose(fptr);
 }
 
-void read_hist(char const *argv[], int arg_num, game_reg **registo_jogo){
+void read_hist(char const *argv[], int arg_num, game_reg **registo_jogo, char *file, int mode){
   game_reg *current;
   tentativas *aux;
   char name[50]="\0", key[10]="\0", tentativa[10]="\0";
-  FILE *fptr=fopen(argv[arg_num], "rb");
+
+  FILE *fptr;
+  if(mode==0) fptr=fopen(file, "rb");
+  else if(mode==1) fptr=fopen(argv[arg_num], "rb");
+
+  if(fptr==NULL) exit(-1);
+
   *registo_jogo=calloc(1, sizeof(game_reg));
   current=*registo_jogo;
   fscanf(fptr, "%d %s %s %d %d %c %s %d %f\n", &(current->game_ID), current->player_ID, name, &(current->colors), &(current->key_size),

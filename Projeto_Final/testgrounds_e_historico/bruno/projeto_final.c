@@ -26,8 +26,6 @@
 
 //DECLARACAO DE FUNCOES
 
-
-
 void save_game_ini(game_reg **registo_jogo, int hist_file, int ord, hist_data last_game, char **nome_jogadores, defs defs_jogo, int jogador);
 void save_key(int k, game_reg *registo_jogo, char jogada[]);
 void save_guess_ini(game_reg *top, int lugar_certo, int lugar_errado, int tentativa, defs defs_jogo, char jogada[]);
@@ -147,7 +145,7 @@ int main(int argc, char const *argv[]) {
   }
   else if (mod == 2) {
     printf("MODO TESTE\nAPENAS REORDENAÇAO\n\n");
-    read_hist(argv, cmd_flag.hist, &registo_jogo);
+    read_hist(argv, cmd_flag.hist, &registo_jogo, "", cmd_flag.hist);
     //sort_registry(&registo_jogo, cmd_flag.ord, argv);
     return 0;
   }
@@ -171,6 +169,7 @@ int main(int argc, char const *argv[]) {
       hist_max_values(argv, cmd_flag.hist, &last_game, "game_history.dat", 1);
       fptr = fopen("game_history.dat","ab");
     }
+
 
     read_init("init.dat", &defs_jogo, &nome_jogadores);
     if(tolower(defs_jogo.repeticao_cores) == 's') rep=1;
@@ -216,10 +215,10 @@ int main(int argc, char const *argv[]) {
     free(nome_jogadores);
   }
 
-  /*if (cmd_flag.ord != 0) {
-    //read_hist(argv, cmd_flag.hist, &registo_jogo);
+  if (cmd_flag.ord != 0) {
+    read_hist(argv, cmd_flag.hist, &registo_jogo, "game_history.dat", cmd_flag.hist);
     //sort_registry(&registo_jogo, cmd_flag.ord, argv);
-  }*/
+  }
 
   return 0;
 }
