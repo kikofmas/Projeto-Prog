@@ -242,24 +242,6 @@ int main(int argc, char const *argv[]) {
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 void save_game_ini(game_reg **registo_jogo, int hist_file, int ord, hist_data last_game, char **nome_jogadores, defs defs_jogo, int jogador){
   int pid=0;
   static int k=0; //se houver ficheiro hmmmmm
@@ -412,7 +394,9 @@ game_reg *reord_2_elements(game_reg *ptr, game_reg *top) {
   if (aux->prev != NULL) {
     aux->prev->next=aux;
   } else {
-    return aux;
+    while (top->prev != NULL) {
+      top=top->prev;
+    }
   }
   return top;
 }
