@@ -32,7 +32,7 @@ void save_guess_ini(game_reg *top, int lugar_certo, int lugar_errado, int tentat
 void sort_registry(game_reg **registo_jogo, int pos, char const *argv[]);
 //game_reg *recursive_bubble_sort_fast(game_reg *current, game_reg *limit);
 game_reg *recursive_bubble_sort_short(game_reg *current, game_reg *limit);
-void reord_2_elements(game_reg *ptr);
+game_reg * reord_2_elements(game_reg *ptr, game_reg *top);
 
 void clear_memory(char **vect1, int v1, dados **ptr_dados, float *vect3, int *vect4, game_reg *registo_jogo);
 void free_guess_list(tentativas *current);
@@ -74,7 +74,6 @@ int main(int argc, char const *argv[]) {
     printf("\n");
     cleanslate();
 
-    if (mod_inter==1) {
     //INICIALIZACAO DAS VARIAVEIS DE JOGO
       introducao();
       //numero de jogadores
@@ -100,6 +99,7 @@ int main(int argc, char const *argv[]) {
       if(tolower(defs_jogo.repeticao_cores) == 's') rep=1;
       clearScreen(1);
 
+    if (mod_inter==1) {
     //JOGO
       //activate_oracle(defs_jogo.tamanho_chave, defs_jogo.num_cores, rep);
       ptr_dados=jogo(defs_jogo, nome_jogadores);
@@ -114,10 +114,10 @@ int main(int argc, char const *argv[]) {
       printf("\nESPERAMOS QUE SE TENHA DIVERTIDO!!!\n");
 
       clear_memory_intermedio(nome_jogadores, defs_jogo.num_jogadores, ptr_dados, mediaTempos, numVitorias); //esta funcao ta aqui bem a toa....
-
-}
+    }
     else if(mod_inter == 2) {
-      read_init(argv[cmd_flag.init], &defs_jogo, &nome_jogadores);
+
+      //esta merda esta mal feita estupido de merda
 
       if(tolower(defs_jogo.repeticao_cores)=='s') rep=1;
       activate_oracle(defs_jogo.tamanho_chave, defs_jogo.num_cores, rep);
@@ -198,8 +198,8 @@ int main(int argc, char const *argv[]) {
         aux=aux->next;
       }
 
-      fprintf(fptr, "%d J%03d %s %d %d %c %s %d %.3f\n", ++last_game.ID, ++last_game.player_ID, nome_jogadores[0], defs_jogo.tamanho_chave,
-                                                       defs_jogo.num_cores, defs_jogo.repeticao_cores, aux->tentativa, num_total_tent, (float)tempo/1000);
+      fprintf(fptr, "%d J%03d %s %d %d %c %s %d %.3f\n", ++last_game.ID, ++last_game.player_ID, nome_jogadores[0], defs_jogo.num_cores,
+                                                       defs_jogo.tamanho_chave, defs_jogo.repeticao_cores, aux->tentativa, num_total_tent, (float)tempo/1000);
       aux=lista_tentativas;
       while(aux!=NULL){
         fprintf(fptr, "%d %s %s\n", aux->tent_ID, aux->tentativa, aux->resultado);
@@ -218,7 +218,24 @@ int main(int argc, char const *argv[]) {
 
   if (cmd_flag.ord != 0) {
     read_hist(argv, cmd_flag.hist, &registo_jogo, "game_history.dat", cmd_flag.hist);
-    //sort_registry(&registo_jogo, cmd_flag.ord, argv);
+    sort_registry(&registo_jogo, cmd_flag.ord, argv);
+
+
+    FILE *fptr = fopen("game_history.dat","wb");
+    game_reg *current = registo_jogo;
+    while(current!=NULL){
+      fprintf(fptr, "%d %s %s %d %d %c %s %d %.3f\n", current->game_ID, current->player_ID, current->player_name,
+                                                      current->colors, current->key_size, current->repet,
+                                                      current->key, current->tentativas, current->game_time);
+      tentativas *aux = current->first;
+      while(aux!=NULL){
+        fprintf(fptr, "%d %s %s\n", aux->tent_ID, aux->tentativa, aux->resultado);
+        aux=aux->next;
+      }
+      current=current->next;
+    }
+    fclose(fptr);
+
   }
 
   return 0;

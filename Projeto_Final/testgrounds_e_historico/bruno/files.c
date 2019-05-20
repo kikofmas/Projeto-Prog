@@ -100,7 +100,7 @@ void read_hist(char const *argv[], int arg_num, game_reg **registo_jogo, char *f
   current->next=NULL;
 
   current->first = calloc(1,sizeof(tentativas));
-  fscanf(fptr, "%d %s %s", &(current->first->tent_ID), tentativa, current->first->resultado);
+  fscanf(fptr, "%d %s %s\n", &(current->first->tent_ID), tentativa, current->first->resultado);
   current->first->tentativa = calloc(strlen(tentativa)+1,sizeof(char));
   strcpy(current->first->tentativa, tentativa);
   current->first->next = NULL;
@@ -108,7 +108,7 @@ void read_hist(char const *argv[], int arg_num, game_reg **registo_jogo, char *f
   aux = current->first;
   for(int i=1;i<(current->tentativas);i++){
     aux->next = calloc(1,sizeof(tentativas));
-    fscanf(fptr, "%d %s %s", &(aux->next->tent_ID), tentativa, aux->next->resultado);
+    fscanf(fptr, "%d %s %s\n", &(aux->next->tent_ID), tentativa, aux->next->resultado);
     aux->next->tentativa = calloc(strlen(tentativa)+1,sizeof(char));
     strcpy(aux->next->tentativa, tentativa);
     aux->next->next = NULL;
@@ -128,7 +128,7 @@ void read_hist(char const *argv[], int arg_num, game_reg **registo_jogo, char *f
     current->next->next=NULL;
 
     current->next->first = calloc(1,sizeof(tentativas));
-    fscanf(fptr, "%d %s %s", &(current->next->first->tent_ID), tentativa, current->next->first->resultado);
+    fscanf(fptr, "%d %s %s\n", &(current->next->first->tent_ID), tentativa, current->next->first->resultado);
     current->next->first->tentativa = calloc(strlen(tentativa)+1,sizeof(char));
     strcpy(current->next->first->tentativa, tentativa);
     current->next->first->next = NULL;
@@ -136,7 +136,7 @@ void read_hist(char const *argv[], int arg_num, game_reg **registo_jogo, char *f
     aux = current->next->first;
     for(int i=1;i<(current->next->tentativas);i++){
       aux->next = calloc(1,sizeof(tentativas));
-      fscanf(fptr, "%d %s %s", &(aux->next->tent_ID), tentativa, aux->next->resultado);
+      fscanf(fptr, "%d %s %s\n", &(aux->next->tent_ID), tentativa, aux->next->resultado);
       aux->next->tentativa = calloc(strlen(tentativa)+1,sizeof(char));
       strcpy(aux->next->tentativa, tentativa);
       aux->next->next = NULL;
