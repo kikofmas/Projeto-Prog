@@ -360,6 +360,9 @@ void sort_registry(game_reg **registo_jogo, int pos, char const *argv[]){
 game_reg *recursive_bubble_sort_short(game_reg *top, game_reg *limit){
   game_reg *current=top;
   if (current == limit) { //base case
+    while (top->prev != NULL) {
+      top=top->prev;
+    }
     return top;
   }
   while (current->next != limit) {
