@@ -170,6 +170,7 @@ int main(int argc, char const *argv[]) {
       fptr = fopen("game_history.dat","ab");
     }
 
+    printf("1\n");
 
     read_init("init.dat", &defs_jogo, &nome_jogadores);
     if(tolower(defs_jogo.repeticao_cores) == 's') rep=1;
@@ -222,6 +223,7 @@ int main(int argc, char const *argv[]) {
 
   return 0;
 }
+
 
 
 
