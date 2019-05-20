@@ -85,14 +85,18 @@ void read_hist(char const *argv[], int arg_num, game_reg **registo_jogo, char *f
 
   FILE *fptr;
   if(mode==0) fptr=fopen(file, "rb");
-  else if(mode==1) fptr=fopen(argv[arg_num], "rb");
+  else if(mode!=0) fptr=fopen(argv[arg_num], "rb");
 
   if(fptr==NULL) exit(-1);
 
   *registo_jogo=calloc(1, sizeof(game_reg));
+  if(*registo_jogo==NULL) exit(-1);
+
   current=*registo_jogo;
+
   fscanf(fptr, "%d %s %s %d %d %c %s %d %f\n", &(current->game_ID), current->player_ID, name, &(current->colors), &(current->key_size),
                                                &(current->repet), key, &(current->tentativas), &(current->game_time));
+
   current->key=calloc(strlen(key)+1, sizeof(char));
   current->player_name=calloc(strlen(name)+1, sizeof(char));
   strcpy(current->key, key);

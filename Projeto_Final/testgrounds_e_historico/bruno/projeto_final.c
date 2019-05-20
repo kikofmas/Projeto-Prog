@@ -38,6 +38,9 @@ void clear_memory(char **vect1, int v1, dados **ptr_dados, float *vect3, int *ve
 void free_guess_list(tentativas *current);
 void free_game_registry(game_reg *current);
 
+void ordena(game_reg **reg);
+void swap(game_reg **ptr1, game_reg **ptr2);
+
 
 int main(int argc, char const *argv[]) {
 
@@ -258,7 +261,8 @@ int main(int argc, char const *argv[]) {
 
     if (cmd_flag.ord != 0) {
       read_hist(argv, cmd_flag.hist, &registo_jogo, "game_history.dat", cmd_flag.hist);
-      sort_registry(&registo_jogo, cmd_flag.ord, argv);
+      //sort_registry(&registo_jogo, cmd_flag.ord, argv);
+      ordena(&registo_jogo);
 
       FILE *fptr;
       if(cmd_flag.hist==0) fptr= fopen("game_history.dat","wb");
@@ -284,6 +288,57 @@ int main(int argc, char const *argv[]) {
   }
 
   return 0;
+}
+
+
+
+void ordena(game_reg **reg){
+  game_reg *atual, *check, *aux_atual, *aux_check;
+  atual = *reg;
+  check = *reg;
+  while(atual!=NULL){
+    while(check!=NULL){
+      if(atual->key_size > check->key_size){
+
+      }
+      else if(atual->key_size == check->key_size &&
+              atual->colors > check->colors){
+
+      }
+      else if(atual->key_size == check->key_size &&
+              atual->colors == check->colors &&
+              atual->repet=='S' && check->repet=='N'){
+
+      }
+      else if(atual->key_size == check->key_size &&
+              atual->colors == check->colors &&
+              atual->repet == check->repet &&
+              atual->tentativas > check->tentativas){
+
+      }
+      else if(atual->key_size == check->key_size &&
+              atual->colors == check->colors &&
+              atual->repet == check->repet &&
+              atual->tentativas == check->tentativas &&
+              atual->game_time == check->game_time){
+
+      }
+      check = check->next;
+    }
+    atual=atual->next;
+  }
+}
+
+
+void swap(game_reg **ptr1, game_reg **ptr2){
+  game_reg *aux_atual, *aux_check;
+  aux_atual = *ptr1;
+  aux_check = *ptr2;
+
+  *ptr1 = (*ptr1)->prev;
+  (*ptr1)->next = aux_check;
+  (*ptr2)->next = 
+  *ptr1 = (*ptr1)->next;
 }
 
 
