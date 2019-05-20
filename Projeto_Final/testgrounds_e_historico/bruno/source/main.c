@@ -33,7 +33,7 @@ void save_guess_ini(game_reg *top, int lugar_certo, int lugar_errado, int tentat
 
 
 
-void clear_memory(char **vect1, int v1, dados **ptr_dados, float *vect3, int *vect4, game_reg *registo_jogo);
+void clear_memory(char **vect1, int v1, dados **ptr_dados, float *vect3, int *vect4, game_reg **registo_jogo);
 void free_guess_list(tentativas *current);
 void free_game_registry(game_reg **reg);
 
@@ -191,7 +191,7 @@ int main(int argc, char const *argv[]) {
 
     FILE *fptr = fopen(argv[cmd_flag.hist],"wb");
     if(fptr==NULL) exit(-1);
-    
+
     game_reg *current = registo_jogo;
     while(current!=NULL){
       fprintf(fptr, "%d %s %s %d %d %c %s %d %.3f\n", current->game_ID, current->player_ID, current->player_name,
@@ -413,7 +413,7 @@ void save_guess_ini(game_reg *top, int lugar_certo, int lugar_errado, int tentat
 
 
 
-void clear_memory(char **vect1, int v1, dados **ptr_dados, float *vect3, int *vect4, game_reg *registo_jogo){
+void clear_memory(char **vect1, int v1, dados **ptr_dados, float *vect3, int *vect4, game_reg **registo_jogo){
   for (int i = 0; i < v1; i++) {
     free(vect1[i]);
   }
