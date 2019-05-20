@@ -48,7 +48,7 @@ int main(int argc, char const *argv[]) {
 //declaracao das variaveis da inicializacao:
   char **nome_jogadores=NULL;
   int combo_possivel=0, rep=0, num_total_tent=0, win=0, tempo=0;
-  defs defs_jogo={'\0',0,0,0,0,0,0,0};
+  defs defs_jogo={'\0',0,0,0,0,0,0,-1};
   letras **lista_cores=NULL;
   tentativas *lista_tentativas=NULL;
 
@@ -117,7 +117,7 @@ int main(int argc, char const *argv[]) {
     else if(mod_inter == 2) {
       tentativas *aux;
       FILE *fptr;
-      
+
       fptr = fopen("game_history.dat","ab");
       fclose(fptr);
       hist_max_values(argv, cmd_flag.hist, &last_game, "game_history.dat", 1);
@@ -133,7 +133,7 @@ int main(int argc, char const *argv[]) {
       //numero maximo de tentivas por jogo
       initialization(&defs_jogo.tentativas, 10, 20, "o numero maximo de tentativas");
       //numero maximo de tentivas aleatorias por jogo
-      initialization(&defs_jogo.tentativas_alea, 0, 20-defs_jogo.tentativas, "o numero maximo de tentativas aleatorias");
+      initialization(&defs_jogo.tentativas_alea, 0, (20-defs_jogo.tentativas), "o numero maximo de tentativas aleatorias");
       do {
       //dimensao da chave
         initialization(&defs_jogo.tamanho_chave, 4, 8, "a dimensao da chave com que deseja jogar");
@@ -156,8 +156,6 @@ int main(int argc, char const *argv[]) {
         lista_cores = listaCores(defs_jogo.tamanho_chave, defs_jogo.num_cores);
         lista_tentativas = tentativasAlea(defs_jogo, &num_total_tent, &lista_cores, &win, &tempo, mod_inter);
 
-
-
         if (win==0) {
           win = keyFinder(defs_jogo.tamanho_chave, &lista_cores, &lista_tentativas, &num_total_tent, &tempo, mod_inter);
         }
@@ -175,9 +173,6 @@ int main(int argc, char const *argv[]) {
           fprintf(fptr, "%d %s %s\n", aux->tent_ID, aux->tentativa, aux->resultado);
           aux=aux->next;
         }
-
-
-
         clear(defs_jogo.tamanho_chave, &lista_tentativas, &lista_cores);
         sleep(1);
       }
@@ -263,7 +258,7 @@ int main(int argc, char const *argv[]) {
 
     if (cmd_flag.ord != 0) {
       read_hist(argv, cmd_flag.hist, &registo_jogo, "game_history.dat", cmd_flag.hist);
-      //sort_registry(&registo_jogo, cmd_flag.ord, argv);
+      sort_registry(&registo_jogo, cmd_flag.ord, argv);
 
       FILE *fptr;
       if(cmd_flag.hist==0) fptr= fopen("game_history.dat","wb");
@@ -426,7 +421,7 @@ game_reg *recursive_bubble_sort_short(game_reg *top, game_reg *limit){
       top=reord_2_elements(current, top);
     } else */if (current->tentativas > current->next->tentativas /*&& tolower(current->repet)==tolower(current->next->repet) &&
             current->colors == current->next->colors && current->key_size == current->next->key_size*/) {
-      top=reord_2_elements(current, top);
+      top=reord_2_elements(&current, top);
     } else {
       current=current->next;
     }
