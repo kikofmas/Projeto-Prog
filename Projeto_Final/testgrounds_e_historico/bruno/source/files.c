@@ -194,6 +194,9 @@ game_reg *recursive_bubble_sort_fast(game_reg *top, game_reg *limit){
     top=top->prev;
   }
   recursive_bubble_sort_fast(top, current);//recursion
+  while (top->prev!=NULL) {
+    top=top->prev;
+  }
   return top;//return "new" first element of list
 }
 

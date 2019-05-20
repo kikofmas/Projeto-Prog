@@ -23,6 +23,7 @@
 #include "key.h"
 #include "files.h"
 #include "mode.h"
+#include "memory.h"
 
 //DECLARACAO DE FUNCOES
 
@@ -35,7 +36,7 @@ void save_guess_ini(game_reg *top, int lugar_certo, int lugar_errado, int tentat
 
 void clear_memory(char **vect1, int v1, dados **ptr_dados, float *vect3, int *vect4, game_reg **registo_jogo);
 void free_guess_list(tentativas *current);
-void free_game_registry(game_reg **reg);
+
 
 
 
@@ -426,27 +427,6 @@ void clear_memory(char **vect1, int v1, dados **ptr_dados, float *vect3, int *ve
   free(vect4);
   free_game_registry(registo_jogo);
 }
-
-
-void free_game_registry(game_reg **reg){
-  game_reg *aux_reg;
-  tentativas *aux_tent1, *aux_tent2;
-  while(*reg!=NULL){
-    aux_tent1 = (*reg)->first;
-    while(aux_tent1!=NULL){
-      aux_tent2 = aux_tent1;
-      free(aux_tent1->tentativa);
-      aux_tent1 = aux_tent1->next;
-      free(aux_tent2);
-    }
-    aux_reg = *reg;
-    *reg=(*reg)->next;
-    free(aux_reg->key);
-    free(aux_reg->player_name);
-    free(aux_reg);
-  }
-}
-
 
 void free_guess_list(tentativas *current){
   if (current->next != NULL) {
