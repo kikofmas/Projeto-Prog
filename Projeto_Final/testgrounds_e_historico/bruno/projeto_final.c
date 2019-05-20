@@ -331,31 +331,13 @@ void ordena(game_reg **reg){
 
 
 void swap(game_reg **ptr1, game_reg **ptr2){
-  game_reg *aux_atual, *aux_check;
-  aux_atual = *ptr1;
-  aux_check = *ptr2;
-
-  *ptr1 = (*ptr1)->prev;
-  /*(*ptr1)->next=aux_check;
-  aux_check->prev = *ptr1;
-  aux_atual->next = aux_check->next;
-  aux_check->next=aux_atual;
-  aux_atual->prev = aux_check;
-  aux_atual->next->prev = aux_atual;*/
-  *ptr1 = (*ptr1)->next;
-
-  (*ptr)->next=(*aux)->next;
-  (*aux)->prev=(*ptr)->prev;
-  (*ptr)->prev=(*aux);
-  (*aux)->next=(*ptr);
-  if ((*ptr)->next != NULL) (*ptr)->next->prev=(*ptr);
-  if ((*aux)->prev != NULL) {
-    (*aux)->prev->next=*aux;
-  } else {
-    while ((*top)->prev != NULL) {
-      *top=(*top)->prev;
-    }
-  }
+  game_reg *aux = ptr->next;
+  ptr->next=aux->next;
+  aux->prev=ptr->prev;
+  ptr->prev=aux;
+  aux->next=ptr;
+  if (ptr->next != NULL) ptr->next->prev=ptr;
+  if (aux->prev != NULL) aux->prev->next=aux;
 }
 
 
