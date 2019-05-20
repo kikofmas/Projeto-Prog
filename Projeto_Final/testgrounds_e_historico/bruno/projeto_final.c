@@ -30,7 +30,7 @@ void save_game_ini(game_reg **registo_jogo, int hist_file, int ord, hist_data la
 void save_key(int k, game_reg *registo_jogo, char jogada[]);
 void save_guess_ini(game_reg *top, int lugar_certo, int lugar_errado, int tentativa, defs defs_jogo, char jogada[]);
 void sort_registry(game_reg **registo_jogo, int pos, char const *argv[]);
-//game_reg *recursive_bubble_sort_fast(game_reg *current, game_reg *limit);
+game_reg *recursive_bubble_sort_fast(game_reg *current, game_reg *limit);
 game_reg *recursive_bubble_sort_short(game_reg **top, game_reg *limit);
 game_reg *reord_2_elements(game_reg **ptr, game_reg **top, game_reg **aux);
 
@@ -190,7 +190,7 @@ int main(int argc, char const *argv[]) {
   else if (mod == 2) {
     printf("MODO TESTE\nAPENAS REORDENAÇAO\n\n");
     read_hist(argv, cmd_flag.hist, &registo_jogo, "", cmd_flag.hist);
-    //sort_registry(&registo_jogo, cmd_flag.ord, argv);
+    sort_registry(&registo_jogo, cmd_flag.ord, argv);
     return 0;
   }
   else if (mod == 3) {
@@ -289,60 +289,6 @@ int main(int argc, char const *argv[]) {
 
   return 0;
 }
-
-
-
-void ordena(game_reg **reg){
-  game_reg *atual, *check;
-  atual = *reg;
-  check = *reg;
-  while(atual!=NULL){
-    while(check!=NULL){
-      if(atual->key_size > check->key_size){
-        swap(&atual,&check);
-      }
-      else if(atual->key_size == check->key_size &&
-              atual->colors > check->colors){
-        swap(&atual,&check);
-      }
-      else if(atual->key_size == check->key_size &&
-              atual->colors == check->colors &&
-              atual->repet=='S' && check->repet=='N'){
-        swap(&atual,&check);
-      }
-      else if(atual->key_size == check->key_size &&
-              atual->colors == check->colors &&
-              atual->repet == check->repet &&
-              atual->tentativas > check->tentativas){
-        swap(&atual,&check);
-      }
-      else if(atual->key_size == check->key_size &&
-              atual->colors == check->colors &&
-              atual->repet == check->repet &&
-              atual->tentativas == check->tentativas &&
-              atual->game_time == check->game_time){
-        swap(&atual,&check);
-      }
-      check = check->next;
-    }
-    atual=atual->next;
-  }
-}
-
-
-void swap(game_reg **ptr1, game_reg **ptr2){
-  game_reg *aux = ptr->next;
-
-
-
-  ptr->next=aux->next;
-  aux->prev=ptr->prev;
-  ptr->prev=aux;
-  aux->next=ptr;
-  if (ptr->next != NULL) ptr->next->prev=ptr;
-  if (aux->prev != NULL) aux->prev->next=aux;
-}
-
 
 
 
@@ -451,7 +397,7 @@ void save_guess_ini(game_reg *top, int lugar_certo, int lugar_errado, int tentat
 void sort_registry(game_reg **registo_jogo, int pos, char const *argv[]){
   char shrt[]="short", fst[]="fast";
   if (strcmp(fst, argv[pos]) == 0) {
-  //  *registo_jogo=recursive_bubble_sort_fast(*registo_jogo, NULL);
+    *registo_jogo=recursive_bubble_sort_fast(*registo_jogo, NULL);
   } else if (strcmp(shrt, argv[pos]) == 0) {
     *registo_jogo=recursive_bubble_sort_short(registo_jogo, NULL);
   } else {
@@ -459,16 +405,41 @@ void sort_registry(game_reg **registo_jogo, int pos, char const *argv[]){
   }
 }
 
-
-game_reg *recursive_bubble_sort_short(game_reg *top, game_reg *limit){
+game_reg *recursive_bubble_sort_fast(game_reg *top, game_reg *limit){
+  game_reg *current=top;
+  if (current == limit) { //base case
+    return current;
+  }
+  while (current->next != limit) {
+    if (current->key_size > current->next->key_size) {
+      reord_2_elements(current);
+    } else if (current->colors > current->next->colors && current->key_size == current->next->key_size) {
+      reord_2_elements(current);
+    } else if (tolower(current->repet)=='s' && tolower(current->next->repet)=='n' &&
+            current->colors == current->next->colors && current->key_size == current->next->key_size) {
+      reord_2_elements(current);
+    } else if (current->game_time > current->next->game_time && tolower(current->repet)==tolower(current->next->repet) &&
+            current->colors == current->next->colors && current->key_size == current->next->key_size) {
+      reord_2_elements(current);
+    } else if (current->tentativas > current->next->tentativas && current->game_time == current->next->game_time && tolower(current->repet)==tolower(current->next->repet) &&
+            current->colors == current->next->colors && current->key_size == current->next->key_size) {
+      reord_2_elements(current);
+    } else {
+      current=current->next;
+    }
+  }
   while (top->prev!=NULL) {
     top=top->prev;
   }
+  recursive_bubble_sort_fast(top, current);//recursion
+  return top;//return "new" first element of list
+}
+
+
+game_reg *recursive_bubble_sort_short(game_reg *top, game_reg *limit){
   game_reg *current=top;
   if (current == limit) { //base case
-    while (current->prev!=NULL) {
-      current=current->prev;
-    }
+
     return current;
   }
   while (current->next != limit) {
