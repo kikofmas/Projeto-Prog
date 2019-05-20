@@ -242,24 +242,6 @@ int main(int argc, char const *argv[]) {
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 void save_game_ini(game_reg **registo_jogo, int hist_file, int ord, hist_data last_game, char **nome_jogadores, defs defs_jogo, int jogador){
   int pid=0;
   static int k=0; //se houver ficheiro hmmmmm
@@ -377,6 +359,9 @@ void sort_registry(game_reg **registo_jogo, int pos, char const *argv[]){
 game_reg *recursive_bubble_sort_short(game_reg *top, game_reg *limit){
   game_reg *current=top;
   if (current == limit) { //base case
+    while (top->prev != NULL) {
+      top=top->prev;
+    }
     return top;
   }
   while (current->next != limit) {
@@ -409,7 +394,9 @@ game_reg *reord_2_elements(game_reg *ptr, game_reg *top) {
   if (aux->prev != NULL) {
     aux->prev->next=aux;
   } else {
-    return aux;
+    while (top->prev != NULL) {
+      top=top->prev;
+    }
   }
   return top;
 }
