@@ -17,53 +17,16 @@
 #include <unistd.h>   //permite usar a funcao sleep
 #include <termios.h>  //permite usar a funcao tcflush
 
-#include "headers/estruturas.h"
-#include "headers/oraculo.h"
-#include "headers/intermedio.h"
-#include "headers/key.h"
-#include "headers/files.h"
-
-
-
-typedef struct guess_t {
-  int guess_ID;
-  char *guess;
-  char result[5];
-  struct guess_t *next;
-  struct guess_t *prev;
-}guess_list;
-
-typedef struct game_registry {
-  int game_ID;
-  char player_ID[5];
-  char *player_name;
-  int colors;
-  int key_size;
-  char repet;
-  char *key;
-  int tentativas;
-  float game_time;
-  struct game_registry *next;
-  struct game_registry *prev;
-  guess_list *first;
-}game_reg;
-
-typedef struct {
-  int ID;
-  char player_ID[5];
-  game_reg *last;
-}hist_data;
-
+#include "estruturas.h"
+#include "oraculo.h"
+#include "intermedio.h"
+#include "key.h"
+#include "files.h"
+#include "mode.h"
 
 //DECLARACAO DE FUNCOES
 
-int mode_check(int argc, char const *argv[], flags *cmd_flag);
-int test_mode_config(int k, char const *argv[], flags **cmd_flag);
 
-
-
-void read_hist_file_1(char const *argv[], int arg_num, hist_data *last_game);
-void read_hist_file_2(char const *argv[], int arg_num, game_reg **registo_jogo);
 
 void save_game_ini(game_reg **registo_jogo, int hist_file, int ord, hist_data last_game, char **nome_jogadores, defs defs_jogo, int jogador);
 void save_key(int k, game_reg *registo_jogo, char jogada[]);
@@ -74,7 +37,7 @@ game_reg *recursive_bubble_sort_short(game_reg *current, game_reg *limit);
 void reord_2_elements(game_reg *ptr);
 
 void clear_memory(char **vect1, int v1, dados **ptr_dados, float *vect3, int *vect4, game_reg *registo_jogo);
-void free_guess_list(guess_list *current);
+void free_guess_list(tentativas *current);
 void free_game_registry(game_reg *current);
 
 
@@ -96,7 +59,7 @@ int main(int argc, char const *argv[]) {
   int *numVitorias=NULL;
   float *mediaTempos=NULL;
   game_reg *registo_jogo;
-  hist_data last_game={0, "J000", NULL};
+  hist_data last_game={0, 0, NULL};
 
 //inicializacao da funcao srand:
   time_t t;
@@ -184,25 +147,27 @@ int main(int argc, char const *argv[]) {
   }
   else if (mod == 2) {
     printf("MODO TESTE\nAPENAS REORDENAÇAO\n\n");
-    read_hist_file_2(argv, cmd_flag.hist, &registo_jogo);
-    sort_registry(&registo_jogo, cmd_flag.ord, argv);
+    read_hist(argv, cmd_flag.hist, &registo_jogo);
+    //sort_registry(&registo_jogo, cmd_flag.ord, argv);
     return 0;
   }
   else if (mod == 3) {
     printf("ERRO: Falta o ficheiro das inicializações\n");
     exit(-1);}
   else if (mod == 4) {
+    FILE *fptr;
+    tentativas *aux;
     printf("MODO TESTE\n\n");
     /* jogar EvE */
     /*load init files and others if needed -- use ifs to allow or not passage*/
 
-
     if (cmd_flag.hist != 0) {
-      read_hist_file_1(argv, cmd_flag.hist, &last_game);
-      if (cmd_flag.ord != 0) read_hist_file_2(argv, cmd_flag.hist, &registo_jogo);
+      hist_max_values(argv, cmd_flag.hist, &last_game);
+      fptr = fopen(argv[cmd_flag.hist],"ab");
     }
-
-
+    else{
+      fptr = fopen("game_history.dat","ab");
+    }
 
     read_init("init.dat", &defs_jogo, &nome_jogadores);
     if(tolower(defs_jogo.repeticao_cores) == 's') rep=1;
@@ -211,6 +176,8 @@ int main(int argc, char const *argv[]) {
 
     for (int i = 0; i < defs_jogo.num_jogos; i++) {
       win = 0;
+      tempo=0;
+      num_total_tent = 0;
       printf("\nJogo %d\n", i);
       printf("Chave: ");
       generate_key(1);
@@ -222,68 +189,35 @@ int main(int argc, char const *argv[]) {
         win = keyFinder(defs_jogo.tamanho_chave, &lista_cores, &lista_tentativas, &num_total_tent, &tempo, 1);
       }
       printf("\nNumero de tentativas: %d\n", num_total_tent);
+
+      aux=lista_tentativas;
+      while(aux->next!=NULL){
+        aux=aux->next;
+      }
+
+      fprintf(fptr, "%d J%03d %s %d %d %c %s %d %.3f\n", ++last_game.ID, ++last_game.player_ID, nome_jogadores[0], defs_jogo.tamanho_chave,
+                                                       defs_jogo.num_cores, defs_jogo.repeticao_cores, aux->tentativa, num_total_tent, (double)tempo/1000);
+      aux=lista_tentativas;
+      while(aux->next!=NULL){
+        fprintf(fptr, "%d %s %s\n", aux->tent_ID, aux->tentativa, aux->resultado);
+        aux=aux->next;
+      }
+
       clear(defs_jogo.tamanho_chave, &lista_tentativas, &lista_cores);
-      num_total_tent = 0;
+      printf("%d\n", tempo);
       sleep(1);
     }
 
-    printf("%d\n", tempo);
     terminate_oracle();
+    fclose(fptr);
     free(nome_jogadores[0]);
     free(nome_jogadores);
+
+    if(cmd_flag.ord != 0) read_hist(argv, cmd_flag.hist, &registo_jogo);
   }
 
   if (cmd_flag.ord != 0) {
-    sort_registry(&registo_jogo, cmd_flag.ord, argv);
-  }
-
-  return 0;
-}
-
-int mode_check (int argc, char const *argv[], flags *cmd_flag) {
-  int func_valid=0;
-
-  switch (argc) {
-    case 1:
-      cmd_flag->init=0;
-      cmd_flag->hist=0;
-      cmd_flag->ord=0;
-      break;
-    case 3:
-      func_valid = test_mode_config(3, argv, &cmd_flag);
-      break;
-    case 5:
-      func_valid = test_mode_config(5, argv, &cmd_flag);
-      break;
-    case 7:
-      func_valid = test_mode_config(7, argv, &cmd_flag);
-      break;
-    default:
-      printf("ERRO: Numero de argumentos inválido\n");
-  }
-
-  if (func_valid == -1) exit(-1);
-  else if (cmd_flag->init==0 && cmd_flag->hist==0 && cmd_flag->ord==0) return 1;
-  else if (cmd_flag->init == 0  &&  cmd_flag->hist != 0  &&  cmd_flag->ord != 0) return 2;
-  else if (cmd_flag->init==0 && ((cmd_flag->hist != 0  &&  cmd_flag->ord == 0) || (cmd_flag->hist == 0  &&  cmd_flag->ord != 0))) return 3;
-  else if (cmd_flag->init!=0) return 4;
-  return 0;
-}
-
-int test_mode_config (int k, char const *argv[], flags **cmd_flag) {
-  char ini[] = "-i", hist[] = "-h", ord[] = "-o";
-
-  for (int i = 1; i < k; i += 2) {
-    if (strcmp(ini, argv[i]) == 0) {
-      (*cmd_flag)->init = i+1;
-    } else if (strcmp(hist, argv[i]) == 0) {
-      (*cmd_flag)->hist = i+1;
-    } else if (strcmp(ord, argv[i]) == 0) {
-      (*cmd_flag)->ord = i+1;
-    } else {
-      printf("ERRO: Argumentos incorretos ou não identificados\n");
-      exit(-1);
-    }
+    //sort_registry(&registo_jogo, cmd_flag.ord, argv);
   }
 
   return 0;
@@ -294,52 +228,17 @@ int test_mode_config (int k, char const *argv[], flags **cmd_flag) {
 
 
 
-void read_hist_file_1(char const *argv[], int arg_num, hist_data *last_game){
-
-  int k=0, a=0, b=0, a1=0, b1=0;
-
-  FILE *fptr=fopen(argv[arg_num], "r");
-
-  while(!feof(fptr)){
-    fscanf(fptr, "%d J%d %*s %*s %*s %*s %*s %d %*[^\n]\n", &a, &b, &k);
-    for (int i = 0; i < k; i++) {
-      fscanf(fptr, "%*[^\n]\n");
-    }
-    if (a>a1) a1=a;
-    if (b>b1) b1=b;
-  }
-  if (b1>998) b1=0;
-  last_game->ID=a1;
-  sprintf(last_game->player_ID, "J%03d", b1);
-  fclose(fptr);
-}
 
 
-void read_hist_file_2(char const *argv[], int arg_num, game_reg **registo_jogo) {
-  game_reg *current;
-  char name[50]="\0", key[10]="\0";
-  FILE *fptr=fopen(argv[arg_num], "rb");
-  *registo_jogo=calloc(1, sizeof(game_reg));
-  current=*registo_jogo;
-  fscanf(fptr, "%d %s %s %d %d %c %s %d %f\n", &current->game_ID, current->player_ID, name, &current->colors,
-        &current->key_size, &current->repet, key, &current->tentativas, &current->game_time);
-  current->key=calloc(strlen(key)+1, sizeof(char));
-  current->player_name=calloc(strlen(name)+1, sizeof(char));
-  strcpy(current->key, key);
-  strcpy(current->player_name, name);
-  while(!feof(fptr)){
-    current->next=calloc(1, sizeof(game_reg));
-    fscanf(fptr, "%d %s %s %d %d %c %s %d %f\n", &current->next->game_ID, current->next->player_ID, name, &current->next->colors,
-          &current->next->key_size, &current->next->repet, key, &current->next->tentativas, &current->next->game_time);
-    current->key=calloc(strlen(key)+1, sizeof(char));
-    current->player_name=calloc(strlen(name)+1, sizeof(char));
-    strcpy(current->key, key);
-    strcpy(current->player_name, name);
-    current->next->next=NULL;
-    current=current->next;
-  }
-  fclose(fptr);
-}
+
+
+
+
+
+
+
+
+
 
 
 void save_game_ini(game_reg **registo_jogo, int hist_file, int ord, hist_data last_game, char **nome_jogadores, defs defs_jogo, int jogador){
@@ -359,8 +258,7 @@ void save_game_ini(game_reg **registo_jogo, int hist_file, int ord, hist_data la
     current_game->game_ID=((last_game.ID)+1);
     current_game->player_name=calloc(strlen(*(nome_jogadores+jogador))+1, sizeof(char));
     strcpy(current_game->player_name, *(nome_jogadores+jogador));
-    last_game.player_ID[0]='0';
-    pid=atoi(last_game.player_ID);
+    pid=last_game.player_ID;
     pid++;
     sprintf(current_game->player_ID, "J%03d", pid);
     current_game->player_ID[0]='J';
@@ -379,8 +277,7 @@ void save_game_ini(game_reg **registo_jogo, int hist_file, int ord, hist_data la
     if (strcmp(current_game->player_name, current_game->next->player_name) == 0) {
       strcpy(current_game->next->player_ID, current_game->player_ID);
     } else {
-      last_game.player_ID[0]='0';
-      pid=atoi(last_game.player_ID);
+      pid=last_game.player_ID;
       pid++;
       sprintf(current_game->next->player_ID, "J%03d", pid);
     }
@@ -410,7 +307,7 @@ void save_key(int k, game_reg *registo_jogo, char jogada[]){
 void save_guess_ini(game_reg *top, int lugar_certo, int lugar_errado, int tentativa, defs defs_jogo, char jogada[]) {
   int k=0;//flag que verifica se existe o primeiro elemento da lista
   game_reg *current_game=top;
-  guess_list *current_guess;
+  tentativas *current_guess;
 
   while (current_game->next != NULL){
     current_game = current_game->next;
@@ -423,22 +320,22 @@ void save_guess_ini(game_reg *top, int lugar_certo, int lugar_errado, int tentat
   if (k==0) {  //verifica se primeiro elemento da lista esta preenchido
     current_game->tentativas=tentativa+1;
     current_game->key=calloc((defs_jogo.tamanho_chave)+1, sizeof(char));
-    current_game->first=calloc(1, sizeof(guess_list));
+    current_game->first=calloc(1, sizeof(tentativas));
     current_guess=current_game->first; //se e a primeira vez que se passa aqui estrutura esta nao esta alocada, dai voltar a fazer isto
 
-    current_guess->guess_ID=tentativa+1;
-    current_guess->guess=calloc((defs_jogo.tamanho_chave)+1, sizeof(char));
-    strcpy(current_guess->guess, jogada);
-    sprintf(current_guess->result, "P%1dB%1d", lugar_certo, lugar_errado);
+    current_guess->tent_ID=tentativa+1;
+    current_guess->tentativa=calloc((defs_jogo.tamanho_chave)+1, sizeof(char));
+    strcpy(current_guess->tentativa, jogada);
+    sprintf(current_guess->resultado, "P%1dB%1d", lugar_certo, lugar_errado);
     current_guess->prev=NULL;
     current_guess->next=NULL;
   } else {
     current_game->next->tentativas=tentativa+1;
-    current_guess->next=calloc(1, sizeof(guess_list));
-    current_guess->next->guess_ID=tentativa+1;
-    current_guess->next->guess=calloc((defs_jogo.tamanho_chave)+1, sizeof(char));
-    strcpy(current_guess->next->guess, jogada);
-    sprintf(current_guess->next->result, "P%1dB%1d", lugar_certo, lugar_errado);
+    current_guess->next=calloc(1, sizeof(tentativas));
+    current_guess->next->tent_ID=tentativa+1;
+    current_guess->next->tentativa=calloc((defs_jogo.tamanho_chave)+1, sizeof(char));
+    strcpy(current_guess->next->tentativa, jogada);
+    sprintf(current_guess->next->resultado, "P%1dB%1d", lugar_certo, lugar_errado);
     current_guess->next->prev=current_guess;
     current_guess->next->next=NULL;
   }
@@ -547,7 +444,7 @@ void free_game_registry(game_reg *current){
 }
 
 
-void free_guess_list(guess_list *current){
+void free_guess_list(tentativas *current){
   if (current->next != NULL) {
     free_guess_list(current->next);
   }
