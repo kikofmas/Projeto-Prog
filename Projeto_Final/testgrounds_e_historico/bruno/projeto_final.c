@@ -188,6 +188,25 @@ int main(int argc, char const *argv[]) {
     printf("MODO TESTE\nAPENAS REORDENAÇAO\n\n");
     read_hist(argv, cmd_flag.hist, &registo_jogo, "", cmd_flag.hist);
     sort_registry(&registo_jogo, cmd_flag.ord, argv);
+
+    FILE *fptr = fopen(argv[cmd_flag.hist],"wb");
+
+    if(fptr==NULL) exit(-1);
+
+    game_reg *current = registo_jogo;
+    while(current!=NULL){
+      fprintf(fptr, "%d %s %s %d %d %c %s %d %.3f\n", current->game_ID, current->player_ID, current->player_name,
+                                                      current->colors, current->key_size, current->repet,
+                                                      current->key, current->tentativas, current->game_time);
+      tentativas *aux = current->first;
+      while(aux!=NULL){
+        fprintf(fptr, "%d %s %s\n", aux->tent_ID, aux->tentativa, aux->resultado);
+        aux=aux->next;
+      }
+      current=current->next;
+    }
+    fclose(fptr);
+
     free_game_registry(&registo_jogo);
     return 0;
   }

@@ -413,7 +413,7 @@ int userAttempt(dados **ptr_dados, char ultima_cor, char *jogada, int tamanho_ch
 ******************************************************************************/
 dados **jogo(defs def, char **nome_jogadores){
   FILE *fptr=fopen("game_history.dat","wb");
-  if(fptr=NULL) exit(-1);
+  if(fptr==NULL) exit(-1);
 
   int verificacao=0, lugar_certo=0, lugar_errado=0, rep=0;
   time_t tempo_inicial=0, tempo_restante=0, tempo_jogo=0;
