@@ -53,7 +53,10 @@ void read_init(char const * file, defs *ptr, char ***nome){
 
 
 void hist_max_values(char const *argv[], int arg_num, hist_data *last_game, char *file, int mode){
-  int k=0, a=0, b=0, a1=0, b1=0;
+  int err_num;
+  char err[10];
+
+  int a=0,b=0,a1=0,b1=0,k=0;
 
   FILE *fptr;
   if(mode==0) fptr=fopen(argv[arg_num], "rb");
@@ -61,14 +64,13 @@ void hist_max_values(char const *argv[], int arg_num, hist_data *last_game, char
 
   if(fptr==NULL) exit(-1);
 
-  while(!feof(fptr)){
+  while(feof(fptr)==0){
     fscanf(fptr, "%d J%d %*s %*s %*s %*s %*s %d %*[^\n]", &a, &b, &k);
-    printf("%d\n", a);
     for (int i = 0; i < k; i++) {
-      fscanf(fptr, "%[^\n]");
+      fscanf(fptr, "%d %s %s", &err_num, err, err);
     }
-    if (a>a1) a1=a;
-    if (b>b1) b1=b;
+    if(a1<a) a1=a;
+    if(b1<b) b1=b;
   }
   if (b1>998) b1=0;
   last_game->ID=a1;

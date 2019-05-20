@@ -169,7 +169,6 @@ int main(int argc, char const *argv[]) {
       fptr = fopen("game_history.dat","ab");
       fclose(fptr);
       hist_max_values(argv, cmd_flag.hist, &last_game, "game_history.dat", 1);
-      exit(0);
       fptr = fopen("game_history.dat","ab");
     }
 
@@ -205,17 +204,14 @@ int main(int argc, char const *argv[]) {
       fprintf(fptr, "%d J%03d %s %d %d %c %s %d %.3f\n", ++last_game.ID, ++last_game.player_ID, nome_jogadores[0], defs_jogo.tamanho_chave,
                                                        defs_jogo.num_cores, defs_jogo.repeticao_cores, aux->tentativa, num_total_tent, (float)tempo/1000);
       aux=lista_tentativas;
-      while(aux->next!=NULL){
+      while(aux!=NULL){
         fprintf(fptr, "%d %s %s\n", aux->tent_ID, aux->tentativa, aux->resultado);
         aux=aux->next;
       }
 
 
 
-
-
       clear(defs_jogo.tamanho_chave, &lista_tentativas, &lista_cores);
-      printf("%d\n", tempo);
       sleep(1);
     }
 
