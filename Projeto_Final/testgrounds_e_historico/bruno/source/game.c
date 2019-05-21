@@ -19,8 +19,7 @@
 void modo_ordenacao(char const *argv[], flags cmd_flag, char *file){
   game_reg *registo_jogo;
 
-  printf("MODO TESTE\nAPENAS REORDENAÇAO\n\n");
-  read_hist(argv, cmd_flag.hist, &registo_jogo, "", cmd_flag.hist);
+  read_hist(argv, cmd_flag.hist, &registo_jogo, file, cmd_flag.hist);
   sort_registry(&registo_jogo, cmd_flag.ord, argv);
   write_file(registo_jogo, argv, file, cmd_flag.hist);
   free_game_registry(&registo_jogo);

@@ -58,7 +58,6 @@ int main(int argc, char const *argv[]) {
   dados **ptr_dados=NULL; //[][][0]=tempo, [][][1]=tentativas, [][][2]=vitoria
   int *numVitorias=NULL;
   float *mediaTempos=NULL;
-  game_reg *registo_jogo;
   hist_data last_game={0, 0, NULL};
 
 //inicializacao da funcao srand:
@@ -122,7 +121,7 @@ int main(int argc, char const *argv[]) {
 
       fptr = fopen("game_history.dat","ab");
       fclose(fptr);
-      hist_max_values(argv, cmd_flag.hist, &last_game, "game_history.dat", 1);
+      hist_max_values(argv, cmd_flag.hist, &last_game, "game_history.dat");
       fptr = fopen("game_history.dat","ab");
 
       defs_jogo.num_jogadores=1;
@@ -186,6 +185,7 @@ int main(int argc, char const *argv[]) {
     }
   }
   else if (mod == 2) {
+    printf("MODO TESTE\nAPENAS REORDENAÇAO\n\n");
     modo_ordenacao(argv, cmd_flag, "game_history.dat");
     return 0;
   }
@@ -196,19 +196,11 @@ int main(int argc, char const *argv[]) {
     FILE *fptr;
     tentativas *aux;
     printf("MODO TESTE\n\n");
-    /* jogar EvE */
-    /*load init files and others if needed -- use ifs to allow or not passage*/
 
-    if (cmd_flag.hist != 0) {
-      hist_max_values(argv, cmd_flag.hist, &last_game, "", 0);
-      fptr = fopen(argv[cmd_flag.hist],"ab");
-    }
-    else{
-      fptr = fopen("game_history.dat","ab");
-      fclose(fptr);
-      hist_max_values(argv, cmd_flag.hist, &last_game, "game_history.dat", 1);
-      fptr = fopen("game_history.dat","ab");
-    }
+    hist_max_values(argv, cmd_flag.hist, &last_game, "game_history.dat");
+
+    if (cmd_flag.hist != 0) fptr = fopen(argv[cmd_flag.hist],"ab");
+    else fptr = fopen("game_history.dat","ab");
 
     read_init("init.dat", &defs_jogo, &nome_jogadores);
     if(tolower(defs_jogo.repeticao_cores) == 's') rep=1;
@@ -254,10 +246,7 @@ int main(int argc, char const *argv[]) {
     free(nome_jogadores);
 
     if (cmd_flag.ord != 0) {
-      read_hist(argv, cmd_flag.hist, &registo_jogo, "game_history.dat", cmd_flag.hist);
-      sort_registry(&registo_jogo, cmd_flag.ord, argv);
-      write_file(registo_jogo, argv, "game_history.dat", cmd_flag.hist);
-      free_game_registry(&registo_jogo);
+      modo_ordenacao(argv, cmd_flag, "game_history.dat");
     }
   }
 

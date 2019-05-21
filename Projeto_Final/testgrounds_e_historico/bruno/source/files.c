@@ -52,15 +52,19 @@ void read_init(char const * file, defs *ptr, char ***nome){
 }
 
 
-void hist_max_values(char const *argv[], int arg_num, hist_data *last_game, char *file, int mode){
+void hist_max_values(char const *argv[], int arg_num, hist_data *last_game, char *file){
   int err_num;
   char err[10];
 
   int a=0,b=0,a1=0,b1=0,k=0;
 
   FILE *fptr;
-  if(mode==0) fptr=fopen(argv[arg_num], "rb");
-  else if(mode==1) fptr=fopen(file, "rb");
+  if(arg_num!=0) fptr=fopen(argv[arg_num], "rb");
+  else if(arg_num==0){
+    fptr = fopen("game_history.dat","ab"); //no caso do ficheiro nao existir este e criado
+    fclose(fptr);
+    fptr=fopen(file, "rb");
+  }
 
   if(fptr==NULL) exit(-1);
 
