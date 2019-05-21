@@ -24,6 +24,7 @@
 #include "files.h"
 #include "mode.h"
 #include "memory.h"
+#include "game.h"
 
 //DECLARACAO DE FUNCOES
 
@@ -182,15 +183,10 @@ int main(int argc, char const *argv[]) {
       terminate_oracle();
       free(nome_jogadores[0]);
       free(nome_jogadores);
-
     }
   }
   else if (mod == 2) {
-    printf("MODO TESTE\nAPENAS REORDENAÇAO\n\n");
-    read_hist(argv, cmd_flag.hist, &registo_jogo, "", cmd_flag.hist);
-    sort_registry(&registo_jogo, cmd_flag.ord, argv);
-    write_file(registo_jogo, argv, "game_history.dat", cmd_flag.hist);
-    free_game_registry(&registo_jogo);
+    modo_ordenacao(argv, cmd_flag, "game_history.dat");
     return 0;
   }
   else if (mod == 3) {
