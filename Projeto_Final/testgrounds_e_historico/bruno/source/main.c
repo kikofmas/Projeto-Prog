@@ -9,26 +9,21 @@
 
 //LIBRARIES
 #include <stdlib.h>
-#include <errno.h>    //library de error handling
 #include <stdio.h>
 #include <string.h>   //funcoes de strings
 #include <time.h>     //usada para se poder calcular o tempo
-#include <ctype.h>    //toupper and tolower functions
-#include <unistd.h>   //permite usar a funcao sleep
-#include <termios.h>  //permite usar a funcao tcflush
 
 #include "estruturas.h"
-#include "oraculo.h"
 #include "intermedio.h"
-#include "key.h"
-#include "files.h"
-#include "mode.h"
 #include "memory.h"
 #include "game.h"
 
+
+//DECLARACAO DE MACROS
+#define DEFAULT_FILE "game_history.dat"
+
+
 //DECLARACAO DE FUNCOES
-
-
 void save_game_ini(game_reg **registo_jogo, int hist_file, int ord, hist_data last_game, char **nome_jogadores, defs defs_jogo, int jogador);
 void save_key(int k, game_reg *registo_jogo, char jogada[]);
 void save_guess_ini(game_reg *top, int lugar_certo, int lugar_errado, int tentativa, defs defs_jogo, char jogada[]);
@@ -39,8 +34,6 @@ void clear_memory(char **vect1, int v1, dados **ptr_dados, float *vect3, int *ve
 void free_guess_list(tentativas *current);
 
 
-
-
 int main(int argc, char const *argv[]) {
 
 //declaracao das variaveis para o modo de funcionamento do programa
@@ -49,16 +42,13 @@ int main(int argc, char const *argv[]) {
 
 //declaracao das variaveis da inicializacao:
   char **nome_jogadores=NULL;
-  int combo_possivel=0, rep=0, num_total_tent=0, win=0, tempo=0;
+  int combo_possivel=0;
   defs defs_jogo={'\0',0,0,0,0,0,0,-1};
-  letras **lista_cores=NULL;
-  tentativas *lista_tentativas=NULL;
 
 //declaracao das variaveis das estatisticas:
   dados **ptr_dados=NULL; //[][][0]=tempo, [][][1]=tentativas, [][][2]=vitoria
   int *numVitorias=NULL;
   float *mediaTempos=NULL;
-  hist_data last_game={0, 0, NULL};
 
 //inicializacao da funcao srand:
   time_t t;
@@ -97,7 +87,6 @@ int main(int argc, char const *argv[]) {
       //verificacao de que a combinacao de parametros e possivel
         combo_possivel=checkCombinacao(&defs_jogo);
       } while(combo_possivel == -1);
-      if(tolower(defs_jogo.repeticao_cores) == 's') rep=1;
       clearScreen(1);
 
     //JOGO
@@ -116,77 +105,12 @@ int main(int argc, char const *argv[]) {
       clear_memory_intermedio(nome_jogadores, defs_jogo.num_jogadores, ptr_dados, mediaTempos, numVitorias); //esta funcao ta aqui bem a toa....
     }
     else if(mod_inter == 2) {
-      tentativas *aux;
-      FILE *fptr;
-
-      fptr = fopen("game_history.dat","ab");
-      fclose(fptr);
-      hist_max_values(argv, cmd_flag.hist, &last_game, "game_history.dat");
-      fptr = fopen("game_history.dat","ab");
-
-      defs_jogo.num_jogadores=1;
-      //nome dos jogadores
-      nome_jogadores=calloc(1,sizeof(char*));
-      nome_jogadores[0]=calloc(strlen("computer")+1,sizeof(char));
-      strcpy(nome_jogadores[0],"computer");
-      //numero de jogos
-      initialization(&defs_jogo.num_jogos, 1, 5, "o numero de jogos");
-      //numero maximo de tentivas por jogo
-      initialization(&defs_jogo.tentativas, 10, 20, "o numero maximo de tentativas");
-      //numero maximo de tentivas aleatorias por jogo
-      initialization(&defs_jogo.tentativas_alea, 0, (20-defs_jogo.tentativas), "o numero maximo de tentativas aleatorias");
-      do {
-      //dimensao da chave
-        initialization(&defs_jogo.tamanho_chave, 4, 8, "a dimensao da chave com que deseja jogar");
-      //numero de cores em jogo
-        initialization(&defs_jogo.num_cores, 6, 12, "o numero de cores com que deseja jogar");
-      //repeticao de cores
-        initializationRepetitions(&defs_jogo.repeticao_cores);
-      //verificacao de que a combinacao de parametros e possivel
-        combo_possivel=checkCombinacao(&defs_jogo);
-      } while(combo_possivel == -1);
-
-      if(tolower(defs_jogo.repeticao_cores)=='s') rep=1;
-      activate_oracle(defs_jogo.tamanho_chave, defs_jogo.num_cores, rep);
-
-      for(int i=0;i<defs_jogo.num_jogos;i++){
-        win = 0;
-        tempo=0;
-        num_total_tent = 0;
-        printf("\nJogo %d\n",i);
-        lista_cores = listaCores(defs_jogo.tamanho_chave, defs_jogo.num_cores);
-        lista_tentativas = tentativasAlea(defs_jogo, &num_total_tent, &lista_cores, &win, &tempo, mod_inter);
-
-        if (win==0) {
-          win = keyFinder(defs_jogo.tamanho_chave, &lista_cores, &lista_tentativas, &num_total_tent, &tempo, mod_inter);
-        }
-        printf("\nNumero de tentativas: %d\n", num_total_tent);
-
-        aux=lista_tentativas;
-        while(aux->next!=NULL){
-          aux=aux->next;
-        }
-
-        fprintf(fptr, "%d J%03d %s %d %d %c %s %d %.3f\n", ++last_game.ID, ++last_game.player_ID, nome_jogadores[0], defs_jogo.num_cores,
-                                                         defs_jogo.tamanho_chave, defs_jogo.repeticao_cores, aux->tentativa, num_total_tent, (float)tempo/1000);
-        aux=lista_tentativas;
-        while(aux!=NULL){
-          fprintf(fptr, "%d %s %s\n", aux->tent_ID, aux->tentativa, aux->resultado);
-          aux=aux->next;
-        }
-        clear(defs_jogo.tamanho_chave, &lista_tentativas, &lista_cores);
-        sleep(1);
-      }
-
-      fclose(fptr);
-      terminate_oracle();
-      free(nome_jogadores[0]);
-      free(nome_jogadores);
+      modo_inter_pc(argv, cmd_flag, DEFAULT_FILE);
     }
   }
   else if (mod == 2) {
     printf("MODO TESTE\nAPENAS REORDENAÇAO\n\n");
-    modo_ordenacao(argv, cmd_flag, "game_history.dat");
+    modo_ordenacao(argv, cmd_flag, DEFAULT_FILE);
     return 0;
   }
   else if (mod == 3) {
@@ -195,7 +119,7 @@ int main(int argc, char const *argv[]) {
   }
   else if (mod == 4) {
     printf("MODO TESTE\n\n");
-    modo_auto(argv, cmd_flag, "game_history.dat");
+    modo_auto(argv, cmd_flag, DEFAULT_FILE);
   return 0;
   }
 
