@@ -244,3 +244,28 @@ void reord_2_elements(game_reg *ptr) {
   if (ptr->next != NULL) ptr->next->prev=ptr;
   if (aux->prev != NULL) aux->prev->next=aux;
 }
+
+
+void write_file(game_reg *reg, char const *argv[], char *file, int mode){
+  FILE *fptr;
+  game_reg *current = reg;
+  tentativas *aux;
+
+  if(mode==0) fptr= fopen(file,"wb");
+  else fptr= fopen(argv[mode],"wb");
+
+  if(fptr==NULL) exit(-1);
+
+  while(current!=NULL){
+    fprintf(fptr, "%d %s %s %d %d %c %s %d %.3f\n", current->game_ID, current->player_ID, current->player_name,
+                                                    current->colors, current->key_size, current->repet,
+                                                    current->key, current->tentativas, current->game_time);
+    aux = current->first;
+    while(aux!=NULL){
+      fprintf(fptr, "%d %s %s\n", aux->tent_ID, aux->tentativa, aux->resultado);
+      aux=aux->next;
+    }
+    current=current->next;
+  }
+  fclose(fptr);
+}
