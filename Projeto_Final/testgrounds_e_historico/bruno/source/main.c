@@ -104,25 +104,20 @@ int main(int argc, char const *argv[]) {
 
       clear_memory_intermedio(nome_jogadores, defs_jogo.num_jogadores, ptr_dados, mediaTempos, numVitorias); //esta funcao ta aqui bem a toa....
     }
-    else if(mod_inter == 2) {
-      modo_inter_pc(argv, cmd_flag, DEFAULT_FILE);
-    }
+    else if(mod_inter == 2) modo_inter_pc(argv, cmd_flag, DEFAULT_FILE);
   }
   else if (mod == 2) {
     printf("MODO TESTE\nAPENAS REORDENAÇAO\n\n");
     modo_ordenacao(argv, cmd_flag, DEFAULT_FILE);
-    return 0;
   }
   else if (mod == 3) {
     printf("ERRO: Falta o ficheiro das inicializações\n");
-    exit(-1);
   }
   else if (mod == 4) {
     printf("MODO TESTE\n\n");
     modo_auto(argv, cmd_flag, DEFAULT_FILE);
-  return 0;
   }
-
+  return 0;
 }
 
 
