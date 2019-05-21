@@ -191,68 +191,15 @@ int main(int argc, char const *argv[]) {
   }
   else if (mod == 3) {
     printf("ERRO: Falta o ficheiro das inicializações\n");
-    exit(-1);}
+    exit(-1);
+  }
   else if (mod == 4) {
-    FILE *fptr;
-    tentativas *aux;
     printf("MODO TESTE\n\n");
-
-    hist_max_values(argv, cmd_flag.hist, &last_game, "game_history.dat");
-
-    if (cmd_flag.hist != 0) fptr = fopen(argv[cmd_flag.hist],"ab");
-    else fptr = fopen("game_history.dat","ab");
-
-    read_init("init.dat", &defs_jogo, &nome_jogadores);
-    if(tolower(defs_jogo.repeticao_cores) == 's') rep=1;
-
-    activate_oracle(defs_jogo.tamanho_chave, defs_jogo.num_cores, rep);
-
-    for (int i = 0; i < defs_jogo.num_jogos; i++) {
-      win = 0;
-      tempo=0;
-      num_total_tent = 0;
-      printf("\nJogo %d\n", i+1);
-      printf("Chave: ");
-      generate_key(1);
-      printf("\n");
-
-      lista_cores = listaCores(defs_jogo.tamanho_chave, defs_jogo.num_cores);
-      lista_tentativas = tentativasAlea(defs_jogo, &num_total_tent, &lista_cores, &win, &tempo, 1);
-      if(win == 0) {
-        win = keyFinder(defs_jogo.tamanho_chave, &lista_cores, &lista_tentativas, &num_total_tent, &tempo, 1);
-      }
-      printf("\nNumero de tentativas: %d\n", num_total_tent);
-
-      aux=lista_tentativas;
-      while(aux->next!=NULL){
-        aux=aux->next;
-      }
-
-      fprintf(fptr, "%d J%03d %s %d %d %c %s %d %.3f\n", ++last_game.ID, ++last_game.player_ID, nome_jogadores[0], defs_jogo.num_cores,
-                                                       defs_jogo.tamanho_chave, defs_jogo.repeticao_cores, aux->tentativa, num_total_tent, (float)tempo/1000);
-      aux=lista_tentativas;
-      while(aux!=NULL){
-        fprintf(fptr, "%d %s %s\n", aux->tent_ID, aux->tentativa, aux->resultado);
-        aux=aux->next;
-      }
-
-      clear(defs_jogo.tamanho_chave, &lista_tentativas, &lista_cores);
-      sleep(1);
-    }
-
-    terminate_oracle();
-    fclose(fptr);
-    free(nome_jogadores[0]);
-    free(nome_jogadores);
-
-    if (cmd_flag.ord != 0) {
-      modo_ordenacao(argv, cmd_flag, "game_history.dat");
-    }
+    modo_auto(argv, cmd_flag, "game_history.dat");
+  return 0;
   }
 
-  return 0;
 }
-
 
 
 

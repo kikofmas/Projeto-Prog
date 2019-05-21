@@ -61,7 +61,7 @@ void hist_max_values(char const *argv[], int arg_num, hist_data *last_game, char
   FILE *fptr;
   if(arg_num!=0) fptr=fopen(argv[arg_num], "rb");
   else if(arg_num==0){
-    fptr = fopen("game_history.dat","ab"); //no caso do ficheiro nao existir este e criado
+    fptr = fopen(file,"ab"); //no caso do ficheiro nao existir este e criado
     fclose(fptr);
     fptr=fopen(file, "rb");
   }
@@ -250,7 +250,29 @@ void reord_2_elements(game_reg *ptr) {
 }
 
 
-void write_file(game_reg *reg, char const *argv[], char *file, int mode){
+void write_file_unord(tentativas *lista_tentativas, char const *argv[], char *file, int mode, hist_data *last_game, char **nome, int tent, int tempo, defs defs_jogo){
+  tentativas *aux=lista_tentativas;
+  FILE *fptr;
+
+  if (mode!= 0) fptr = fopen(argv[mode],"ab");
+  else fptr = fopen(file,"ab");
+
+  while(aux->next!=NULL) aux=aux->next;
+
+  fprintf(fptr, "%d J%03d %s %d %d %c %s %d %.3f\n", ++(last_game->ID), ++(last_game->player_ID), nome[0], defs_jogo.num_cores,
+                                                   defs_jogo.tamanho_chave, defs_jogo.repeticao_cores, aux->tentativa, tent, (float)tempo/1000);
+  aux=lista_tentativas;
+  while(aux!=NULL){
+    fprintf(fptr, "%d %s %s\n", aux->tent_ID, aux->tentativa, aux->resultado);
+    aux=aux->next;
+  }
+
+  fclose(fptr);
+
+}
+
+
+void write_file_ord(game_reg *reg, char const *argv[], char *file, int mode){
   FILE *fptr;
   game_reg *current = reg;
   tentativas *aux;

@@ -8,6 +8,7 @@ void sort_registry(game_reg **registo_jogo, int pos, char const *argv[]);
 game_reg *recursive_bubble_sort_fast(game_reg *top, game_reg *limit);
 game_reg *recursive_bubble_sort_short(game_reg *top, game_reg *limit);
 void reord_2_elements(game_reg *ptr);
-void write_file(game_reg *reg, char const *argv[], char *file, int mode);
+void write_file_unord(tentativas *lista_tentativas, char const *argv[], char *file, int mode, hist_data *last_game, char **nome, int tent, int tempo, defs defs_jogo);
+void write_file_ord(game_reg *reg, char const *argv[], char *file, int mode);
 
 #endif
