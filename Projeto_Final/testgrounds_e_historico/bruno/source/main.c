@@ -148,10 +148,24 @@ void clear_memory(char **vect1, int v1, dados **ptr_dados, float *vect3, int *ve
   free_game_registry(registo_jogo);
 }
 
+
+void free_game_registry(tentativas *current);
+
+
+void free_game_registry(tentativas *current){
+  if (current->next != NULL) {
+    free_guess_registry(current->next);
+  }
+  free_guess_list(current->first);
+  free(current->key);
+  free(current->player_name);
+  free(current);
+}
+
+
 void free_guess_list(tentativas *current){
   if (current->next != NULL) {
     free_guess_list(current->next);
   }
   free(current);
 }
-
