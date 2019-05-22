@@ -1,6 +1,9 @@
 # Projeto-Prog
 
 
+uniformizar o codigo
+
+
 free_game_registry a minha recursiva tava tao pequenina e tao bonitinha...
 
 
