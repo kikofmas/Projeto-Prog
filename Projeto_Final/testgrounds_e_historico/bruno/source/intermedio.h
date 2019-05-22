@@ -20,8 +20,4 @@ void vencedor(float *mediaTempos, char **nome, int num_jogadores, int *numVitori
 void resultados(int num_jogadores, int num_jogos, dados **ptr_dados, int dado_principal, char frase[], char **nome); //apresenta as estatisticas
 void showData(dados **ptr_dados, float *mediaTempos, int num_jogadores, int *numVitorias, int num_jogos, char **nome_jogadores);  //apresenta dados extra de jogo
 
-
-
-void clear_memory_intermedio(char **vect1, int v1, dados **ptr_dados, float *vect3, int *vect4);
-
 #endif

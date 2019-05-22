@@ -260,7 +260,7 @@ void reord_2_elements(game_reg *ptr) {
 }
 
 
-void write_file_unord(tentativas *lista_tentativas, char const *argv[], char *file, int mode, hist_data *last_game, char **nome, int tent, int tempo, defs defs_jogo){
+void write_file_raw(tentativas *lista_tentativas, char const *argv[], char *file, int mode, hist_data *last_game, char **nome, int tent, int tempo, defs defs_jogo){
   tentativas *aux=lista_tentativas;
   FILE *fptr;
 
@@ -287,7 +287,7 @@ void write_file_unord(tentativas *lista_tentativas, char const *argv[], char *fi
 }
 
 
-void write_file_ord(game_reg *reg, char const *argv[], char *file, int mode){
+void write_file(game_reg *reg, char const *argv[], char *file, int mode){
   FILE *fptr;
   game_reg *current = reg;
   tentativas *aux;
@@ -325,7 +325,7 @@ void save_game_ini(game_reg **registo_jogo, hist_data *last_game, char **nome_jo
   /*isto so funciona se leres o ficheiro -h antes e meteres o pointer a apontar para a lista
   caso se implemente de maneira diferente tenho de mudar isto*/
   if (k==0) {  //verifica se primeiro elemento da lista esta preenchido
-    registo_jogo=calloc(1, sizeof(game_reg));
+    *registo_jogo=calloc(1, sizeof(game_reg));
     current_game=*registo_jogo; //se e a primeira vez que se passa aqui estrutura esta nao esta alocada, dai voltar a fazer isto
 
     current_game->game_ID=((last_game->ID)+1);
@@ -387,7 +387,7 @@ void save_key(int k, game_reg *registo_jogo, char jogada[]){
   }
 }
 
-void save_guess_ini(game_reg *top, int lugar_certo, int lugar_errado, int tentativa, defs defs_jogo, char jogada[]) {
+void save_guess_ini(game_reg *top, int lugar_certo, int lugar_errado, int tentativa, char jogada[]) {
   game_reg *current_game=top;
   tentativas *current_guess;
 
