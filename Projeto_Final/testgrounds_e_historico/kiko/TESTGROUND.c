@@ -3,7 +3,7 @@
 ****************************/
 
 
-void free_game_registry(game_reg **reg);
+void free_game_registry(tentativas *current);
 
 
 void free_game_registry(tentativas *current){

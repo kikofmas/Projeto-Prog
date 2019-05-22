@@ -318,13 +318,13 @@ void write_file_ord(game_reg *reg, char const *argv[], char *file, int mode){
 
 
 
-void save_game_ini(game_reg **registo_jogo, int hist_file, int ord, hist_data *last_game, char **nome_jogadores, defs defs_jogo, int jogador){
+void save_game_ini(game_reg **registo_jogo, hist_data *last_game, char **nome_jogadores, defs defs_jogo, int jogador){
   static int k=0; //se houver ficheiro hmmmmm
   game_reg *current_game=*registo_jogo; //chama-se current mas isso so e vdd para a primeira vez, a partir dai e o anterior
   //inicio de jogo
   /*isto so funciona se leres o ficheiro -h antes e meteres o pointer a apontar para a lista
   caso se implemente de maneira diferente tenho de mudar isto*/
-  if (k==0 && !(hist_file!=0 && ord!=0)) {  //verifica se primeiro elemento da lista esta preenchido
+  if (k==0) {  //verifica se primeiro elemento da lista esta preenchido
     registo_jogo=calloc(1, sizeof(game_reg));
     current_game=*registo_jogo; //se e a primeira vez que se passa aqui estrutura esta nao esta alocada, dai voltar a fazer isto
 
