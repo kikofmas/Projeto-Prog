@@ -240,9 +240,9 @@ int verificaResultAlea(tentativas *ptr, letras ***lista_cores, int size){
 * Descricao: funcao que percorre as diversas combinacoes para descobrir a chave de jogo
 *
 ******************************************************************************/
-int keyFinder(int size, letras ***lista_cores, tentativas **lista_tentativas, int *count, int *tempo_exec, int modo_jogo){
+int keyFinder(defs def, int size, letras ***lista_cores, tentativas **lista_tentativas, int *count, int *tempo_exec, int modo_jogo){
   reply *answer;
-  int valid=0, pretas=0, brancas=0;
+  int valid=0, pretas=0, brancas=0, tentativa_atual = 0;
   tentativas *aux=NULL;
   struct timeval stop, start;
   letras **index = (letras **)calloc(size,sizeof(letras*));
@@ -256,12 +256,15 @@ int keyFinder(int size, letras ***lista_cores, tentativas **lista_tentativas, in
     index[i] = (*lista_cores)[i];
   }
 
-  while(index[0]!=NULL){
+
+  while(index[0]!=NULL && tentativa_atual<def.tentativas-def.tentativas_alea){
     for(int i=0;i<size;i++){
       tentativa[i] = index[i]->letra;
     }
     valid = 0;
     gettimeofday(&start, NULL);
+
+
     if(*lista_tentativas==NULL){
 
       *lista_tentativas = calloc(1,sizeof(tentativas));
@@ -278,6 +281,7 @@ int keyFinder(int size, letras ***lista_cores, tentativas **lista_tentativas, in
         *tempo_exec = *tempo_exec + stop.tv_usec-start.tv_usec;
         return 1;
       }
+      tentativa_atual++;
     }
     else{
       aux = *lista_tentativas;
@@ -296,6 +300,7 @@ int keyFinder(int size, letras ***lista_cores, tentativas **lista_tentativas, in
         aux=aux->prev;
       }
       if(valid == 1){
+        tentativa_atual++;
         aux = *lista_tentativas;
         while(aux->next!=NULL) aux = aux->next;
         aux->next = calloc(1,sizeof(tentativas));

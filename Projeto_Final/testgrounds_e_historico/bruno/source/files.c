@@ -59,7 +59,11 @@ void hist_max_values(char const *argv[], int arg_num, hist_data *last_game, char
   int a=0,b=0,a1=0,b1=0,k=0;
 
   FILE *fptr;
-  if(arg_num!=0) fptr=fopen(argv[arg_num], "rb");
+  if(arg_num!=0){
+    fptr = fopen(argv[arg_num],"ab"); //no caso do ficheiro nao existir este e criado
+    fclose(fptr);
+    fptr=fopen(argv[arg_num], "rb");
+  }
   else if(arg_num==0){
     fptr = fopen(file,"ab"); //no caso do ficheiro nao existir este e criado
     fclose(fptr);
@@ -270,7 +274,7 @@ void write_file_unord(tentativas *lista_tentativas, char const *argv[], char *fi
 
   while(aux->next!=NULL) aux=aux->next;
 
-  fprintf(fptr, "%d J%03d %s %d %d %c %s %d %.3f\n", ++(last_game->ID), ++(last_game->player_ID), nome[0], defs_jogo.num_cores,
+  fprintf(fptr, "%d J%03d %s %d %d %c %s %d %.3f\n", ++(last_game->ID), last_game->player_ID, nome[0], defs_jogo.num_cores,
                                                    defs_jogo.tamanho_chave, defs_jogo.repeticao_cores, aux->tentativa, tent, (float)tempo/1000);
   aux=lista_tentativas;
   while(aux!=NULL){

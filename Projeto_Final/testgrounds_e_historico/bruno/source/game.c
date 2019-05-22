@@ -107,7 +107,7 @@ void modo_auto(char const *argv[], flags cmd_flag, char *file){
     lista_cores = listaCores(defs_jogo.tamanho_chave, defs_jogo.num_cores);
     lista_tentativas = tentativasAlea(defs_jogo, &num_total_tent, &lista_cores, &win, &tempo, 1);
 
-    if(win == 0) win = keyFinder(defs_jogo.tamanho_chave, &lista_cores, &lista_tentativas, &num_total_tent, &tempo, 1);
+    if(win == 0) win = keyFinder(defs_jogo, defs_jogo.tamanho_chave, &lista_cores, &lista_tentativas, &num_total_tent, &tempo, 1);
 
     printf("\nNumero de tentativas: %d\n", num_total_tent);
 
@@ -168,7 +168,7 @@ void modo_inter_pc(char const *argv[], flags cmd_flag, char *file){
     lista_cores = listaCores(defs_jogo.tamanho_chave, defs_jogo.num_cores);
     lista_tentativas = tentativasAlea(defs_jogo, &num_total_tent, &lista_cores, &win, &tempo, 2);
 
-    if (win==0) win = keyFinder(defs_jogo.tamanho_chave, &lista_cores, &lista_tentativas, &num_total_tent, &tempo, 2);
+    if (win==0) win = keyFinder(defs_jogo, defs_jogo.tamanho_chave, &lista_cores, &lista_tentativas, &num_total_tent, &tempo, 2);
 
     printf("\nNumero de tentativas: %d\n", num_total_tent);
 
