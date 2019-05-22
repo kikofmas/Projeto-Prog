@@ -376,8 +376,8 @@ void save_key(int k, game_reg *registo_jogo, char jogada[], time_t tempo_jogo, d
   /*onde se grava a vitoria*/
   if(k==1) {
     current_game->game_time=tempo_jogo;
-    current_game->key=calloc((strlen(jogada))+1, sizeof(char));
-    strcpy(current_game->key, jogada);
+    current_game->key=calloc((strlen(jogada)), sizeof(char));
+    strncpy(current_game->key, jogada, strlen(jogada)-1);
   }
   /*onde se mete a derrota*/
   if(k==0) {

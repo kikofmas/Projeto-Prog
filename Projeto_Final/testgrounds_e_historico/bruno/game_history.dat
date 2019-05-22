@@ -1,10 +1,6 @@
-1 J001 bruno 6 4 n 1111
- 16 60.000
-1 aaa1 P1B0
-2 11bb P0B2
-3 111c P2B1
-4 111d P2B1
-5 111e P2B1
-6 1111 P2B2
-7 1111 P1B3
-16 1111 P4B0
+1 J001 bruno 6 4 n - 5 60.000
+1 aaaa P0B0
+2 abbb P0B0
+3 abcc P0B0
+4 cabd P0B0
+5 dcab P0B0

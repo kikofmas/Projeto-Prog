@@ -451,6 +451,7 @@ dados **jogo(defs def, char **nome_jogadores, game_reg **registo_jogo, hist_data
           tentativa=def.tentativas;
         }
         else{
+          save_guess_ini(*registo_jogo, lugar_certo, lugar_errado, tentativa, jogada);
           for(int index1=0; index1<def.tamanho_chave; index1++){   //copia da chave para se fazer a comparacao
             copia_chave[index1]=chave[index1];
           }
@@ -469,7 +470,6 @@ dados **jogo(defs def, char **nome_jogadores, game_reg **registo_jogo, hist_data
             printf("Ainda tem %lis de jogo e %d jogada(s) restante(s)\n", tempo_restante, def.tentativas-(tentativa +1));
           }
         }
-        save_guess_ini(*registo_jogo, lugar_certo, lugar_errado, tentativa, jogada);
       }
       if(lugar_certo!=def.tamanho_chave){
         (ptr_dados[jogador][jogo]).vitoria=0;  //guarda se o jogador conseguiu completar a partida
