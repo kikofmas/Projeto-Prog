@@ -367,7 +367,7 @@ void save_game_ini(game_reg **registo_jogo, hist_data *last_game, char **nome_jo
   }
 }
 
-void save_key(int k, game_reg *registo_jogo, char jogada[]){
+void save_key(int k, game_reg *registo_jogo, char jogada[], time_t tempo_jogo){
   game_reg *current_game = registo_jogo;
   char travessao[] = "-";
   while (current_game->next != NULL){
@@ -375,13 +375,13 @@ void save_key(int k, game_reg *registo_jogo, char jogada[]){
   }
   /*onde se grava a vitoria*/
   if(k==1) {
-
+    current_game->game_time=tempo_jogo;
     current_game->key=calloc((strlen(jogada))+1, sizeof(char));
     strcpy(current_game->key, jogada);
   }
   /*onde se mete a derrota*/
   if(k==0) {
-    current_game->next->game_time=defs_jogo.duracao_jogo;
+    current_game->game_time=defs_jogo.duracao_jogo;
     current_game->key=calloc((strlen(travessao))+1, sizeof(char));
     strcpy(current_game->key, travessao);
   }

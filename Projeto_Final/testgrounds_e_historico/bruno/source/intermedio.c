@@ -427,7 +427,7 @@ dados **jogo(defs def, char **nome_jogadores, game_reg **registo_jogo, hist_data
     ptr_dados[jogador]=calloc(def.num_jogos, sizeof(dados));
 
     for(int jogo=0; jogo<def.num_jogos; jogo++){   //passagem por cada jogo a fazer
-      save_game_ini(registo_jogo, last_game, nome_jogadores, def, jogador);
+      save_game_ini(registo_jogo, last_game, nome_jogadores, def, jogador, tempo_jogo);
       printf("Jogador %d: %s, e a sua vez\n\n", jogador+1, *(nome_jogadores+jogador));
       countdown(jogador+1, (nome_jogadores+jogador));
       printf("Tamanho da chave: %d; Numero de cores: %d; Repeticao de cores: %c;\n", def.tamanho_chave, def.num_cores, def.repeticao_cores);
