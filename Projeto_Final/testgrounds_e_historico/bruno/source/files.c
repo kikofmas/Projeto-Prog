@@ -46,7 +46,7 @@ void read_init(char const * file, defs *ptr, char ***nome){
     free(text);
   }
   else{
-    perror("ERRO:");
+    perror("ERRO (ficheiro init)");
     exit(-1);
   }
 }
@@ -66,7 +66,10 @@ void hist_max_values(char const *argv[], int arg_num, hist_data *last_game, char
     fptr=fopen(file, "rb");
   }
 
-  if(fptr==NULL) exit(-1);
+  if(fptr==NULL){
+    perror("ERRO (ficheiro hist)");
+    exit(-1);
+  }
 
   while(feof(fptr)==0){
     fscanf(fptr, "%d J%d %*s %*s %*s %*s %*s %d %*[^\n]", &a, &b, &k);
@@ -91,7 +94,10 @@ void read_hist(char const *argv[], int arg_num, game_reg **registo_jogo, char *f
   if(mode==0) fptr=fopen(file, "rb");
   else if(mode!=0) fptr=fopen(argv[arg_num], "rb");
 
-  if(fptr==NULL) exit(-1);
+  if(fptr==NULL){
+    perror("ERRO (ficheiro hist)");
+    exit(-1);
+  }
 
   *registo_jogo=calloc(1, sizeof(game_reg));
   if(*registo_jogo==NULL) exit(-1);
@@ -257,6 +263,11 @@ void write_file_unord(tentativas *lista_tentativas, char const *argv[], char *fi
   if (mode!= 0) fptr = fopen(argv[mode],"ab");
   else fptr = fopen(file,"ab");
 
+  if(fptr==NULL){
+    perror("Erro (ficheiro hist)");
+    exit(-1);
+  }
+
   while(aux->next!=NULL) aux=aux->next;
 
   fprintf(fptr, "%d J%03d %s %d %d %c %s %d %.3f\n", ++(last_game->ID), ++(last_game->player_ID), nome[0], defs_jogo.num_cores,
@@ -280,7 +291,10 @@ void write_file_ord(game_reg *reg, char const *argv[], char *file, int mode){
   if(mode==0) fptr= fopen(file,"wb");
   else fptr= fopen(argv[mode],"wb");
 
-  if(fptr==NULL) exit(-1);
+  if(fptr==NULL){
+    perror("Erro (ficheiro hist)");
+    exit(-1);
+  }
 
   while(current!=NULL){
     fprintf(fptr, "%d %s %s %d %d %c %s %d %.3f\n", current->game_ID, current->player_ID, current->player_name,
