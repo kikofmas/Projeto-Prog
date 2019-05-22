@@ -411,7 +411,7 @@ int userAttempt(dados **ptr_dados, char ultima_cor, char *jogada, int tamanho_ch
 * Descricao: funcao que realiza todo o processo de jogo
 *
 ******************************************************************************/
-dados **jogo(defs def, char **nome_jogadores){
+dados **jogo(defs def, char **nome_jogadores, game_reg **registo_jogo, hist_data *last_game){
   FILE *fptr=fopen("game_history.dat","wb");
   if(fptr==NULL) exit(-1);
 
@@ -427,7 +427,7 @@ dados **jogo(defs def, char **nome_jogadores){
     ptr_dados[jogador]=calloc(def.num_jogos, sizeof(dados));
 
     for(int jogo=0; jogo<def.num_jogos; jogo++){   //passagem por cada jogo a fazer
-      //save_game_ini(registo_jogo, cmd_flag.hist, cmd_flag.ord, *last_game, nome_jogadores, defs_jogo, jogador);
+      save_game_ini(registo_jogo, cmd_flag.hist, cmd_flag.ord, last_game, nome_jogadores, defs_jogo, jogador);
       printf("Jogador %d: %s, e a sua vez\n\n", jogador+1, *(nome_jogadores+jogador));
       countdown(jogador+1, (nome_jogadores+jogador));
       printf("Tamanho da chave: %d; Numero de cores: %d; Repeticao de cores: %c;\n", def.tamanho_chave, def.num_cores, def.repeticao_cores);
@@ -461,6 +461,7 @@ dados **jogo(defs def, char **nome_jogadores){
           if(lugar_certo==def.tamanho_chave){
             printf("PARABENS por ter conseguido acabar o jogo!\n");
             (ptr_dados[jogador][jogo]).vitoria=1;  //guarda se o jogador conseguiu completar a partida
+            save_key(1, *registo_jogo, jogada);
             printf("Acabou o jogo apos %lis e em %d jogada(s)\n\n", tempo_jogo, tentativa+1);
             tentativa=def.tentativas;
           }
@@ -468,9 +469,11 @@ dados **jogo(defs def, char **nome_jogadores){
             printf("Ainda tem %lis de jogo e %d jogada(s) restante(s)\n", tempo_restante, def.tentativas-(tentativa +1));
           }
         }
+        save_guess_ini(*registo_jogo, lugar_certo, lugar_errado, tentativa, defs_jogo, jogada);
       }
       if(lugar_certo!=def.tamanho_chave){
         (ptr_dados[jogador][jogo]).vitoria=0;  //guarda se o jogador conseguiu completar a partida
+        save_key(0, *registo_jogo, jogada);
         printf("Lamentamos mas nao conseguiu acabar o jogo...\n");
         printf("A chave correta era: %s\n\n", chave);
       }
