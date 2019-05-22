@@ -88,8 +88,9 @@ void modo_auto(char const *argv[], flags cmd_flag, char *file){
   char **nome_jogadores=NULL;
   int rep=0, win=0, tempo=0, num_total_tent=0;
 
-  hist_max_values(argv, cmd_flag.hist, &last_game, file);
   read_init(argv[cmd_flag.init], &defs_jogo, &nome_jogadores);
+  hist_max_values(argv, cmd_flag.hist, &last_game, file);
+
 
   if(tolower(defs_jogo.repeticao_cores) == 's') rep=1;
   activate_oracle(defs_jogo.tamanho_chave, defs_jogo.num_cores, rep);
