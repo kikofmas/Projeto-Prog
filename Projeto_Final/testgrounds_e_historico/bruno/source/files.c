@@ -260,9 +260,10 @@ void reord_2_elements(game_reg *ptr) {
 }
 
 
-void write_file_raw(tentativas *lista_tentativas, char const *argv[], char *file, int mode, hist_data *last_game, char **nome, int tent, int tempo, defs defs_jogo){
+void write_file_raw(tentativas *lista_tentativas, char const *argv[], char *file, int mode, hist_data *last_game, char **nome, int tent, int tempo, defs defs_jogo, int win){
   tentativas *aux=lista_tentativas;
   FILE *fptr;
+  char copy[10];
 
   if (mode!= 0) fptr = fopen(argv[mode],"ab");
   else fptr = fopen(file,"ab");
@@ -274,8 +275,15 @@ void write_file_raw(tentativas *lista_tentativas, char const *argv[], char *file
 
   while(aux->next!=NULL) aux=aux->next;
 
+  strcpy(copy, aux->tentativa);
+  if(win==0){
+    strcpy(aux->tentativa, "-");
+  }
+
   fprintf(fptr, "%d J%03d %s %d %d %c %s %d %.3f\n", ++(last_game->ID), last_game->player_ID, nome[0], defs_jogo.num_cores,
                                                    defs_jogo.tamanho_chave, defs_jogo.repeticao_cores, aux->tentativa, tent, (float)tempo/1000);
+
+  strcpy(aux->tentativa, copy);
   aux=lista_tentativas;
   while(aux!=NULL){
     fprintf(fptr, "%d %s %s\n", aux->tent_ID, aux->tentativa, aux->resultado);

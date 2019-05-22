@@ -90,7 +90,7 @@ void modo_auto(char const *argv[], flags cmd_flag, char *file){
 
   read_init(argv[cmd_flag.init], &defs_jogo, &nome_jogadores);
   hist_max_values(argv, cmd_flag.hist, &last_game, file);
-
+  last_game.player_ID++;
 
   if(tolower(defs_jogo.repeticao_cores) == 's') rep=1;
   activate_oracle(defs_jogo.tamanho_chave, defs_jogo.num_cores, rep);
@@ -111,7 +111,7 @@ void modo_auto(char const *argv[], flags cmd_flag, char *file){
 
     printf("\nNumero de tentativas: %d\n", num_total_tent);
 
-    write_file_raw(lista_tentativas, argv, file, cmd_flag.hist, &last_game, nome_jogadores, num_total_tent, tempo, defs_jogo);
+    write_file_raw(lista_tentativas, argv, file, cmd_flag.hist, &last_game, nome_jogadores, num_total_tent, tempo, defs_jogo, win);
     clear(defs_jogo.tamanho_chave, &lista_tentativas, &lista_cores);
     sleep(1);
   }
@@ -134,7 +134,8 @@ void modo_inter_pc(char const *argv[], flags cmd_flag, char *file){
   int combo_possivel=0, rep=0, win=0, tempo=0, num_total_tent=0;
 
   hist_max_values(argv, cmd_flag.hist, &last_game, file);
-
+  last_game.player_ID++;
+  
   defs_jogo.num_jogadores=1;
   //nome dos jogadores
   nome_jogadores=calloc(1,sizeof(char*));
@@ -172,7 +173,7 @@ void modo_inter_pc(char const *argv[], flags cmd_flag, char *file){
 
     printf("\nNumero de tentativas: %d\n", num_total_tent);
 
-    write_file_raw(lista_tentativas, argv, file, cmd_flag.hist, &last_game, nome_jogadores, num_total_tent, tempo, defs_jogo);
+    write_file_raw(lista_tentativas, argv, file, cmd_flag.hist, &last_game, nome_jogadores, num_total_tent, tempo, defs_jogo, win);
 
     clear(defs_jogo.tamanho_chave, &lista_tentativas, &lista_cores);
     sleep(1);
