@@ -415,7 +415,7 @@ dados **jogo(defs def, char **nome_jogadores, game_reg **registo_jogo, hist_data
   FILE *fptr=fopen("game_history.dat","wb");
   if(fptr==NULL) exit(-1);
 
-  int verificacao=0, lugar_certo=0, lugar_errado=0, rep=0;
+  int verificacao=0, lugar_certo=0, lugar_errado=0;
   time_t tempo_inicial=0, tempo_restante=0, tempo_jogo=0;
   char ultima_cor='\0';
   char *chave = (char *)calloc(def.tamanho_chave,sizeof(char));
@@ -427,7 +427,7 @@ dados **jogo(defs def, char **nome_jogadores, game_reg **registo_jogo, hist_data
     ptr_dados[jogador]=calloc(def.num_jogos, sizeof(dados));
 
     for(int jogo=0; jogo<def.num_jogos; jogo++){   //passagem por cada jogo a fazer
-      save_game_ini(registo_jogo, cmd_flag.hist, cmd_flag.ord, last_game, nome_jogadores, defs_jogo, jogador);
+      save_game_ini(registo_jogo, last_game, nome_jogadores, def, jogador);
       printf("Jogador %d: %s, e a sua vez\n\n", jogador+1, *(nome_jogadores+jogador));
       countdown(jogador+1, (nome_jogadores+jogador));
       printf("Tamanho da chave: %d; Numero de cores: %d; Repeticao de cores: %c;\n", def.tamanho_chave, def.num_cores, def.repeticao_cores);
@@ -469,7 +469,7 @@ dados **jogo(defs def, char **nome_jogadores, game_reg **registo_jogo, hist_data
             printf("Ainda tem %lis de jogo e %d jogada(s) restante(s)\n", tempo_restante, def.tentativas-(tentativa +1));
           }
         }
-        save_guess_ini(*registo_jogo, lugar_certo, lugar_errado, tentativa, defs_jogo, jogada);
+        save_guess_ini(*registo_jogo, lugar_certo, lugar_errado, tentativa, def, jogada);
       }
       if(lugar_certo!=def.tamanho_chave){
         (ptr_dados[jogador][jogo]).vitoria=0;  //guarda se o jogador conseguiu completar a partida

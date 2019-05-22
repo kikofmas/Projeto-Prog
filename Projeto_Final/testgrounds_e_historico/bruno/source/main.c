@@ -49,7 +49,7 @@ int main(int argc, char const *argv[]) {
   int *numVitorias=NULL;
   float *mediaTempos=NULL;
 
-  game_reg = *registo_jogo;
+  game_reg *registo_jogo;
 
 //inicializacao da funcao srand:
   time_t t;
