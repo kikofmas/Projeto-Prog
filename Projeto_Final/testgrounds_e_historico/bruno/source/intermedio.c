@@ -427,7 +427,7 @@ dados **jogo(defs def, char **nome_jogadores, game_reg **registo_jogo, hist_data
     ptr_dados[jogador]=calloc(def.num_jogos, sizeof(dados));
 
     for(int jogo=0; jogo<def.num_jogos; jogo++){   //passagem por cada jogo a fazer
-      save_game_ini(registo_jogo, last_game, nome_jogadores, def, jogador, tempo_jogo);
+      save_game_ini(registo_jogo, last_game, nome_jogadores, def, jogador);
       printf("Jogador %d: %s, e a sua vez\n\n", jogador+1, *(nome_jogadores+jogador));
       countdown(jogador+1, (nome_jogadores+jogador));
       printf("Tamanho da chave: %d; Numero de cores: %d; Repeticao de cores: %c;\n", def.tamanho_chave, def.num_cores, def.repeticao_cores);
@@ -461,7 +461,7 @@ dados **jogo(defs def, char **nome_jogadores, game_reg **registo_jogo, hist_data
           if(lugar_certo==def.tamanho_chave){
             printf("PARABENS por ter conseguido acabar o jogo!\n");
             (ptr_dados[jogador][jogo]).vitoria=1;  //guarda se o jogador conseguiu completar a partida
-            save_key(1, *registo_jogo, jogada);
+            save_key(1, *registo_jogo, jogada, tempo_jogo, def);
             printf("Acabou o jogo apos %lis e em %d jogada(s)\n\n", tempo_jogo, tentativa+1);
             tentativa=def.tentativas;
           }
@@ -473,7 +473,7 @@ dados **jogo(defs def, char **nome_jogadores, game_reg **registo_jogo, hist_data
       }
       if(lugar_certo!=def.tamanho_chave){
         (ptr_dados[jogador][jogo]).vitoria=0;  //guarda se o jogador conseguiu completar a partida
-        save_key(0, *registo_jogo, jogada);
+        save_key(0, *registo_jogo, jogada, tempo_jogo, def);
         printf("Lamentamos mas nao conseguiu acabar o jogo...\n");
         printf("A chave correta era: %s\n\n", chave);
       }
