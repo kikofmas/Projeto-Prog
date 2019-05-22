@@ -1,6 +1,14 @@
 # Projeto-Prog
 
 
+free_game_registry a minha recursiva tava tao pequenina e tao bonitinha...
+
+
+modo interativo: se o user mete as P/B com numeros > a 9 we fucked para o registo
+
+
+last_game problema
+
 fazer o makefile e decobrir porque e que o meu esta a dar merda
 
 
