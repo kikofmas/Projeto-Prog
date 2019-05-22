@@ -83,6 +83,7 @@ int main(int argc, char const *argv[]) {
 
     //JOGO
       //activate_oracle(defs_jogo.tamanho_chave, defs_jogo.num_cores, rep);
+      hist_max_values(argv, cmd_flag.hist, &last_game, DEFAULT_FILE);
       ptr_dados=jogo(defs_jogo, nome_jogadores, &registo_jogo, &last_game);
     //ESTATISTICAS: calculo dos resultados e apresentacao das estatisticas
       write_file(registo_jogo, argv, DEFAULT_FILE, cmd_flag.hist);

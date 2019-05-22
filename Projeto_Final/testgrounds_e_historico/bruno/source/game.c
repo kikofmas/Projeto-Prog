@@ -66,9 +66,6 @@ int test_mode_config (int k, char const *argv[], flags **cmd_flag) {
   return 0;
 }
 
-
-
-
 void modo_ordenacao(char const *argv[], flags cmd_flag, char *file){
   game_reg *registo_jogo;
 
@@ -77,8 +74,6 @@ void modo_ordenacao(char const *argv[], flags cmd_flag, char *file){
   write_file(registo_jogo, argv, file, cmd_flag.hist);
   free_game_registry(registo_jogo);
 }
-
-
 
 void modo_auto(char const *argv[], flags cmd_flag, char *file){
   defs defs_jogo={'\0',0,0,0,0,0,0,-1};
@@ -123,8 +118,6 @@ void modo_auto(char const *argv[], flags cmd_flag, char *file){
   if (cmd_flag.ord != 0) modo_ordenacao(argv, cmd_flag, file);
 }
 
-
-
 void modo_inter_pc(char const *argv[], flags cmd_flag, char *file){
   defs defs_jogo={'\0',0,0,0,0,0,0,-1};
   hist_data last_game={0, 0, NULL};
@@ -135,7 +128,7 @@ void modo_inter_pc(char const *argv[], flags cmd_flag, char *file){
 
   hist_max_values(argv, cmd_flag.hist, &last_game, file);
   last_game.player_ID++;
-  
+
   defs_jogo.num_jogadores=1;
   //nome dos jogadores
   nome_jogadores=calloc(1,sizeof(char*));
@@ -183,3 +176,5 @@ void modo_inter_pc(char const *argv[], flags cmd_flag, char *file){
   free(nome_jogadores[0]);
   free(nome_jogadores);
 }
+
+//void modo_inter_intermedio()
