@@ -17,20 +17,11 @@
 #include "intermedio.h"
 #include "memory.h"
 #include "game.h"
+#include "files.h"
 
 
 //DECLARACAO DE MACROS
 #define DEFAULT_FILE "game_history.dat"
-
-
-//DECLARACAO DE FUNCOES
-
-
-
-
-void clear_memory(char **vect1, int v1, dados **ptr_dados, float *vect3, int *vect4, game_reg **registo_jogo);
-void free_guess_list(tentativas *current);
-
 
 int main(int argc, char const *argv[]) {
 
@@ -94,7 +85,7 @@ int main(int argc, char const *argv[]) {
       //activate_oracle(defs_jogo.tamanho_chave, defs_jogo.num_cores, rep);
       ptr_dados=jogo(defs_jogo, nome_jogadores, &registo_jogo, &last_game);
     //ESTATISTICAS: calculo dos resultados e apresentacao das estatisticas
-
+      write_file(registo_jogo, argv, DEFAULT_FILE, cmd_flag.hist);
       criaDados(defs_jogo.num_jogadores, defs_jogo.num_jogos, ptr_dados, &mediaTempos, &numVitorias);
       vencedor(mediaTempos, nome_jogadores, defs_jogo.num_jogadores, numVitorias);
       resultados(defs_jogo.num_jogadores, defs_jogo.num_jogos, ptr_dados, 0, "mais rapido", nome_jogadores);
@@ -103,7 +94,7 @@ int main(int argc, char const *argv[]) {
 
       printf("\nESPERAMOS QUE SE TENHA DIVERTIDO!!!\n");
 
-      clear_memory_intermedio(nome_jogadores, defs_jogo.num_jogadores, ptr_dados, mediaTempos, numVitorias); //esta funcao ta aqui bem a toa....
+      clear_memory(nome_jogadores, defs_jogo.num_jogadores, ptr_dados, mediaTempos, numVitorias, registo_jogo); //esta funcao ta aqui bem a toa....
     }
     else if(mod_inter == 2) modo_inter_pc(argv, cmd_flag, DEFAULT_FILE);
   }
@@ -119,53 +110,4 @@ int main(int argc, char const *argv[]) {
     modo_auto(argv, cmd_flag, DEFAULT_FILE);
   }
   return 0;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-void clear_memory(char **vect1, int v1, dados **ptr_dados, float *vect3, int *vect4, game_reg **registo_jogo){
-  for (int i = 0; i < v1; i++) {
-    free(vect1[i]);
-  }
-  free(vect1);
-  for (int i = 0; i < v1; i++) {
-    free(ptr_dados[i]);
-  }
-  free(ptr_dados);
-  free(vect3);
-  free(vect4);
-  free_game_registry(registo_jogo);
-}
-
-
-void free_game_registry(tentativas *current);
-
-
-void free_game_registry(tentativas *current){
-  if (current->next != NULL) {
-    free_guess_registry(current->next);
-  }
-  free_guess_list(current->first);
-  free(current->key);
-  free(current->player_name);
-  free(current);
-}
-
-
-void free_guess_list(tentativas *current){
-  if (current->next != NULL) {
-    free_guess_list(current->next);
-  }
-  free(current);
 }

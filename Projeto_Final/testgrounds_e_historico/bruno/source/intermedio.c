@@ -469,7 +469,7 @@ dados **jogo(defs def, char **nome_jogadores, game_reg **registo_jogo, hist_data
             printf("Ainda tem %lis de jogo e %d jogada(s) restante(s)\n", tempo_restante, def.tentativas-(tentativa +1));
           }
         }
-        save_guess_ini(*registo_jogo, lugar_certo, lugar_errado, tentativa, def, jogada);
+        save_guess_ini(*registo_jogo, lugar_certo, lugar_errado, tentativa, jogada);
       }
       if(lugar_certo!=def.tamanho_chave){
         (ptr_dados[jogador][jogo]).vitoria=0;  //guarda se o jogador conseguiu completar a partida
@@ -681,18 +681,4 @@ void showData(dados **ptr_dados, float *mediaTempos, int num_jogadores, int *num
   } else{
     clearScreen(0);
   }
-}
-
-
-void clear_memory_intermedio(char **vect1, int v1, dados **ptr_dados, float *vect3, int *vect4){
-  for (int i = 0; i < v1; i++) {
-    free(vect1[i]);
-  }
-  free(vect1);
-  for (int i = 0; i < v1; i++) {
-    free(ptr_dados[i]);
-  }
-  free(ptr_dados);
-  free(vect3);
-  free(vect4);
 }

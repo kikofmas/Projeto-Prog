@@ -74,8 +74,8 @@ void modo_ordenacao(char const *argv[], flags cmd_flag, char *file){
 
   read_hist(argv, cmd_flag.hist, &registo_jogo, file, cmd_flag.hist);
   sort_registry(&registo_jogo, cmd_flag.ord, argv);
-  write_file_ord(registo_jogo, argv, file, cmd_flag.hist);
-  free_game_registry(&registo_jogo);
+  write_file(registo_jogo, argv, file, cmd_flag.hist);
+  free_game_registry(registo_jogo);
 }
 
 
@@ -111,7 +111,7 @@ void modo_auto(char const *argv[], flags cmd_flag, char *file){
 
     printf("\nNumero de tentativas: %d\n", num_total_tent);
 
-    write_file_unord(lista_tentativas, argv, file, cmd_flag.hist, &last_game, nome_jogadores, num_total_tent, tempo, defs_jogo);
+    write_file_raw(lista_tentativas, argv, file, cmd_flag.hist, &last_game, nome_jogadores, num_total_tent, tempo, defs_jogo);
     clear(defs_jogo.tamanho_chave, &lista_tentativas, &lista_cores);
     sleep(1);
   }
@@ -172,7 +172,7 @@ void modo_inter_pc(char const *argv[], flags cmd_flag, char *file){
 
     printf("\nNumero de tentativas: %d\n", num_total_tent);
 
-    write_file_unord(lista_tentativas, argv, file, cmd_flag.hist, &last_game, nome_jogadores, num_total_tent, tempo, defs_jogo);
+    write_file_raw(lista_tentativas, argv, file, cmd_flag.hist, &last_game, nome_jogadores, num_total_tent, tempo, defs_jogo);
 
     clear(defs_jogo.tamanho_chave, &lista_tentativas, &lista_cores);
     sleep(1);
