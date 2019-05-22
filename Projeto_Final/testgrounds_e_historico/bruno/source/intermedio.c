@@ -367,7 +367,7 @@ int userAttempt(dados **ptr_dados, char ultima_cor, char *jogada, int tamanho_ch
     char buffer[100];
     printf("Insira uma combinacao de cores (A a %c): ", ultima_cor);
     fgets(buffer, 100, stdin);
-    strncpy(jogada, buffer, tamanho_chave+1);
+    strncpy(jogada, buffer, tamanho_chave);
     tempo_atual=time(NULL);       //armazenamento do tempo atual
     *tempo_jogo = tempo_atual-tempo_inicial;    //calculo do tempo atual que o jogo tem
     *tempo_restante = duracao_jogo - *tempo_jogo;
@@ -418,9 +418,9 @@ dados **jogo(defs def, char **nome_jogadores, game_reg **registo_jogo, hist_data
   int verificacao=0, lugar_certo=0, lugar_errado=0;
   time_t tempo_inicial=0, tempo_restante=0, tempo_jogo=0;
   char ultima_cor='\0';
-  char *chave = (char *)calloc(def.tamanho_chave,sizeof(char));
-  char *copia_chave = (char *)calloc(def.tamanho_chave,sizeof(char));
-  char *jogada = (char *)calloc(def.tamanho_chave,sizeof(char));
+  char *chave = (char *)calloc(def.tamanho_chave+1,sizeof(char));
+  char *copia_chave = (char *)calloc(def.tamanho_chave+1,sizeof(char));
+  char *jogada = (char *)calloc(def.tamanho_chave+1,sizeof(char));
   dados **ptr_dados=calloc(def.num_jogadores, sizeof(dados *));
 
   for(int jogador=0; jogador<def.num_jogadores; jogador++){   //passagem por cada jogador
@@ -451,13 +451,13 @@ dados **jogo(defs def, char **nome_jogadores, game_reg **registo_jogo, hist_data
           tentativa=def.tentativas;
         }
         else{
-          save_guess_ini(*registo_jogo, lugar_certo, lugar_errado, tentativa, jogada);
           for(int index1=0; index1<def.tamanho_chave; index1++){   //copia da chave para se fazer a comparacao
             copia_chave[index1]=chave[index1];
           }
 
         //verificacao da igualdade entre a chave de jogo e a tentativa do jogador
           comparaChave(def.tamanho_chave, jogada, copia_chave, &lugar_certo, &lugar_errado);
+          save_guess_ini(*registo_jogo, lugar_certo, lugar_errado, tentativa, jogada);
 
           if(lugar_certo==def.tamanho_chave){
             printf("PARABENS por ter conseguido acabar o jogo!\n");

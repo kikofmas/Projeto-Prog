@@ -24,6 +24,7 @@ void free_guess_list(tentativas *current){
   if (current->next != NULL) {
     free_guess_list(current->next);
   }
+  free(current->tentativa);
   free(current);
 }
 

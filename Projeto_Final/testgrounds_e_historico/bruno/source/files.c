@@ -344,7 +344,7 @@ void save_game_ini(game_reg **registo_jogo, hist_data *last_game, char **nome_jo
     (last_game->player_ID)++;
     current_game->colors=defs_jogo.num_cores;
     current_game->key_size=defs_jogo.tamanho_chave;
-    current_game->repet=defs_jogo.repeticao_cores;
+    current_game->repet=toupper(defs_jogo.repeticao_cores);
     current_game->game_time=defs_jogo.duracao_jogo;
     current_game->prev=last_game->last;
     last_game->last=current_game;
@@ -384,8 +384,8 @@ void save_key(int k, game_reg *registo_jogo, char jogada[], time_t tempo_jogo, d
   /*onde se grava a vitoria*/
   if(k==1) {
     current_game->game_time=tempo_jogo;
-    current_game->key=calloc((strlen(jogada)), sizeof(char));
-    strncpy(current_game->key, jogada, strlen(jogada)-1);
+    current_game->key=calloc(strlen(jogada), sizeof(char));
+    strncpy(current_game->key, jogada, strlen(jogada));
   }
   /*onde se mete a derrota*/
   if(k==0) {
@@ -405,11 +405,19 @@ void save_guess_ini(game_reg *top, int lugar_certo, int lugar_errado, int tentat
   if (tentativa==0) {  //verifica se primeiro elemento da lista esta preenchido
     current_game->tentativas=tentativa+1;
     current_game->first=calloc(1, sizeof(tentativas));
+    if(current_game->first==NULL){
+      perror("Erro");
+      exit(-1);
+    }
     current_guess=current_game->first; //se e a primeira vez que se passa aqui estrutura esta nao esta alocada, dai voltar a fazer isto
 
     current_guess->tent_ID=tentativa+1;
     current_guess->tentativa=calloc(strlen(jogada), sizeof(char));
-    strncpy(current_guess->tentativa, jogada, strlen(jogada)-1);
+    if(current_guess->tentativa==NULL){
+      perror("Erro");
+      exit(-1);
+    }
+    strncpy(current_guess->tentativa, jogada, strlen(jogada));
     sprintf(current_guess->resultado, "P%1dB%1d", lugar_certo, lugar_errado);
     current_guess->prev=NULL;
     current_guess->next=NULL;
@@ -420,9 +428,17 @@ void save_guess_ini(game_reg *top, int lugar_certo, int lugar_errado, int tentat
     }
     current_game->tentativas=tentativa+1;
     current_guess->next=calloc(1, sizeof(tentativas));
+    if(current_guess->next==NULL){
+      perror("Erro");
+      exit(-1);
+    }
     current_guess->next->tent_ID=tentativa+1;
     current_guess->next->tentativa=calloc(strlen(jogada), sizeof(char));
-    strncpy(current_guess->next->tentativa, jogada, strlen(jogada)-1);
+    if(current_guess->next->tentativa==NULL){
+      perror("Erro");
+      exit(-1);
+    }
+    strncpy(current_guess->next->tentativa, jogada, strlen(jogada));
     sprintf(current_guess->next->resultado, "P%1dB%1d", lugar_certo, lugar_errado);
     current_guess->next->prev=current_guess;
     current_guess->next->next=NULL;
