@@ -88,7 +88,7 @@ int test_mode_config (int k, char const *argv[], flags **cmd_flag) {
     } else if (strcmp(ord, argv[i]) == 0) {
       (*cmd_flag)->ord = i+1;
     } else {
-      printf("ERRO: Argumentos incorretos ou não identificados\n");
+      printf("ERRO: Argumentos e/ou flags incorretos ou não identificados\n");
       exit(-1);
     }
   }
