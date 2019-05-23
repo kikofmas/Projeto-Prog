@@ -281,7 +281,7 @@ void modo_inter_intermedio(char const *argv[], flags cmd_flag, char *file){
 
   time_t t;
   srand((unsigned) time(&t)); //inicializa o gerador aleatorio
-  
+
   //INICIALIZACAO DAS VARIAVEIS DE JOGO
     cleanslate();
 
@@ -311,9 +311,9 @@ void modo_inter_intermedio(char const *argv[], flags cmd_flag, char *file){
   //JOGO
     //activate_oracle(defs_jogo.tamanho_chave, defs_jogo.num_cores, rep);
     hist_max_values(argv, cmd_flag.hist, &last_game, file);
-    ptr_dados=jogo(defs_jogo, nome_jogadores, &registo_jogo, &last_game);
+    ptr_dados=jogo(defs_jogo, nome_jogadores, &registo_jogo, &last_game, file);
   //ESTATISTICAS: calculo dos resultados e apresentacao das estatisticas
-    write_file(registo_jogo, argv, file, cmd_flag.hist);
+    write_file(registo_jogo, argv, file, -1);
     criaDados(defs_jogo.num_jogadores, defs_jogo.num_jogos, ptr_dados, &mediaTempos, &numVitorias);
     vencedor(mediaTempos, nome_jogadores, defs_jogo.num_jogadores, numVitorias);
     resultados(defs_jogo.num_jogadores, defs_jogo.num_jogos, ptr_dados, 0, "mais rapido", nome_jogadores);

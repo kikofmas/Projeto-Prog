@@ -405,14 +405,15 @@ int userAttempt(dados **ptr_dados, char ultima_cor, char *jogada, int tamanho_ch
 *             repeticao_cores - indica se exite repeticao de cores na chave
 *             nome_jogadores[4][21] - array onde estao guardados os nomes dos jogadores
 *             dados[4][5][3] - array onde se guardam os dados de jogo
+*             *file - ficheiro de historico
 *
 * Return: none
 *
 * Descricao: funcao que realiza todo o processo de jogo
 *
 ******************************************************************************/
-dados **jogo(defs def, char **nome_jogadores, game_reg **registo_jogo, hist_data *last_game){
-  FILE *fptr=fopen("game_history.dat","wb");
+dados **jogo(defs def, char **nome_jogadores, game_reg **registo_jogo, hist_data *last_game, char *file){
+  FILE *fptr=fopen(file,"ab");
   if(fptr==NULL) exit(-1);
 
   int verificacao=0, lugar_certo=0, lugar_errado=0;
@@ -424,7 +425,7 @@ dados **jogo(defs def, char **nome_jogadores, game_reg **registo_jogo, hist_data
   char *copia_jogada = (char *)calloc(def.tamanho_chave+1,sizeof(char));
   dados **ptr_dados=calloc(def.num_jogadores, sizeof(dados *));
 
-  if(chave==NULL || copia_chave==NULL || jogada==NULL || ptr_dados==NULL) exit(-1); //confirma a correta alocacao de memoria
+  if(chave==NULL || copia_chave==NULL || jogada==NULL || copia_jogada==NULL || ptr_dados==NULL) exit(-1); //confirma a correta alocacao de memoria
 
   for(int jogador=0; jogador<def.num_jogadores; jogador++){   //passagem por cada jogador
     ptr_dados[jogador]=calloc(def.num_jogos, sizeof(dados));
@@ -488,6 +489,7 @@ dados **jogo(defs def, char **nome_jogadores, game_reg **registo_jogo, hist_data
   free(chave);
   free(copia_chave);
   free(jogada);
+  free(copia_jogada);
   return (ptr_dados);
 }
 
