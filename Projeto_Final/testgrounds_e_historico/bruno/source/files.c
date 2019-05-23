@@ -12,7 +12,7 @@
 *
 * Argumentos: *file - ficheiro de inicializacao
 *             *ptr - ponteiro para a estrutura que guarda as definicoes de jogo
-*             ***nome - ponteiro para o nome dos jogadores
+*             ***nome - ponteiro para o(s) nome(s) do(s) jogadore(s)
 *
 * Return: none
 *
@@ -22,14 +22,14 @@
 * Descricao: le o ficheiro de inicializacao e guarda os dados numa estrutura
 *
 ******************************************************************************/
-void read_init(char const * file, defs *ptr, char ***nome){
-  char *text=NULL, *token=NULL, c='\0';
-  int counter=1;
+void read_init (char const * file, defs *ptr, char ***nome) {
+  char *text = NULL, *token = NULL, c = '\0';
+  int counter = 1;
   FILE *fptr = fopen(file,"rb");
 
-  if(fptr!=NULL){ //confirma que o ficheiro foi corretamente aberto
-    text = (char *)malloc(sizeof(char));
-    if(text==NULL) exit(-1);  //confirma a correta alocacao de memoria
+  if (fptr != NULL) { //confirma que o ficheiro foi corretamente aberto
+    text = (char *) malloc(sizeof(char));
+    if (text==NULL) exit(-1);  //confirma a correta alocacao de memoria
     while((c=fgetc(fptr))!=EOF){  //loop para guarda o conteudo do ficheiro de init
       text = (char *)realloc(text,counter);
       if(text==NULL) exit(-1);  //confirma a correta alocacao de memoria
