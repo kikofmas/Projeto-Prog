@@ -1,7 +1,7 @@
 PROJECT_NAME=mastermind
 
 CC=gcc
-FLAGS=-c -W -Wall -ansi -pedantic -O3 -std=c99
+FLAGS=-c -W -Wall -ansi -pedantic -Wextra -O3 -std=c99
 
 # .c files
 C_SOURCE=$(wildcard ./source/*.c)

@@ -8,6 +8,7 @@
 //LIBRARIES
 #include <stdlib.h>
 #include <stdio.h>
+
 #include "estruturas.h"
 #include "game.h"
 
@@ -23,8 +24,8 @@ int main(int argc, char const *argv[]) {
 
   if (mod == 1) {
     printf("MODO INTERATIVO\n\n");
-    printf("1) Jogador Vs. Jogador\n");
-    printf("2) Jogador Vs. Computador\n\n");
+    printf(" 1) Jogador Vs. Jogador\n");
+    printf(" 2) Jogador Vs. Computador\n\n");
     printf("Opcao: ");
     scanf("%d", &mod_inter);
     printf("\n");
@@ -36,9 +37,6 @@ int main(int argc, char const *argv[]) {
     modo_ordenacao(argv, cmd_flag, DEFAULT_FILE);
   }
   else if (mod == 3) {
-    printf("ERRO: Falta o ficheiro das inicializações\n");
-  }
-  else if (mod == 4) {
     printf("MODO TESTE\n\n");
     modo_auto(argv, cmd_flag, DEFAULT_FILE);
   }

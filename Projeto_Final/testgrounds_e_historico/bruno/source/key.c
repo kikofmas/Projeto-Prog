@@ -18,7 +18,7 @@
 *
 * Side-effects: se a alocacao nao for bem sucedida força a saida do programa
 *
-* Descricao: cria uma lista de cores possiveis para cada posicao da chave
+* Descricao: cria uma lista das cores possiveis para cada posicao da chave
 *
 ******************************************************************************/
 letras ** listaCores(int size, int colors){
@@ -338,7 +338,7 @@ int keyFinder(defs def, int size, letras ***lista_cores, tentativas **lista_tent
 * Side-effects: se a alocacao nao for bem sucedida força a saida do programa
 *               faz free das variaveis index e tentativas no fim da sua execucao
 *
-* Descricao: faz a avaliacao da mesma (P_B_) e insere a tentativa na lista
+* Descricao: faz a avaliacao da tentativa (P_B_) e insere a mesma na lista
 *
 ******************************************************************************/
 void fillLogic(int size, int *count, char *tentativa, tentativas **ptr, tentativas *prev, int modo_jogo){
@@ -457,7 +457,7 @@ int verificaResultLogic(tentativas *ptr, char *tentativa, letras ***lista_cores,
 *
 * Side-effects: none
 *
-* Descricao: funcao que permite interar por todas cores
+* Descricao: realiza a iteracao pela lista index
 *
 ******************************************************************************/
 void reset(letras ***index, letras **lista_cores, int size){

@@ -42,8 +42,11 @@ int mode_check (int argc, char const *argv[], flags *cmd_flag) {
   if (func_valid == -1) exit(-1);
   else if (cmd_flag->init==0 && cmd_flag->hist==0 && cmd_flag->ord==0) return 1;
   else if (cmd_flag->init == 0  &&  cmd_flag->hist != 0  &&  cmd_flag->ord != 0) return 2;
-  else if (cmd_flag->init==0 && ((cmd_flag->hist != 0  &&  cmd_flag->ord == 0) || (cmd_flag->hist == 0  &&  cmd_flag->ord != 0))) return 3;
-  else if (cmd_flag->init!=0) return 4;
+  else if (cmd_flag->init==0 && ((cmd_flag->hist != 0  &&  cmd_flag->ord == 0) || (cmd_flag->hist == 0  &&  cmd_flag->ord != 0))){
+    printf("ERRO: Falta o ficheiro das inicializações\n");
+    exit(-1);
+  }
+  else if (cmd_flag->init!=0) return 3;
   return 0;
 }
 
