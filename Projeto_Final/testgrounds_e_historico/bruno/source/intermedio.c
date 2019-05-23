@@ -466,7 +466,7 @@ dados **jogo(defs def, char **nome_jogadores, game_reg **registo_jogo, hist_data
           if(lugar_certo==def.tamanho_chave){
             printf("PARABENS por ter conseguido acabar o jogo!\n");
             (ptr_dados[jogador][jogo]).vitoria=1;  //guarda se o jogador conseguiu completar a partida
-            save_key(1, *registo_jogo, jogada, tempo_jogo, def);
+            save_key(1, *registo_jogo, copia_jogada, tempo_jogo, def);
             printf("Acabou o jogo apos %lis e em %d jogada(s)\n\n", tempo_jogo, tentativa+1);
             tentativa=def.tentativas;
           }
@@ -477,7 +477,7 @@ dados **jogo(defs def, char **nome_jogadores, game_reg **registo_jogo, hist_data
       }
       if(lugar_certo!=def.tamanho_chave){
         (ptr_dados[jogador][jogo]).vitoria=0;  //guarda se o jogador conseguiu completar a partida
-        save_key(0, *registo_jogo, jogada, tempo_jogo, def);
+        save_key(0, *registo_jogo, copia_jogada, tempo_jogo, def);
         printf("Lamentamos mas nao conseguiu acabar o jogo...\n");
         printf("A chave correta era: %s\n\n", chave);
       }
