@@ -2,7 +2,7 @@
 #define estruturas_included
 
 
-//estrutura para guardar os melhores dados de jogo para o modo do proj intermedio
+//estrutura para guardar os melhores dados de jogo para o modo torneio do projeto intermedio
 typedef struct {
   int tempo;
   int tentativas;
@@ -30,12 +30,18 @@ typedef struct tentativas_t {
 //estrutura para guardar os dados das inicializacoes
 typedef struct {
   char repeticao_cores;
-  int num_jogadores, duracao_jogo, num_jogos, num_cores, tamanho_chave, tentativas, tentativas_alea;
+  int num_jogadores;
+  int duracao_jogo;
+  int num_jogos;
+  int num_cores;
+  int tamanho_chave;
+  int tentativas;
+  int tentativas_alea;
 } defs;
 
 
 //estrutura para guardar em que posicao do array argv[] os argumentos se encontram
-typedef struct{
+typedef struct {
   int init;
   int hist;
   int ord;
