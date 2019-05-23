@@ -32,13 +32,13 @@
 *
 ******************************************************************************/
 int mode_check (int argc, char const *argv[], flags *cmd_flag) {
-  int func_valid=0;
+  int func_valid = 0;
 
   switch (argc) { //analise dos arguemntos dependendo da quantidade
     case 1:
-      cmd_flag->init=0;
-      cmd_flag->hist=0;
-      cmd_flag->ord=0;
+      cmd_flag->init = 0;
+      cmd_flag->hist = 0;
+      cmd_flag->ord = 0;
       break;
     case 3:
     case 5:
@@ -46,19 +46,20 @@ int mode_check (int argc, char const *argv[], flags *cmd_flag) {
       func_valid = test_mode_config(argc, argv, &cmd_flag);
       break;
     default:
-      func_valid=-1;
+      func_valid = -1;
       printf("ERRO: Numero de argumentos inválido\n");
   }
 
   //atribuicao do modo de jogo
   if (func_valid == -1) exit(-1);
-  else if (cmd_flag->init==0 && cmd_flag->hist==0 && cmd_flag->ord==0) return 1;
+  else if (cmd_flag->init == 0  &&  cmd_flag->hist == 0  &&  cmd_flag->ord == 0) return 1;
   else if (cmd_flag->init == 0  &&  cmd_flag->hist != 0  &&  cmd_flag->ord != 0) return 2;
-  else if (cmd_flag->init==0 && ((cmd_flag->hist != 0  &&  cmd_flag->ord == 0) || (cmd_flag->hist == 0  &&  cmd_flag->ord != 0))){
+  else if (cmd_flag->init == 0  &&  ((cmd_flag->hist != 0  &&  cmd_flag->ord == 0) ||
+            (cmd_flag->hist == 0  &&  cmd_flag->ord != 0))) {
     printf("ERRO: Falta o ficheiro das inicializações\n");
     exit(-1);
   }
-  else if (cmd_flag->init!=0) return 3;
+  else if (cmd_flag->init != 0) return 3;
   return 0;
 }
 
@@ -92,7 +93,6 @@ int test_mode_config (int k, char const *argv[], flags **cmd_flag) {
       exit(-1);
     }
   }
-
   return 0;
 }
 
@@ -111,7 +111,7 @@ int test_mode_config (int k, char const *argv[], flags **cmd_flag) {
 * Descricao: chama as funcoes para realizar a ordenacao do ficheiro de historico
 *
 ******************************************************************************/
-void modo_ordenacao(char const *argv[], flags cmd_flag, char *file){
+void modo_ordenacao (char const *argv[], flags cmd_flag, char *file) {
   game_reg *registo_jogo;
 
   read_hist(argv, cmd_flag.hist, &registo_jogo, file, cmd_flag.hist);
@@ -135,24 +135,24 @@ void modo_ordenacao(char const *argv[], flags cmd_flag, char *file){
 * Descricao: chama as funcoes que permitem ao computador adivinhar a chave de jogo
 *
 ******************************************************************************/
-void modo_auto(char const *argv[], flags cmd_flag, char *file){
-  defs defs_jogo={'\0',0,0,0,0,0,0,-1};
-  hist_data last_game={0, 0, NULL};
-  letras **lista_cores=NULL;
-  tentativas *lista_tentativas=NULL;
-  char **nome_jogadores=NULL;
-  int rep=0, win=0, tempo=0, num_total_tent=0;
+void modo_auto (char const *argv[], flags cmd_flag, char *file) {
+  defs defs_jogo = {'\0', 0, 0, 0, 0, 0, 0, -1};
+  hist_data last_game = {0, 0, NULL};
+  letras **lista_cores = NULL;
+  tentativas *lista_tentativas = NULL;
+  char **nome_jogadores = NULL;
+  int rep = 0, win = 0, tempo = 0, num_total_tent = 0;
 
   read_init(argv[cmd_flag.init], &defs_jogo, &nome_jogadores);
   hist_max_values(argv, cmd_flag.hist, &last_game, file);
   last_game.player_ID++;
 
-  if(tolower(defs_jogo.repeticao_cores) == 's') rep=1;
+  if (tolower(defs_jogo.repeticao_cores) == 's') rep = 1;
   activate_oracle(defs_jogo.tamanho_chave, defs_jogo.num_cores, rep);
 
   for (int i = 0; i < defs_jogo.num_jogos; i++) {
     win = 0;  //faz as reset as variaveis no inicio de cada no jogo
-    tempo=0;
+    tempo = 0;
     num_total_tent = 0;
     printf("\nJogo %d\n", i+1);
     printf("Chave: ");
@@ -162,7 +162,7 @@ void modo_auto(char const *argv[], flags cmd_flag, char *file){
     lista_cores = listaCores(defs_jogo.tamanho_chave, defs_jogo.num_cores);
     lista_tentativas = tentativasAlea(defs_jogo, &num_total_tent, &lista_cores, &win, &tempo, 1);
 
-    if(win == 0) win = keyFinder(defs_jogo, defs_jogo.tamanho_chave, &lista_cores, &lista_tentativas, &num_total_tent, &tempo, 1);
+    if (win == 0) win = keyFinder(defs_jogo, defs_jogo.tamanho_chave, &lista_cores, &lista_tentativas, &num_total_tent, &tempo, 1);
 
     printf("\nNumero de tentativas: %d\n", num_total_tent);
 
@@ -193,23 +193,23 @@ void modo_auto(char const *argv[], flags cmd_flag, char *file){
 * Descricao: chama as funcoes que permitem jogar o modo interativo PESSOA/COMPUTADOR
 *
 ******************************************************************************/
-void modo_inter_pc(char const *argv[], flags cmd_flag, char *file){
-  defs defs_jogo={'\0',0,0,0,0,0,0,-1};
-  hist_data last_game={0, 0, NULL};
-  letras **lista_cores=NULL;
-  tentativas *lista_tentativas=NULL;
-  char **nome_jogadores=NULL;
-  int combo_possivel=0, rep=0, win=0, tempo=0, num_total_tent=0;
+void modo_inter_pc (char const *argv[], flags cmd_flag, char *file) {
+  defs defs_jogo = {'\0', 0, 0, 0, 0, 0, 0, -1};
+  hist_data last_game = {0, 0, NULL};
+  letras **lista_cores = NULL;
+  tentativas *lista_tentativas = NULL;
+  char **nome_jogadores = NULL;
+  int combo_possivel = 0, rep = 0, win = 0, tempo = 0, num_total_tent = 0;
 
   hist_max_values(argv, cmd_flag.hist, &last_game, file);
   last_game.player_ID++;
 
-  defs_jogo.num_jogadores=1;
+  defs_jogo.num_jogadores = 1;
   //nome dos jogadores
-  nome_jogadores=calloc(1,sizeof(char*));
-  if(nome_jogadores==NULL) exit(-1);  //confirma a correta alocacao de memoria
-  nome_jogadores[0]=calloc(strlen("computer")+1,sizeof(char));
-  if(nome_jogadores[0]==NULL) exit(-1); //confirma a correta alocacao de memoria
+  nome_jogadores = calloc(1, sizeof(char*));
+  if (nome_jogadores == NULL) exit(-1);  //confirma a correta alocacao de memoria
+  nome_jogadores[0] = calloc(strlen("computer")+1, sizeof(char));
+  if (nome_jogadores[0] == NULL) exit(-1); //confirma a correta alocacao de memoria
   strcpy(nome_jogadores[0],"computer");
   //numero de jogos
   initialization(&defs_jogo.num_jogos, 1, 5, "o numero de jogos");
@@ -228,18 +228,18 @@ void modo_inter_pc(char const *argv[], flags cmd_flag, char *file){
     combo_possivel=checkCombinacao(&defs_jogo);
   } while(combo_possivel == -1);
 
-  if(tolower(defs_jogo.repeticao_cores)=='s') rep=1;
+  if (tolower(defs_jogo.repeticao_cores) == 's') rep = 1;
   activate_oracle(defs_jogo.tamanho_chave, defs_jogo.num_cores, rep);
 
-  for(int i=0;i<defs_jogo.num_jogos;i++){
+  for (int i = 0; i < defs_jogo.num_jogos; i++) {
     win = 0;  //reset das variaveis a cada jogo
-    tempo=0;
+    tempo = 0;
     num_total_tent = 0;
-    printf("\nJogo %d\n",i);
+    printf("\nJogo %d\n", i);
     lista_cores = listaCores(defs_jogo.tamanho_chave, defs_jogo.num_cores);
     lista_tentativas = tentativasAlea(defs_jogo, &num_total_tent, &lista_cores, &win, &tempo, 2);
 
-    if (win==0) win = keyFinder(defs_jogo, defs_jogo.tamanho_chave, &lista_cores, &lista_tentativas, &num_total_tent, &tempo, 2);
+    if (win == 0) win = keyFinder(defs_jogo, defs_jogo.tamanho_chave, &lista_cores, &lista_tentativas, &num_total_tent, &tempo, 2);
 
     printf("\nNumero de tentativas: %d\n", num_total_tent);
 
@@ -269,14 +269,14 @@ void modo_inter_pc(char const *argv[], flags cmd_flag, char *file){
 * Descricao: chama as funcoes que permitem jogar o modo interativo PESSOA/PESSOA
 *
 ******************************************************************************/
-void modo_inter_intermedio(char const *argv[], flags cmd_flag, char *file){
-  int combo_possivel=0;
-  char **nome_jogadores=NULL;
-  int *numVitorias=NULL;
-  float *mediaTempos=NULL;
-  dados **ptr_dados=NULL; //[][][0]=tempo, [][][1]=tentativas, [][][2]=vitoria
-  defs defs_jogo={'\0',0,0,0,0,0,0,-1};
-  hist_data last_game={0, 0, NULL};
+void modo_inter_intermedio (char const *argv[], flags cmd_flag, char *file) {
+  int combo_possivel = 0;
+  char **nome_jogadores = NULL;
+  int *numVitorias = NULL;
+  float *mediaTempos = NULL;
+  dados **ptr_dados = NULL; //[][][0]=tempo, [][][1]=tentativas, [][][2]=vitoria
+  defs defs_jogo = {'\0', 0, 0, 0, 0, 0, 0, -1};
+  hist_data last_game = {0, 0, NULL};
   game_reg *registo_jogo;
 
   time_t t;
@@ -289,7 +289,7 @@ void modo_inter_intermedio(char const *argv[], flags cmd_flag, char *file){
     //numero de jogadores
     initialization(&defs_jogo.num_jogadores, 1, 4, "o numero de jogadores");
     //nome dos jogadores
-    nome_jogadores=initializationNames(defs_jogo.num_jogadores);
+    nome_jogadores = initializationNames(defs_jogo.num_jogadores);
     //numero de jogos
     initialization(&defs_jogo.num_jogos, 1, 5, "o numero de jogos");
     //numero maximo de tentivas por jogo
@@ -305,13 +305,13 @@ void modo_inter_intermedio(char const *argv[], flags cmd_flag, char *file){
       initializationRepetitions(&defs_jogo.repeticao_cores);
     //verificacao de que a combinacao de parametros e possivel
       combo_possivel=checkCombinacao(&defs_jogo);
-    } while(combo_possivel == -1);
+    }while(combo_possivel == -1);
     clearScreen(1);
 
   //JOGO
     //activate_oracle(defs_jogo.tamanho_chave, defs_jogo.num_cores, rep);
     hist_max_values(argv, cmd_flag.hist, &last_game, file);
-    ptr_dados=jogo(defs_jogo, nome_jogadores, &registo_jogo, &last_game, file);
+    ptr_dados = jogo(defs_jogo, nome_jogadores, &registo_jogo, &last_game, file);
   //ESTATISTICAS: calculo dos resultados e apresentacao das estatisticas
     write_file(registo_jogo, argv, file, -1);
     criaDados(defs_jogo.num_jogadores, defs_jogo.num_jogos, ptr_dados, &mediaTempos, &numVitorias);
