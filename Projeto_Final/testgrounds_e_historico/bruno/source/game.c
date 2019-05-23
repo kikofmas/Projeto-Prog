@@ -281,7 +281,7 @@ void modo_inter_intermedio(char const *argv[], flags cmd_flag, char *file){
 
   time_t t;
   srand((unsigned) time(&t)); //inicializa o gerador aleatorio
-
+  
   //INICIALIZACAO DAS VARIAVEIS DE JOGO
     cleanslate();
 

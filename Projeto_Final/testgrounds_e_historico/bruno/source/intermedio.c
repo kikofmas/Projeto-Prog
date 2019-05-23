@@ -421,6 +421,7 @@ dados **jogo(defs def, char **nome_jogadores, game_reg **registo_jogo, hist_data
   char *chave = (char *)calloc(def.tamanho_chave+1,sizeof(char));
   char *copia_chave = (char *)calloc(def.tamanho_chave+1,sizeof(char));
   char *jogada = (char *)calloc(def.tamanho_chave+1,sizeof(char));
+  char *copia_jogada = (char *)calloc(def.tamanho_chave+1,sizeof(char));
   dados **ptr_dados=calloc(def.num_jogadores, sizeof(dados *));
 
   if(chave==NULL || copia_chave==NULL || jogada==NULL || ptr_dados==NULL) exit(-1); //confirma a correta alocacao de memoria
@@ -458,8 +459,9 @@ dados **jogo(defs def, char **nome_jogadores, game_reg **registo_jogo, hist_data
           }
 
         //verificacao da igualdade entre a chave de jogo e a tentativa do jogador
+          strcpy(copia_jogada,jogada);
           comparaChave(def.tamanho_chave, jogada, copia_chave, &lugar_certo, &lugar_errado);
-          save_guess_ini(*registo_jogo, lugar_certo, lugar_errado, tentativa, jogada);
+          save_guess_ini(*registo_jogo, lugar_certo, lugar_errado, tentativa, copia_jogada);
 
           if(lugar_certo==def.tamanho_chave){
             printf("PARABENS por ter conseguido acabar o jogo!\n");
