@@ -17,7 +17,7 @@
 
 int main (int argc, char const *argv[]) {
 //declaracao das variaveis para o modo de funcionamento do programa
-  int mod = 0, mod_inte r= 0;
+  int mod = 0, mod_inter= 0;
   flags cmd_flag = {0, 0, 0};
 
   //selecao do modo de jogo
