@@ -24,6 +24,8 @@
 letras ** listaCores(int size, int colors){
   letras *aux;
   letras **lista_cores = (letras **)calloc(size,sizeof(letras*));
+
+
   if(lista_cores == NULL) exit(-1); //confirma a correta alocacao de memoria
   for(int index=0;index<size;index++){
     lista_cores[index] = calloc(1,sizeof(letras));
@@ -41,6 +43,7 @@ letras ** listaCores(int size, int colors){
       aux = aux->next;
     }
   }
+
   return lista_cores;
 }
 
@@ -64,6 +67,7 @@ letras ** listaCores(int size, int colors){
 ******************************************************************************/
 tentativas * tentativasAlea(defs def, int *count, letras ***lista_cores, int *win, int *tempo_exec, int modo_jogo){
   tentativas *lista_tentativas=NULL, *aux=NULL;
+
   struct timeval stop, start;
   if(def.tentativas_alea>0){
     printf("Tentativas aleatorias:\n");
@@ -80,7 +84,6 @@ tentativas * tentativasAlea(defs def, int *count, letras ***lista_cores, int *wi
       *tempo_exec = *tempo_exec + stop.tv_usec-start.tv_usec;
       return lista_tentativas;
     }
-
     for(int i=1;i<def.tentativas_alea;i++){
       aux->next = calloc(1,sizeof(tentativas));
       if(aux->next==NULL) exit(-1); //confirma a correta alocacao de memoria
@@ -181,14 +184,16 @@ int verificaResultAlea(tentativas *ptr, letras ***lista_cores, int size){
           free(color_aux);
         }
         else{
-          while(color_aux->next->letra != ptr->tentativa[i]){
-            color_aux = color_aux->next;
-            if(color_aux->next==NULL) break;
-          }
           if(color_aux->next!=NULL){
-            aux_rm = color_aux->next;
-            color_aux->next=color_aux->next->next;
-            free(aux_rm);
+            while(color_aux->next->letra != ptr->tentativa[i]){
+              color_aux = color_aux->next;
+              if(color_aux->next==NULL) break;
+            }
+            if(color_aux->next!=NULL){
+              aux_rm = color_aux->next;
+              color_aux->next=color_aux->next->next;
+              free(aux_rm);
+            }
           }
         }
       }
@@ -202,14 +207,16 @@ int verificaResultAlea(tentativas *ptr, letras ***lista_cores, int size){
         free(color_aux);
       }
       else{
-        while(color_aux->next->letra!=ptr->tentativa[i]){
-          color_aux = color_aux->next;
-          if(color_aux->next==NULL) break;
-        }
+        if(color_aux->next!=NULL){
+          while(color_aux->next->letra!=ptr->tentativa[i]){
+            color_aux = color_aux->next;
+            if(color_aux->next==NULL) break;
+          }
           if(color_aux->next!=NULL){
-          aux_rm = color_aux->next;
-          color_aux->next=color_aux->next->next;
-          free(aux_rm);
+            aux_rm = color_aux->next;
+            color_aux->next=color_aux->next->next;
+            free(aux_rm);
+          }
         }
       }
     }
@@ -405,14 +412,16 @@ int verificaResultLogic(tentativas *ptr, char *tentativa, letras ***lista_cores,
             free(color_aux);
           }
           else{
-            while(color_aux->next->letra != tentativa[i]){
-              color_aux = color_aux->next;
-              if(color_aux->next==NULL) break;
-            }
             if(color_aux->next!=NULL){
-              aux_rm = color_aux->next;
-              color_aux->next=color_aux->next->next;
-              free(aux_rm);
+              while(color_aux->next->letra != tentativa[i]){
+                color_aux = color_aux->next;
+                if(color_aux->next==NULL) break;
+              }
+              if(color_aux->next!=NULL){
+                aux_rm = color_aux->next;
+                color_aux->next=color_aux->next->next;
+                free(aux_rm);
+              }
             }
           }
         }
@@ -426,14 +435,16 @@ int verificaResultLogic(tentativas *ptr, char *tentativa, letras ***lista_cores,
           free(color_aux);
         }
         else{
-          while(color_aux->next->letra != tentativa[i]){
-            color_aux = color_aux->next;
-            if(color_aux->next==NULL) break;
-          }
           if(color_aux->next!=NULL){
-            aux_rm = color_aux->next;
-            color_aux->next=color_aux->next->next;
-            free(aux_rm);
+            while(color_aux->next->letra != tentativa[i]){
+              color_aux = color_aux->next;
+              if(color_aux->next==NULL) break;
+            }
+            if(color_aux->next!=NULL){
+              aux_rm = color_aux->next;
+              color_aux->next=color_aux->next->next;
+              free(aux_rm);
+            }
           }
         }
       }
