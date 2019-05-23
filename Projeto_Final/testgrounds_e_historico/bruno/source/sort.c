@@ -172,7 +172,7 @@ void reord_2_elements(game_reg *ptr) {
 *
 ******************************************************************************/
 void save_game_ini(game_reg **registo_jogo, hist_data *last_game, char **nome_jogadores, defs defs_jogo, int jogador){
-  static int k=0; //se houver ficheiro hmmmmm
+  static int k=0;
   game_reg *current_game=*registo_jogo;
   //inicio de jogo
   if (k==0) {  //verifica se primeiro elemento da lista esta preenchido
@@ -251,9 +251,9 @@ void save_key(int k, game_reg *registo_jogo, char jogada[], time_t tempo_jogo, d
   /*onde se grava a vitoria*/
   if(k==1) {
     current_game->game_time=tempo_jogo;
-    current_game->key=calloc(strlen(jogada), sizeof(char));
+    current_game->key=calloc(strlen(jogada)+1, sizeof(char));
     if(current_game->key==NULL) exit(-1); //confirma a correta alocacao de memoria
-    strncpy(current_game->key, jogada, strlen(jogada));
+    strcpy(current_game->key, jogada);
   }
   /*onde se mete a derrota*/
   if(k==0) {
@@ -298,12 +298,12 @@ void save_guess_ini(game_reg *top, int lugar_certo, int lugar_errado, int tentat
     current_guess=current_game->first; //se e a primeira vez que se passa aqui estrutura esta nao esta alocada, dai voltar a fazer isto
 
     current_guess->tent_ID=tentativa+1;
-    current_guess->tentativa=calloc(strlen(jogada), sizeof(char));
+    current_guess->tentativa=calloc(strlen(jogada)+1, sizeof(char));
     if(current_guess->tentativa==NULL){ //confirma a correta alocacao de memoria
       perror("Erro");
       exit(-1);
     }
-    strncpy(current_guess->tentativa, jogada, strlen(jogada));
+    strcpy(current_guess->tentativa, jogada);
     sprintf(current_guess->resultado, "P%1dB%1d", lugar_certo, lugar_errado);
     current_guess->prev=NULL;
     current_guess->next=NULL;
@@ -319,12 +319,12 @@ void save_guess_ini(game_reg *top, int lugar_certo, int lugar_errado, int tentat
       exit(-1);
     }
     current_guess->next->tent_ID=tentativa+1;
-    current_guess->next->tentativa=calloc(strlen(jogada), sizeof(char));
+    current_guess->next->tentativa=calloc(strlen(jogada)+1, sizeof(char));
     if(current_guess->next->tentativa==NULL){ //confirma a correta alocacao de memoria
       perror("Erro");
       exit(-1);
     }
-    strncpy(current_guess->next->tentativa, jogada, strlen(jogada));
+    strcpy(current_guess->next->tentativa, jogada);
     sprintf(current_guess->next->resultado, "P%1dB%1d", lugar_certo, lugar_errado);
     current_guess->next->prev=current_guess;
     current_guess->next->next=NULL;
