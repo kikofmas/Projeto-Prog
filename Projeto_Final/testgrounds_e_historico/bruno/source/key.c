@@ -83,11 +83,11 @@ tentativas * tentativasAlea (defs def, int *count, letras ***lista_cores, int *w
 
     for (int i = 1; i < def.tentativas_alea; i++) {
       aux->next = (tentativas *) calloc(1,sizeof(tentativas));
-      if(aux->next==NULL) exit(-1); //confirma a correta alocacao de memoria
+      if (aux->next == NULL) exit(-1); //confirma a correta alocacao de memoria
       fillAlea(aux->next, def.tamanho_chave, def.num_cores, count, aux, modo_jogo);
       printf("%d: %s %s\n", aux->next->tent_ID, aux->next->tentativa, aux->next->resultado);
-      if(verificaResultAlea(aux->next, lista_cores, def.tamanho_chave)==1){
-        *win=1;
+      if (verificaResultAlea(aux->next, lista_cores, def.tamanho_chave) == 1) {
+        *win = 1;
         return lista_tentativas;
         gettimeofday(&stop, NULL);
         *tempo_exec = *tempo_exec + stop.tv_usec-start.tv_usec;
