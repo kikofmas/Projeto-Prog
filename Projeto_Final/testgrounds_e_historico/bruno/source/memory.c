@@ -41,3 +41,41 @@ void clear_memory(char **vect1, int v1, dados **ptr_dados, float *vect3, int *ve
   free(vect4);
   free_game_registry(registo_jogo);
 }
+
+/******************************************************************************
+* Nome da funcao: reset()
+*
+* Argumentos: size - tamanho da chave de jogo
+*             ***lista_cores - array de listas com as cores para cada posicao
+*             **lista_tentativas - lista que guarda as tentativas efetuadas pelo computador
+*
+* Return: 1 - se a tentativa coincidir com a Chave
+*         0 - nos restantes casos
+*
+* Side-effects: none
+*
+* Descricao: funcao para dar free a toda a memoria alocada pelo algoritmo
+*
+******************************************************************************/
+void clear_keyFinder(int size, tentativas **lista_tentativas, letras ***lista_cores){
+  tentativas *aux_tenta;
+  letras *aux_letras;
+
+  for(int i=0;i<size;i++){
+    while((*lista_cores)[i]!=NULL){
+      aux_letras = (*lista_cores)[i];
+      (*lista_cores)[i]=(*lista_cores)[i]->next;
+      free(aux_letras);
+    }
+  }
+
+  while (*lista_tentativas!=NULL) {
+    aux_tenta=(*lista_tentativas);
+    (*lista_tentativas)=(*lista_tentativas)->next;
+    free(aux_tenta->tentativa);
+    free(aux_tenta);
+  }
+
+  free(*lista_cores);
+  free(*lista_tentativas);
+}

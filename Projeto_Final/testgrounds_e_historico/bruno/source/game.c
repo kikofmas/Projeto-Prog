@@ -107,7 +107,7 @@ void modo_auto(char const *argv[], flags cmd_flag, char *file){
     printf("\nNumero de tentativas: %d\n", num_total_tent);
 
     write_file_raw(lista_tentativas, argv, file, cmd_flag.hist, &last_game, nome_jogadores, num_total_tent, tempo, defs_jogo, win);
-    clear(defs_jogo.tamanho_chave, &lista_tentativas, &lista_cores);
+    clear_keyFinder(defs_jogo.tamanho_chave, &lista_tentativas, &lista_cores);
     sleep(1);
   }
 
@@ -168,7 +168,7 @@ void modo_inter_pc(char const *argv[], flags cmd_flag, char *file){
 
     write_file_raw(lista_tentativas, argv, file, cmd_flag.hist, &last_game, nome_jogadores, num_total_tent, tempo, defs_jogo, win);
 
-    clear(defs_jogo.tamanho_chave, &lista_tentativas, &lista_cores);
+    clear_keyFinder(defs_jogo.tamanho_chave, &lista_tentativas, &lista_cores);
     sleep(1);
   }
 
@@ -192,7 +192,7 @@ void modo_inter_intermedio(char const *argv[], flags cmd_flag, char *file){
 
   //INICIALIZACAO DAS VARIAVEIS DE JOGO
     cleanslate();
-    
+
     introducao();
     //numero de jogadores
     initialization(&defs_jogo.num_jogadores, 1, 4, "o numero de jogadores");

@@ -9,6 +9,5 @@ int keyFinder(defs def, int size, letras ***lista_cores, tentativas **lista_tent
 void fillLogic(int size, int *count, char *tentativa, tentativas **ptr, tentativas *prev, int modo_jogo);
 int verificaResultLogic(tentativas *ptr, char *tentativa, letras ***lista_cores, int size, letras ***index);
 void reset(letras ***index, letras **lista_cores, int size);
-void clear(int size, tentativas **lista_tentativas, letras ***lista_cores);
 
 #endif
