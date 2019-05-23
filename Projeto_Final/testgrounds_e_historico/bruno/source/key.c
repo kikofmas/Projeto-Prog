@@ -21,21 +21,21 @@
 * Descricao: cria uma lista das cores possiveis para cada posicao da chave
 *
 ******************************************************************************/
-letras ** listaCores(int size, int colors){
+letras ** listaCores (int size, int colors) {
   letras *aux;
-  letras **lista_cores = (letras **)calloc(size,sizeof(letras*));
-  if(lista_cores == NULL) exit(-1); //confirma a correta alocacao de memoria
-  for(int index=0;index<size;index++){
-    lista_cores[index] = calloc(1,sizeof(letras));
-    if(lista_cores[index] == NULL) exit(-1);  //confirma a correta alocacao de memoria
-    aux=lista_cores[index];
+  letras **lista_cores = (letras **) calloc(size, sizeof(letras*));
+  if (lista_cores == NULL) exit(-1); //confirma a correta alocacao de memoria
+  for (int index = 0; index < size; index++) {
+    lista_cores[index] = (letras *) calloc(1, sizeof(letras));
+    if (lista_cores[index] == NULL) exit(-1);  //confirma a correta alocacao de memoria
+    aux = lista_cores[index];
 
     aux->letra = 'A';
     aux->next = NULL;
 
-    for(int offset=1;offset<colors;offset++){
-      aux->next = calloc(1,sizeof(letras));
-      if(aux->next == NULL) exit(-1); //confirma a correta alocacao de memoria
+    for (int offset = 1; offset < colors; offset++) {
+      aux->next = calloc(1, sizeof(letras));
+      if (aux->next == NULL) exit(-1); //confirma a correta alocacao de memoria
       aux->next->letra = 'A'+offset;
       aux->next->next = NULL;
       aux = aux->next;
@@ -62,27 +62,27 @@ letras ** listaCores(int size, int colors){
 * Descricao: cria uma lista com as tentativas aleatorias efetuadas
 *
 ******************************************************************************/
-tentativas * tentativasAlea(defs def, int *count, letras ***lista_cores, int *win, int *tempo_exec, int modo_jogo){
-  tentativas *lista_tentativas=NULL, *aux=NULL;
+tentativas * tentativasAlea (defs def, int *count, letras ***lista_cores, int *win, int *tempo_exec, int modo_jogo) {
+  tentativas *lista_tentativas = NULL, *aux = NULL;
   struct timeval stop, start;
-  if(def.tentativas_alea>0){
+  if (def.tentativas_alea > 0) {
     printf("Tentativas aleatorias:\n");
 
-    lista_tentativas = calloc(1,sizeof(tentativas));
-    if(lista_tentativas==NULL) exit(-1);  //confirma a correta alocacao de memoria
+    lista_tentativas = (tentativas *) calloc(1, sizeof(tentativas));
+    if (lista_tentativas == NULL) exit(-1);  //confirma a correta alocacao de memoria
     aux = lista_tentativas;
     gettimeofday(&start, NULL);
     fillAlea(aux, def.tamanho_chave, def.num_cores, count, NULL, modo_jogo);
     printf("%d: %s %s\n", aux->tent_ID, aux->tentativa, aux->resultado);
-    if(verificaResultAlea(aux, lista_cores, def.tamanho_chave)==1){
-      *win=1;
+    if (verificaResultAlea(aux, lista_cores, def.tamanho_chave) == 1) {
+      *win = 1;
       gettimeofday(&stop, NULL);
       *tempo_exec = *tempo_exec + stop.tv_usec-start.tv_usec;
       return lista_tentativas;
     }
 
-    for(int i=1;i<def.tentativas_alea;i++){
-      aux->next = calloc(1,sizeof(tentativas));
+    for (int i = 1; i < def.tentativas_alea; i++) {
+      aux->next = (tentativas *) calloc(1,sizeof(tentativas));
       if(aux->next==NULL) exit(-1); //confirma a correta alocacao de memoria
       fillAlea(aux->next, def.tamanho_chave, def.num_cores, count, aux, modo_jogo);
       printf("%d: %s %s\n", aux->next->tent_ID, aux->next->tentativa, aux->next->resultado);
