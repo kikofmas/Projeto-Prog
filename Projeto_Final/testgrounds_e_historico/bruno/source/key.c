@@ -24,10 +24,10 @@
 letras ** listaCores(int size, int colors){
   letras *aux;
   letras **lista_cores = (letras **)calloc(size,sizeof(letras*));
-  if(lista_cores == NULL) exit(-1);
+  if(lista_cores == NULL) exit(-1); //confirma a correta alocacao de memoria
   for(int index=0;index<size;index++){
     lista_cores[index] = calloc(1,sizeof(letras));
-    if(lista_cores[index] == NULL) exit(-1);
+    if(lista_cores[index] == NULL) exit(-1);  //confirma a correta alocacao de memoria
     aux=lista_cores[index];
 
     aux->letra = 'A';
@@ -35,7 +35,7 @@ letras ** listaCores(int size, int colors){
 
     for(int offset=1;offset<colors;offset++){
       aux->next = calloc(1,sizeof(letras));
-      if(aux->next == NULL) exit(-1);
+      if(aux->next == NULL) exit(-1); //confirma a correta alocacao de memoria
       aux->next->letra = 'A'+offset;
       aux->next->next = NULL;
       aux = aux->next;
@@ -69,7 +69,7 @@ tentativas * tentativasAlea(defs def, int *count, letras ***lista_cores, int *wi
     printf("Tentativas aleatorias:\n");
 
     lista_tentativas = calloc(1,sizeof(tentativas));
-    if(lista_tentativas==NULL) exit(-1);
+    if(lista_tentativas==NULL) exit(-1);  //confirma a correta alocacao de memoria
     aux = lista_tentativas;
     gettimeofday(&start, NULL);
     fillAlea(aux, def.tamanho_chave, def.num_cores, count, NULL, modo_jogo);
@@ -83,7 +83,7 @@ tentativas * tentativasAlea(defs def, int *count, letras ***lista_cores, int *wi
 
     for(int i=1;i<def.tentativas_alea;i++){
       aux->next = calloc(1,sizeof(tentativas));
-      if(aux->next==NULL) exit(-1);
+      if(aux->next==NULL) exit(-1); //confirma a correta alocacao de memoria
       fillAlea(aux->next, def.tamanho_chave, def.num_cores, count, aux, modo_jogo);
       printf("%d: %s %s\n", aux->next->tent_ID, aux->next->tentativa, aux->next->resultado);
       if(verificaResultAlea(aux->next, lista_cores, def.tamanho_chave)==1){
@@ -126,7 +126,7 @@ void fillAlea(tentativas *ptr, int size, int colors, int *count, tentativas *pre
   reply *answer = NULL;
   int pretas=0, brancas=0;
   ptr->tentativa = calloc(size+1,sizeof(char));
-  if(ptr->tentativa==NULL) exit(-1);
+  if(ptr->tentativa==NULL) exit(-1);  //confirma a correta alocacao de memoria
   for(int a=0;a<size;a++){
     ptr->tentativa[a] = 'A'+(rand()%colors);
   }
@@ -242,9 +242,9 @@ int keyFinder(defs def, int size, letras ***lista_cores, tentativas **lista_tent
   tentativas *aux=NULL;
   struct timeval stop, start;
   letras **index = (letras **)calloc(size,sizeof(letras*));
-  if(index==NULL) exit(-1);
+  if(index==NULL) exit(-1); //confirma a correta alocacao de memoria
   char *tentativa = (char *)calloc(size+1,sizeof(char));
-  if(tentativa==NULL) exit(-1);
+  if(tentativa==NULL) exit(-1); //confirma a correta alocacao de memoria
 
   printf("Tentativas logicas:\n");
 
@@ -264,7 +264,7 @@ int keyFinder(defs def, int size, letras ***lista_cores, tentativas **lista_tent
     if(*lista_tentativas==NULL){
 
       *lista_tentativas = calloc(1,sizeof(tentativas));
-      if(*lista_tentativas==NULL) exit(-1);
+      if(*lista_tentativas==NULL) exit(-1); //confirma a correta alocacao de memoria
 
       fillLogic(size, count, tentativa, lista_tentativas, NULL, modo_jogo);
 
@@ -300,7 +300,7 @@ int keyFinder(defs def, int size, letras ***lista_cores, tentativas **lista_tent
         aux = *lista_tentativas;
         while(aux->next!=NULL) aux = aux->next;
         aux->next = calloc(1,sizeof(tentativas));
-        if(aux->next==NULL) exit(-1);
+        if(aux->next==NULL) exit(-1); //confirma a correta alocacao de memoria
         fillLogic(size, count, tentativa, &(aux->next), aux, modo_jogo);
         printf("%d: %s %s\n", *count, tentativa, aux->next->resultado);
         if(verificaResultLogic(aux->next, tentativa, lista_cores, size, &index)==1){
@@ -358,7 +358,7 @@ void fillLogic(int size, int *count, char *tentativa, tentativas **ptr, tentativ
   }
   sprintf((*ptr)->resultado,"P%dB%d", (*ptr)->pretas, (*ptr)->brancas);
   (*ptr)->tentativa = calloc(size+1,sizeof(char));
-  if((*ptr)->tentativa==NULL) exit(-1);
+  if((*ptr)->tentativa==NULL) exit(-1); //confirma a correta alocacao de memoria
   strcpy((*ptr)->tentativa,tentativa);
   (*ptr)->next = NULL;
   (*ptr)->prev=prev;

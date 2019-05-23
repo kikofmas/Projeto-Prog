@@ -9,6 +9,20 @@
 #include "sort.h"
 
 
+/******************************************************************************
+* Nome da funcao: sort_registry()
+*
+* Argumentos: **registo_jogo - pointer para a lista com o registo de jogo
+*             pos - posicao do argumento de ordenacao
+*             *argv[] - valores passados atraves da linha de comandos
+*
+* Return: none
+*
+* Side-effects: forca a saida caso a instrucao esteja incorreta
+*
+* Descricao: escolhe o tipo de ordenacao fast/short dependendo do input do user
+*
+******************************************************************************/
 void sort_registry(game_reg **registo_jogo, int pos, char const *argv[]){
   char shrt[]="short", fst[]="fast";
   if (strcmp(fst, argv[pos]) == 0) {
@@ -17,8 +31,25 @@ void sort_registry(game_reg **registo_jogo, int pos, char const *argv[]){
     *registo_jogo=recursive_bubble_sort_short(*registo_jogo, NULL);
   } else {
     printf("ERRO: impossivel ordenar. Instrucao errada\n");
+    exit(-1);
   }
 }
+
+
+/******************************************************************************
+* Nome da funcao: recursive_bubble_sort_fast()
+*
+* Argumentos: *top - .....
+*             *limit - ....
+*
+* Return: ponteiro para o inicio da lista com o registo de jogo ja organizada
+*
+* Side-effects: none
+*
+* Descricao: ordena o registo de jogo do menor tempo para o maior e
+*            agrupa os jogos por classes
+*
+******************************************************************************/
 game_reg *recursive_bubble_sort_fast(game_reg *top, game_reg *limit){
   game_reg *current=top;
   if (current == limit) { //base case
@@ -46,11 +77,27 @@ game_reg *recursive_bubble_sort_fast(game_reg *top, game_reg *limit){
     top=top->prev;
   }
   recursive_bubble_sort_fast(top, current);//recursion
-  while (top->prev!=NULL) {
+  while (top->prev!=NULL) { //poe o ponteiro a apontar para o inicio da lista
     top=top->prev;
   }
   return top;//return "new" first element of list
 }
+
+
+/******************************************************************************
+* Nome da funcao: recursive_bubble_sort_short()
+*
+* Argumentos: *top - .....
+*             *limit - ....
+*
+* Return: ponteiro para o inicio da lista com o registo de jogo ja organizada
+*
+* Side-effects: none
+*
+* Descricao: Ordena o registo de jogo do menor numero de jogadas
+*            para o maior e agrupa os jogos por classes
+*
+******************************************************************************/
 game_reg *recursive_bubble_sort_short(game_reg *top, game_reg *limit){
   game_reg *current=top;
   if (current == limit) { //base case
@@ -78,11 +125,25 @@ game_reg *recursive_bubble_sort_short(game_reg *top, game_reg *limit){
     top=top->prev;
   }
   recursive_bubble_sort_short(top, current);//recursion
-  while (top->prev!=NULL) {
+  while (top->prev!=NULL) { //poe o ponteiro a apontar para o inicio da lista
     top=top->prev;
   }
   return top;//return "new" first element of list
 }
+
+
+/******************************************************************************
+* Nome da funcao: recursive_bubble_sort_short()
+*
+* Argumentos: *ptr - elemento a trocar (troca de posicao com o seguinte)
+*
+* Return: none
+*
+* Side-effects: none
+*
+* Descricao: troca a posicao de dois elementos consecutivos
+*
+******************************************************************************/
 void reord_2_elements(game_reg *ptr) {
   game_reg *aux = ptr->next;
   ptr->next=aux->next;
@@ -94,23 +155,35 @@ void reord_2_elements(game_reg *ptr) {
 }
 
 
-
-
-
-
+/******************************************************************************
+* Nome da funcao: save_game_ini()
+*
+* Argumentos: **registo_jogo - ponteiro para a lista do registo de jogo
+*             *last_game - estrutura que guarda os valores mais elevados de jogos
+*             **nome_jogadores - ponteiro para o nome dos jogadores
+*             defs_jogo - definicoes de jogo
+*             jogador - numero do jogador atual
+*
+* Return: none
+*
+* Side-effects: forca a saida caso a alocacao de memoria nao for bem sucedida
+*
+* Descricao: cria/guarda na lista do registo de jogo os dados do jogo a decorrer
+*
+******************************************************************************/
 void save_game_ini(game_reg **registo_jogo, hist_data *last_game, char **nome_jogadores, defs defs_jogo, int jogador){
   static int k=0; //se houver ficheiro hmmmmm
-  game_reg *current_game=*registo_jogo; //chama-se current mas isso so e vdd para a primeira vez, a partir dai e o anterior
+  game_reg *current_game=*registo_jogo;
   //inicio de jogo
-  /*isto so funciona se leres o ficheiro -h antes e meteres o pointer a apontar para a lista
-  caso se implemente de maneira diferente tenho de mudar isto*/
   if (k==0) {  //verifica se primeiro elemento da lista esta preenchido
     *registo_jogo=calloc(1, sizeof(game_reg));
+    if(*registo_jogo==NULL) exit(-1); //confirma a correta alocacao de memoria
     current_game=*registo_jogo; //se e a primeira vez que se passa aqui estrutura esta nao esta alocada, dai voltar a fazer isto
 
     current_game->game_ID=((last_game->ID)+1);
     (last_game->ID)++;
     current_game->player_name=calloc(strlen(*(nome_jogadores+jogador))+1, sizeof(char));
+    if(current_game->player_name==NULL) exit(-1); //confirma a correta alocacao de memoria
     strcpy(current_game->player_name, *(nome_jogadores+jogador));
     sprintf(current_game->player_ID, "J%03d", (last_game->player_ID)+1);
     (last_game->player_ID)++;
@@ -121,15 +194,18 @@ void save_game_ini(game_reg **registo_jogo, hist_data *last_game, char **nome_jo
     current_game->prev=last_game->last;
     last_game->last=current_game;
     current_game->next=NULL;
+    current_game->prev=NULL;
     k=1;
   } else {
     while (current_game->next != NULL){
       current_game = current_game->next;
     }
     current_game->next=calloc(1, sizeof(game_reg));
+    if(current_game->next==NULL) exit(-1); //confirma a correta alocacao de memoria
     current_game->next->game_ID=((last_game->ID)+1);
     (last_game->ID)++;
     current_game->next->player_name=calloc(strlen(*(nome_jogadores+jogador))+1, sizeof(char));
+    if(current_game->next->player_name==NULL) exit(-1); //confirma a correta alocacao de memoria
     strcpy(current_game->next->player_name, *(nome_jogadores+jogador));
     if (strcmp(current_game->player_name, current_game->next->player_name) == 0) {
       strcpy(current_game->next->player_ID, current_game->player_ID);
@@ -144,9 +220,28 @@ void save_game_ini(game_reg **registo_jogo, hist_data *last_game, char **nome_jo
     current_game->next->prev=last_game->last;
     last_game->last=current_game->next;
     current_game->next->next=NULL;
+    current_game->next->prev=current_game;
   }
 }
 
+
+/******************************************************************************
+* Nome da funcao: save_key()
+*
+* Argumentos: k - indica se a chave de jogo foi acertada
+*             *registo_jogo - ponteiro para a lista do registo de jogo
+*             jogada[] - tentativa do jogador de acertar a chave
+*             tempo_jogo - tempo que o
+*             defs_jogo - definicoes de jogo
+*             jogador - numero do jogador atual
+*
+* Return: none
+*
+* Side-effects: forca a saida caso a alocacao de memoria nao for bem sucedida
+*
+* Descricao: guarda na lista do registo de jogo a chave de jogo (no caso de ser descoberta)
+*
+******************************************************************************/
 void save_key(int k, game_reg *registo_jogo, char jogada[], time_t tempo_jogo, defs def){
   game_reg *current_game = registo_jogo;
   char travessao[] = "-";
@@ -157,16 +252,35 @@ void save_key(int k, game_reg *registo_jogo, char jogada[], time_t tempo_jogo, d
   if(k==1) {
     current_game->game_time=tempo_jogo;
     current_game->key=calloc(strlen(jogada), sizeof(char));
+    if(current_game->key==NULL) exit(-1); //confirma a correta alocacao de memoria
     strncpy(current_game->key, jogada, strlen(jogada));
   }
   /*onde se mete a derrota*/
   if(k==0) {
     current_game->game_time=def.duracao_jogo;
     current_game->key=calloc((strlen(travessao))+1, sizeof(char));
+    if(current_game->key==NULL) exit(-1); //confirma a correta alocacao de memoria
     strcpy(current_game->key, travessao);
   }
 }
 
+
+/******************************************************************************
+* Nome da funcao: save_key()
+*
+* Argumentos: *top - .......
+*             lugar_certo - numero de cores certas na posicao correta
+*             lugar_errado - numero de cores certas na posicao errada
+*             tentativa - numero da tentativa do user
+*             jogada[] - tentativa para adivinhar a chave efetuada pelo user
+*
+* Return: none
+*
+* Side-effects: forca a saida caso a alocacao de memoria nao for bem sucedida
+*
+* Descricao: cria/guarda na lista de tentativas as tentativas do utilizador
+*
+******************************************************************************/
 void save_guess_ini(game_reg *top, int lugar_certo, int lugar_errado, int tentativa, char jogada[]) {
   game_reg *current_game=top;
   tentativas *current_guess;
@@ -177,7 +291,7 @@ void save_guess_ini(game_reg *top, int lugar_certo, int lugar_errado, int tentat
   if (tentativa==0) {  //verifica se primeiro elemento da lista esta preenchido
     current_game->tentativas=tentativa+1;
     current_game->first=calloc(1, sizeof(tentativas));
-    if(current_game->first==NULL){
+    if(current_game->first==NULL){  //confirma a correta alocacao de memoria
       perror("Erro");
       exit(-1);
     }
@@ -185,7 +299,7 @@ void save_guess_ini(game_reg *top, int lugar_certo, int lugar_errado, int tentat
 
     current_guess->tent_ID=tentativa+1;
     current_guess->tentativa=calloc(strlen(jogada), sizeof(char));
-    if(current_guess->tentativa==NULL){
+    if(current_guess->tentativa==NULL){ //confirma a correta alocacao de memoria
       perror("Erro");
       exit(-1);
     }
@@ -200,13 +314,13 @@ void save_guess_ini(game_reg *top, int lugar_certo, int lugar_errado, int tentat
     }
     current_game->tentativas=tentativa+1;
     current_guess->next=calloc(1, sizeof(tentativas));
-    if(current_guess->next==NULL){
+    if(current_guess->next==NULL){  //confirma a correta alocacao de memoria
       perror("Erro");
       exit(-1);
     }
     current_guess->next->tent_ID=tentativa+1;
     current_guess->next->tentativa=calloc(strlen(jogada), sizeof(char));
-    if(current_guess->next->tentativa==NULL){
+    if(current_guess->next->tentativa==NULL){ //confirma a correta alocacao de memoria
       perror("Erro");
       exit(-1);
     }

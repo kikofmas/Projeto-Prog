@@ -152,6 +152,7 @@ void initialization(int *var, int min, int max, char frase[30]){
 char **initializationNames(int num_jogadores){
   char aux[101]="\0"; //variavel auxiliar para recolher o input do user
   char **nome_jogadores=calloc(num_jogadores, sizeof(char *));
+  if(nome_jogadores==NULL) exit(-1);  //confirma a correta alocacao de memoria
   for (int jogador=0; jogador < num_jogadores; jogador++) {
     while (1) {
       printf("Insira o nome do jogador %d (maximo de 20 caracteres):  ", jogador+1);
@@ -162,6 +163,7 @@ char **initializationNames(int num_jogadores){
       }
       else{
         nome_jogadores[jogador]=(char *)calloc(strlen(aux)+1, sizeof(char));
+        if(nome_jogadores[jogador]==NULL) exit(-1);  //confirma a correta alocacao de memoria
         sscanf(aux, "%s", nome_jogadores[jogador]);
         break;
       }
@@ -421,9 +423,11 @@ dados **jogo(defs def, char **nome_jogadores, game_reg **registo_jogo, hist_data
   char *jogada = (char *)calloc(def.tamanho_chave+1,sizeof(char));
   dados **ptr_dados=calloc(def.num_jogadores, sizeof(dados *));
 
+  if(chave==NULL || copia_chave==NULL || jogada==NULL || ptr_dados==NULL) exit(-1); //confirma a correta alocacao de memoria
+
   for(int jogador=0; jogador<def.num_jogadores; jogador++){   //passagem por cada jogador
     ptr_dados[jogador]=calloc(def.num_jogos, sizeof(dados));
-
+    if(ptr_dados[jogador]==NULL) exit(-1);  //confirma a correta alocacao de memoria
     for(int jogo=0; jogo<def.num_jogos; jogo++){   //passagem por cada jogo a fazer
       save_game_ini(registo_jogo, last_game, nome_jogadores, def, jogador);
       printf("Jogador %d: %s, e a sua vez\n\n", jogador+1, *(nome_jogadores+jogador));
@@ -505,6 +509,8 @@ void criaDados(int num_jogadores, int num_jogos, dados **ptr_dados, float **medi
 
   *mediaTempos=(float *)calloc(num_jogadores+1, sizeof(float));
   *numVitorias=(int *)calloc(num_jogadores+1, sizeof(int));
+
+  if(*mediaTempos==NULL || *numVitorias==NULL) exit(-1);  //confirma a correta alocacao de memoria
 
   for (int jogador = 0; jogador < num_jogadores; jogador++) {
     for (int jogo = 0; jogo < num_jogos; jogo++) {

@@ -13,15 +13,15 @@
 #include "game.h"
 
 //DECLARACAO DE MACROS
-#define DEFAULT_FILE "game_history.dat"
+#define DEFAULT_FILE "game_history.dat" //ficheiro de historico utilizado quando nenhum e dado na linha de comandos
 
 int main(int argc, char const *argv[]) {
 //declaracao das variaveis para o modo de funcionamento do programa
   int mod=0, mod_inter=0;
   flags cmd_flag={0, 0, 0};
 
+  //selecao do modo de jogo
   mod = mode_check(argc, argv, &cmd_flag);
-
   if (mod == 1) {
     printf("MODO INTERATIVO\n\n");
     printf(" 1) Jogador Vs. Jogador\n");
