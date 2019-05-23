@@ -39,7 +39,7 @@ int userAttempt(dados **ptr_dados, char ultima_cor, char *jogada, int tamanho_ch
                 time_t *tempo_jogo, time_t *tempo_restante, int duracao_jogo, int num_cores, int jogador, int jogo);
 
 //Funcao que permite jogar
-dados **jogo(defs def, char **nome_jogadores, game_reg **registo_jogo, hist_data *last_game);
+dados **jogo(defs def, char **nome_jogadores, game_reg **registo_jogo, hist_data *last_game, char *file);
 
 //Criacao da media de tempo de jogo de cada jogador
 void criaDados(int num_jogadores, int num_jogos, dados **ptr_dados, float **mediaTempos, int **numVitorias);

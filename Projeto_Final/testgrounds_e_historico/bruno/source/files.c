@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>   //funcoes de strings
+#include <ctype.h>
 
 #include "estruturas.h"
 #include "files.h"
@@ -308,7 +309,8 @@ void write_file(game_reg *reg, char const *argv[], char *file, int mode){
   game_reg *current = reg;
   tentativas *aux;
 
-  if(mode==0) fptr= fopen(file,"wb");
+  if(mode==-1) fptr= fopen(file,"ab");
+  else if(mode==0) fptr= fopen(file,"wb");
   else fptr= fopen(argv[mode],"wb");
 
   if(fptr==NULL){ //confirma se o ficheiro foi bem aberto
@@ -318,7 +320,7 @@ void write_file(game_reg *reg, char const *argv[], char *file, int mode){
 
   while(current!=NULL){
     fprintf(fptr, "%d %s %s %d %d %c %s %d %.3f\n", current->game_ID, current->player_ID, current->player_name,
-                                                    current->colors, current->key_size, current->repet,
+                                                    current->colors, current->key_size, toupper(current->repet),
                                                     current->key, current->tentativas, current->game_time);
     aux = current->first;
     while(aux!=NULL){
