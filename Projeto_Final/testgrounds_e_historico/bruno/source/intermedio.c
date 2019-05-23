@@ -1,5 +1,4 @@
 #include <stdlib.h>
-#include <errno.h>    //library de error handling
 #include <stdio.h>
 #include <string.h>   //funcoes de strings
 #include <time.h>     //usada para se poder calcular o tempo
@@ -8,9 +7,8 @@
 #include <termios.h>  //permite usar a funcao tcflush
 
 #include "estruturas.h"
-#include "oraculo.h"
 #include "intermedio.h"
-#include "files.h"
+#include "sort.h"
 
 /******************************************************************************
 * Nome da funcao: introducao()

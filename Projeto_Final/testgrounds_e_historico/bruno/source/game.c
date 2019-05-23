@@ -1,5 +1,4 @@
 #include <stdlib.h>
-#include <errno.h>    //library de error handling
 #include <stdio.h>
 #include <string.h>   //funcoes de strings
 #include <time.h>     //usada para se poder calcular o tempo
@@ -13,6 +12,7 @@
 #include "key.h"
 #include "files.h"
 #include "memory.h"
+#include "sort.h"
 #include "game.h"
 
 
