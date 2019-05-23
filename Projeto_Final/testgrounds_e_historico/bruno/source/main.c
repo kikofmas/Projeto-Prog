@@ -15,10 +15,10 @@
 //DECLARACAO DE MACROS
 #define DEFAULT_FILE "game_history.dat" //ficheiro de historico utilizado quando nenhum e dado na linha de comandos
 
-int main(int argc, char const *argv[]) {
+int main (int argc, char const *argv[]) {
 //declaracao das variaveis para o modo de funcionamento do programa
-  int mod=0, mod_inter=0;
-  flags cmd_flag={0, 0, 0};
+  int mod = 0, mod_inter = 0;
+  flags cmd_flag = {0, 0, 0};
 
   //selecao do modo de jogo
   mod = mode_check(argc, argv, &cmd_flag);
@@ -31,12 +31,10 @@ int main(int argc, char const *argv[]) {
     printf("\n");
     if (mod_inter==1) modo_inter_intermedio(argv, cmd_flag, DEFAULT_FILE);
     else if(mod_inter == 2) modo_inter_pc(argv, cmd_flag, DEFAULT_FILE);
-  }
-  else if (mod == 2) {
+  } else if (mod == 2) {
     printf("MODO TESTE\nAPENAS REORDENAÇAO\n\n");
     modo_ordenacao(argv, cmd_flag, DEFAULT_FILE);
-  }
-  else if (mod == 3) {
+  } else if (mod == 3) {
     printf("MODO TESTE\n\n");
     modo_auto(argv, cmd_flag, DEFAULT_FILE);
   }

@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>   //funcoes de strings
+#include <ctype.h>
 
 #include "estruturas.h"
 #include "files.h"
@@ -25,36 +26,36 @@
 void read_init (char const * file, defs *ptr, char ***nome) {
   char *text = NULL, *token = NULL, c = '\0';
   int counter = 1;
-  FILE *fptr = fopen(file,"rb");
+  FILE *fptr = fopen(file, "rb");
 
   if (fptr != NULL) { //confirma que o ficheiro foi corretamente aberto
     text = (char *) malloc(sizeof(char));
-    if (text==NULL) exit(-1);  //confirma a correta alocacao de memoria
-    while((c=fgetc(fptr))!=EOF){  //loop para guarda o conteudo do ficheiro de init
-      text = (char *)realloc(text,counter);
-      if(text==NULL) exit(-1);  //confirma a correta alocacao de memoria
-      text[counter-1]=c;
+    if (text == NULL) exit(-1);  //confirma a correta alocacao de memoria
+    while ((c = fgetc(fptr))  !=  EOF) {  //loop para guarda o conteudo do ficheiro de init
+      text = (char *) realloc(text, counter);
+      if(text == NULL) exit(-1);  //confirma a correta alocacao de memoria
+      text[counter-1] = c;
       counter++;
     }
     fclose(fptr);
 
-    token = strtok(text,"\n");
-    *nome = (char **)malloc(sizeof(char*));
-    if(*nome==NULL) exit(-1); //confirma a correta alocacao de memoria
-    **nome = (char *)malloc((strlen(token)+1)*sizeof(char));
-    if(**nome==NULL) exit(-1);  //confirma a correta alocacao de memoria
-    strcpy(**nome,token);
-    token = strtok(NULL,"\n");
+    token = strtok(text, "\n");
+    *nome = (char **) malloc(sizeof(char*));
+    if (*nome == NULL) exit(-1); //confirma a correta alocacao de memoria
+    **nome = (char *) malloc((strlen(token)+1)*sizeof(char));
+    if(**nome == NULL) exit(-1);  //confirma a correta alocacao de memoria
+    strcpy(**nome, token);
+    token = strtok(NULL, "\n");
     ptr->num_jogos = atoi(token);
-    token = strtok(NULL,"\n");
+    token = strtok(NULL, "\n");
     ptr->num_cores = atoi(token);
-    token = strtok(NULL,"\n");
+    token = strtok(NULL, "\n");
     ptr->tamanho_chave = atoi(token);
-    token = strtok(NULL,"\n");
+    token = strtok(NULL, "\n");
     ptr->repeticao_cores = token[0];
-    token = strtok(NULL,"\n");
+    token = strtok(NULL, "\n");
     ptr->tentativas_alea = atoi(token);
-    token = strtok(NULL,"\n");
+    token = strtok(NULL, "\n");
     ptr->tentativas = atoi(token);
     free(text);
   }
@@ -83,39 +84,39 @@ void read_init (char const * file, defs *ptr, char ***nome) {
 * Descricao: encontra os valores mais elevados do ID de jogador e ID de jogo
 *
 ******************************************************************************/
-void hist_max_values(char const *argv[], int arg_num, hist_data *last_game, char *file){
+void hist_max_values (char const *argv[], int arg_num, hist_data *last_game, char *file) {
   int err_num;
   char err[10];
 
-  int a=0,b=0,a1=0,b1=0,k=0;
+  int a = 0, b = 0, a1 = 0, b1 = 0, k = 0;
 
   FILE *fptr;
-  if(arg_num!=0){
-    fptr = fopen(argv[arg_num],"ab"); //no caso do ficheiro nao existir este e criado
+  if (arg_num != 0) {
+    fptr = fopen(argv[arg_num], "ab"); //no caso do ficheiro nao existir este e criado
     fclose(fptr);
-    fptr=fopen(argv[arg_num], "rb");
+    fptr = fopen(argv[arg_num], "rb");
   }
-  else if(arg_num==0){
-    fptr = fopen(file,"ab"); //no caso do ficheiro nao existir este e criado
+  else if (arg_num == 0) {
+    fptr = fopen(file, "ab"); //no caso do ficheiro nao existir este e criado
     fclose(fptr);
-    fptr=fopen(file, "rb");
+    fptr = fopen(file, "rb");
   }
 
-  if(fptr==NULL){ //confirma que o ficheiro foi bem aberto
+  if (fptr == NULL) { //confirma que o ficheiro foi bem aberto
     perror("ERRO (ficheiro hist)");
     exit(-1);
   }
 
-  while(feof(fptr)==0){ //scan do ficheiro de historico
+  while (feof(fptr) == 0) { //scan do ficheiro de historico
     fscanf(fptr, "%d J%d %*s %*s %*s %*s %*s %d %*[^\n]", &a, &b, &k);
     for (int i = 0; i < k; i++) {
       fscanf(fptr, "%d %s %s", &err_num, err, err);
     }
-    if(a1<a) a1=a;
-    if(b1<b) b1=b;
+    if (a1 < a) a1 = a;
+    if (b1 < b) b1 = b;
   }
-  if (b1>998) b1=0;
-  last_game->ID=a1;
+  if (b1 > 998) b1 = 0;
+  last_game->ID = a1;
   last_game->player_ID = b1;
   fclose(fptr);
 }
@@ -138,95 +139,95 @@ void hist_max_values(char const *argv[], int arg_num, hist_data *last_game, char
 * Descricao: le o ficheiro de historico e cria a lista que contem o registo de jogo
 *
 ******************************************************************************/
-void read_hist(char const *argv[], int arg_num, game_reg **registo_jogo, char *file, int mode){
+void read_hist (char const *argv[], int arg_num, game_reg **registo_jogo, char *file, int mode) {
   game_reg *current;
   tentativas *aux;
-  char name[50]="\0", key[10]="\0", tentativa[10]="\0";
+  char name[50] = "\0", key[10] = "\0", tentativa[10] = "\0";
 
   FILE *fptr;
-  if(mode==0) fptr=fopen(file, "rb");
-  else if(mode!=0) fptr=fopen(argv[arg_num], "rb");
+  if (mode == 0) fptr = fopen(file, "rb");
+  else if (mode != 0) fptr = fopen(argv[arg_num], "rb");
 
-  if(fptr==NULL){ //confirma se o ficheiro foi bem aberto
+  if (fptr == NULL) { //confirma se o ficheiro foi bem aberto
     perror("ERRO (ficheiro hist)");
     exit(-1);
   }
 
-  *registo_jogo=calloc(1, sizeof(game_reg));
-  if(*registo_jogo==NULL) exit(-1); //confirma a correta alocacao de memoria
+  *registo_jogo = calloc(1, sizeof(game_reg));
+  if (*registo_jogo == NULL) exit(-1); //confirma a correta alocacao de memoria
 
-  current=*registo_jogo;
+  current = *registo_jogo;
 
   fscanf(fptr, "%d %s %s %d %d %c %s %d %f\n", &(current->game_ID), current->player_ID, name, &(current->colors), &(current->key_size),
                                                &(current->repet), key, &(current->tentativas), &(current->game_time));
 
-  current->key=calloc(strlen(key)+1, sizeof(char));
-  if(current->key==NULL) exit(-1); //confirma a correta alocacao de memoria
+  current->key = calloc(strlen(key)+1, sizeof(char));
+  if (current->key == NULL) exit(-1); //confirma a correta alocacao de memoria
   strcpy(current->key, key);
-  current->player_name=calloc(strlen(name)+1, sizeof(char));
-  if(current->player_name==NULL) exit(-1); //confirma a correta alocacao de memoria
+  current->player_name = calloc(strlen(name)+1, sizeof(char));
+  if (current->player_name == NULL) exit(-1); //confirma a correta alocacao de memoria
   strcpy(current->player_name, name);
-  current->next=NULL;
-  current->prev=NULL;
+  current->next = NULL;
+  current->prev = NULL;
   current->first = calloc(1,sizeof(tentativas));
-  if(current->first==NULL) exit(-1);//confirma que a correta alocacao de memoria
+  if (current->first == NULL) exit(-1);//confirma que a correta alocacao de memoria
   fscanf(fptr, "%d %s %s\n", &(current->first->tent_ID), tentativa, current->first->resultado);
   current->first->tentativa = calloc(strlen(tentativa)+1,sizeof(char));
-  if(current->first->tentativa==NULL) exit(-1); //confirma a correta alocacao de memoria
+  if (current->first->tentativa == NULL) exit(-1); //confirma a correta alocacao de memoria
   strcpy(current->first->tentativa, tentativa);
   current->first->next = NULL;
   current->first->prev = NULL;
   aux = current->first;
-  for(int i=1;i<(current->tentativas);i++){
+  for (int i = 1; i < (current->tentativas); i++) {
     aux->next = calloc(1,sizeof(tentativas));
     if(aux->next==NULL) exit(-1); //confirma a correta alocacao de memoria
     fscanf(fptr, "%d %s %s\n", &(aux->next->tent_ID), tentativa, aux->next->resultado);
     aux->next->tentativa = calloc(strlen(tentativa)+1,sizeof(char));
-    if(aux->next->tentativa==NULL) exit(-1);  //confirma a correta alocacao de memoria
+    if (aux->next->tentativa == NULL) exit(-1);  //confirma a correta alocacao de memoria
     strcpy(aux->next->tentativa, tentativa);
     aux->next->next = NULL;
     aux->next->prev = aux;
-    aux=aux->next;
+    aux = aux->next;
   }
 
-  while(!feof(fptr)){ //loop ate chegar ao final do ficheiro
-    current->next=calloc(1, sizeof(game_reg));
-    if(current->next==NULL) exit(-1); //confirma a correta alocacao de memoria
+  while (!feof(fptr)) { //loop ate chegar ao final do ficheiro
+    current->next = calloc(1, sizeof(game_reg));
+    if (current->next == NULL) exit(-1); //confirma a correta alocacao de memoria
 
     fscanf(fptr, "%d %s %s %d %d %c %s %d %f\n", &(current->next->game_ID), current->next->player_ID, name, &(current->next->colors),
                                                  &(current->next->key_size), &(current->next->repet), key, &(current->next->tentativas),
                                                  &(current->next->game_time));
 
-    current->next->key=calloc(strlen(key)+1, sizeof(char));
-    if(current->next->key==NULL) exit(-1);  //confirma a correta alocacao de memoria
+    current->next->key = calloc(strlen(key)+1, sizeof(char));
+    if (current->next->key == NULL) exit(-1);  //confirma a correta alocacao de memoria
     strcpy(current->next->key, key);
-    current->next->player_name=calloc(strlen(name)+1, sizeof(char));
-    if(current->next->player_name==NULL) exit(-1);  //confirma a correta alocacao de memoria
+    current->next->player_name = calloc(strlen(name)+1, sizeof(char));
+    if (current->next->player_name == NULL) exit(-1);  //confirma a correta alocacao de memoria
     strcpy(current->next->player_name, name);
-    current->next->next=NULL;
-    current->next->prev=current;
+    current->next->next = NULL;
+    current->next->prev = current;
     current->next->first = calloc(1,sizeof(tentativas));
-    if(current->next->first==NULL) exit(-1);  //confirma a correta alocacao de memoria
+    if (current->next->first == NULL) exit(-1);  //confirma a correta alocacao de memoria
     fscanf(fptr, "%d %s %s\n", &(current->next->first->tent_ID), tentativa, current->next->first->resultado);
     current->next->first->tentativa = calloc(strlen(tentativa)+1,sizeof(char));
-    if(current->next->first->tentativa==NULL) exit(-1); //confirma a correta alocacao de memoria
+    if (current->next->first->tentativa == NULL) exit(-1); //confirma a correta alocacao de memoria
     strcpy(current->next->first->tentativa, tentativa);
     current->next->first->next = NULL;
     current->next->first->prev = NULL;
     aux = current->next->first;
-    for(int i=1;i<(current->next->tentativas);i++){
-      aux->next = calloc(1,sizeof(tentativas));
-      if(aux->next==NULL) exit(-1); //confirma a correta alocacao de memoria
+    for (int i = 1; i < (current->next->tentativas); i++) {
+      aux->next = calloc(1, sizeof(tentativas));
+      if (aux->next == NULL) exit(-1); //confirma a correta alocacao de memoria
       fscanf(fptr, "%d %s %s\n", &(aux->next->tent_ID), tentativa, aux->next->resultado);
       aux->next->tentativa = calloc(strlen(tentativa)+1,sizeof(char));
-      if(aux->next->tentativa==NULL) exit(-1);  //confirma a correta alocacao de memoria
+      if (aux->next->tentativa == NULL) exit(-1);  //confirma a correta alocacao de memoria
       strcpy(aux->next->tentativa, tentativa);
       aux->next->next = NULL;
       aux->next->prev = aux;
-      aux=aux->next;
+      aux = aux->next;
     }
 
-    current=current->next;
+    current = current->next;
   }
   fclose(fptr);
 }
@@ -253,23 +254,23 @@ void read_hist(char const *argv[], int arg_num, game_reg **registo_jogo, char *f
 * Descricao: escreve os dados de jogo no ficheiro de historico
 *
 ******************************************************************************/
-void write_file_raw(tentativas *lista_tentativas, char const *argv[], char *file, int mode, hist_data *last_game, char **nome, int tent, int tempo, defs defs_jogo, int win){
-  tentativas *aux=lista_tentativas;
+void write_file_raw (tentativas *lista_tentativas, char const *argv[], char *file, int mode, hist_data *last_game, char **nome, int tent, int tempo, defs defs_jogo, int win) {
+  tentativas *aux = lista_tentativas;
   FILE *fptr;
   char copy[10];
 
-  if (mode!= 0) fptr = fopen(argv[mode],"ab");
-  else fptr = fopen(file,"ab");
+  if (mode != 0) fptr = fopen(argv[mode], "ab");
+  else fptr = fopen(file, "ab");
 
-  if(fptr==NULL){ //confirma se o ficheiro foi bem aberto
+  if (fptr == NULL) { //confirma se o ficheiro foi bem aberto
     perror("Erro (ficheiro hist)");
     exit(-1);
   }
 
-  while(aux->next!=NULL) aux=aux->next; //loop para chegar a ultima tentativa efetuada
+  while (aux->next != NULL) aux=aux->next; //loop para chegar a ultima tentativa efetuada
 
   strcpy(copy, aux->tentativa);
-  if(win==0){
+  if (win == 0){
     strcpy(aux->tentativa, "-");
   }
 
@@ -277,10 +278,10 @@ void write_file_raw(tentativas *lista_tentativas, char const *argv[], char *file
                                                    defs_jogo.tamanho_chave, defs_jogo.repeticao_cores, aux->tentativa, tent, (float)tempo/1000);
 
   strcpy(aux->tentativa, copy);
-  aux=lista_tentativas;
-  while(aux!=NULL){
+  aux = lista_tentativas;
+  while (aux != NULL) {
     fprintf(fptr, "%d %s %s\n", aux->tent_ID, aux->tentativa, aux->resultado);
-    aux=aux->next;
+    aux = aux->next;
   }
 
   fclose(fptr);
@@ -303,29 +304,30 @@ void write_file_raw(tentativas *lista_tentativas, char const *argv[], char *file
 * Descricao: escreve os dados de jogo no ficheiro de historico
 *
 ******************************************************************************/
-void write_file(game_reg *reg, char const *argv[], char *file, int mode){
+void write_file (game_reg *reg, char const *argv[], char *file, int mode) {
   FILE *fptr;
   game_reg *current = reg;
   tentativas *aux;
 
-  if(mode==0) fptr= fopen(file,"wb");
-  else fptr= fopen(argv[mode],"wb");
+  if (mode == -1) fptr = fopen(file, "ab");
+  else if (mode == 0) fptr = fopen(file, "wb");
+  else fptr = fopen(argv[mode], "wb");
 
-  if(fptr==NULL){ //confirma se o ficheiro foi bem aberto
+  if (fptr == NULL) { //confirma se o ficheiro foi bem aberto
     perror("Erro (ficheiro hist)");
     exit(-1);
   }
 
-  while(current!=NULL){
+  while (current != NULL) {
     fprintf(fptr, "%d %s %s %d %d %c %s %d %.3f\n", current->game_ID, current->player_ID, current->player_name,
-                                                    current->colors, current->key_size, current->repet,
+                                                    current->colors, current->key_size, toupper(current->repet),
                                                     current->key, current->tentativas, current->game_time);
     aux = current->first;
-    while(aux!=NULL){
+    while (aux != NULL) {
       fprintf(fptr, "%d %s %s\n", aux->tent_ID, aux->tentativa, aux->resultado);
-      aux=aux->next;
+      aux = aux->next;
     }
-    current=current->next;
+    current = current->next;
   }
   fclose(fptr);
 }
