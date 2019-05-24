@@ -40,11 +40,11 @@ void read_init (char const * file, defs *ptr, char ***nome) {
     fclose(fptr);
 
     token = strtok(text, "\n");
-    *nome = (char **) malloc(sizeof(char*));
+    *nome = (char **) calloc(1,sizeof(char*));
     if (*nome == NULL) exit(-1); //confirma a correta alocacao de memoria
-    **nome = (char *) malloc((strlen(token)+1)*sizeof(char));
+    **nome = (char *) calloc(strlen(token)+1,sizeof(char));
     if(**nome == NULL) exit(-1);  //confirma a correta alocacao de memoria
-    strcpy(**nome, token);
+    strncpy(**nome, token, strlen(token)-1);
     token = strtok(NULL, "\n");
     ptr->num_jogos = atoi(token);
     token = strtok(NULL, "\n");
