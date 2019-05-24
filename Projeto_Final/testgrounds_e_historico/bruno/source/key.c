@@ -249,15 +249,15 @@ int keyFinder (defs def, int size, letras ***lista_cores, tentativas **lista_ten
   char *tentativa = (char *) calloc(size+1,sizeof(char));
   if (tentativa == NULL) exit(-1); //confirma a correta alocacao de memoria
 
-
-
   for (int i = 0; i < size; i++) {
     index[i] = (*lista_cores)[i];
   }
 
+  if(tentativa_atual < def.tentativas-def.tentativas_alea){
+    printf("Tentativas logicas:\n");
+  }
 
   while (index[0] != NULL  &&  tentativa_atual < def.tentativas-def.tentativas_alea) {
-    printf("Tentativas logicas:\n");
     for (int i = 0; i < size; i++) {
       tentativa[i] = index[i]->letra;
     }

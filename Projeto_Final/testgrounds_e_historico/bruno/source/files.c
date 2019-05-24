@@ -53,10 +53,22 @@ void read_init (char const * file, defs *ptr, char ***nome) {
     ptr->tamanho_chave = atoi(token);
     token = strtok(NULL, "\n");
     ptr->repeticao_cores = token[0];
+    if(toupper(ptr->repeticao_cores)!='N' && toupper(ptr->repeticao_cores)!='S'){
+      printf("Existem argumento(s) errado(s) no ficheiro de inicialização\n");
+      exit(-1);
+    }
     token = strtok(NULL, "\n");
     ptr->tentativas_alea = atoi(token);
+    if(ptr->tentativas_alea<=0){
+      printf("Existem argumento(s) errado(s) no ficheiro de inicialização\n");
+      exit(-1);
+    }
     token = strtok(NULL, "\n");
     ptr->tentativas = atoi(token);
+    if(ptr->tentativas<=0 || ptr->tentativas_alea>ptr->tentativas){
+      printf("Existem argumento(s) errado(s) no ficheiro de inicialização\n");
+      exit(-1);
+    }
     free(text);
   }
   else{
