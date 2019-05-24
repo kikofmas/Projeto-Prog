@@ -170,8 +170,11 @@ void read_hist (char const *argv[], int arg_num, game_reg **registo_jogo, char *
 
   current = *registo_jogo;
 
-  fscanf(fptr, "%d %s %s %d %d %c %s %d %f\n", &(current->game_ID), current->player_ID, name, &(current->colors), &(current->key_size),
-                                               &(current->repet), key, &(current->tentativas), &(current->game_time));
+  if(fscanf(fptr, "%d %s %s %d %d %c %s %d %f\n", &(current->game_ID), current->player_ID, name, &(current->colors), &(current->key_size),
+                                                  &(current->repet), key, &(current->tentativas), &(current->game_time))!=9){
+    printf("Registo de jogo com formato incorreto\n");
+    exit(-1);
+  }
 
   current->key = calloc(strlen(key)+1, sizeof(char));
   if (current->key == NULL) exit(-1); //confirma a correta alocacao de memoria
