@@ -178,7 +178,9 @@ int verificaResultAlea (tentativas *ptr, letras ***lista_cores, int size) {
         if (color_aux->letra == ptr->tentativa[i]) {
           (*lista_cores)[a] = (*lista_cores)[a]->next;
           free(color_aux);
-        } else{
+        }
+        else{
+          if(color_aux->next!=NULL){
             while(color_aux->next->letra != ptr->tentativa[i]) {
               color_aux = color_aux->next;
               if(color_aux->next==NULL) break;
@@ -187,6 +189,7 @@ int verificaResultAlea (tentativas *ptr, letras ***lista_cores, int size) {
               aux_rm = color_aux->next;
               color_aux->next = color_aux->next->next;
               free(aux_rm);
+            }
           }
         }
       }
@@ -198,15 +201,18 @@ int verificaResultAlea (tentativas *ptr, letras ***lista_cores, int size) {
       if (color_aux->letra == ptr->tentativa[i]) {
         (*lista_cores)[i] = (*lista_cores)[i]->next;
         free(color_aux);
-      } else{
+      }
+      else{
+        if (color_aux->next != NULL) {
           while (color_aux->next->letra != ptr->tentativa[i]) {
             color_aux = color_aux->next;
             if (color_aux->next == NULL) break;
           }
           if (color_aux->next != NULL) {
-          aux_rm = color_aux->next;
-          color_aux->next = color_aux->next->next;
-          free(aux_rm);
+            aux_rm = color_aux->next;
+            color_aux->next = color_aux->next->next;
+            free(aux_rm);
+          }
         }
       }
     }
@@ -398,7 +404,9 @@ int verificaResultLogic (tentativas *ptr, char *tentativa, letras ***lista_cores
           if (color_aux->letra == tentativa[i]) {
             (*lista_cores)[a] = (*lista_cores)[a]->next;
             free(color_aux);
-          } else {
+          }
+          else {
+            if (color_aux->next != NULL) {
               while (color_aux->next->letra != tentativa[i]) {
                 color_aux = color_aux->next;
                 if (color_aux->next == NULL) break;
@@ -409,6 +417,7 @@ int verificaResultLogic (tentativas *ptr, char *tentativa, letras ***lista_cores
                 free(aux_rm);
               }
             }
+          }
         }
       }
     } else {
@@ -417,7 +426,9 @@ int verificaResultLogic (tentativas *ptr, char *tentativa, letras ***lista_cores
         if (color_aux->letra == tentativa[i]) {
           (*lista_cores)[i] = (*lista_cores)[i]->next;
           free(color_aux);
-        } else {
+        }
+        else {
+          if (color_aux->next != NULL) {
             while (color_aux->next->letra != tentativa[i]) {
               color_aux = color_aux->next;
               if (color_aux->next == NULL) break;
@@ -426,6 +437,7 @@ int verificaResultLogic (tentativas *ptr, char *tentativa, letras ***lista_cores
               aux_rm = color_aux->next;
               color_aux->next=color_aux->next->next;
               free(aux_rm);
+            }
           }
         }
       }
