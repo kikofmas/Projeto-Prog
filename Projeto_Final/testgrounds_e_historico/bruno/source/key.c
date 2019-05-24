@@ -249,7 +249,7 @@ int keyFinder (defs def, int size, letras ***lista_cores, tentativas **lista_ten
   char *tentativa = (char *) calloc(size+1,sizeof(char));
   if (tentativa == NULL) exit(-1); //confirma a correta alocacao de memoria
 
-  printf("Tentativas logicas:\n");
+
 
   for (int i = 0; i < size; i++) {
     index[i] = (*lista_cores)[i];
@@ -257,6 +257,7 @@ int keyFinder (defs def, int size, letras ***lista_cores, tentativas **lista_ten
 
 
   while (index[0] != NULL  &&  tentativa_atual < def.tentativas-def.tentativas_alea) {
+    printf("Tentativas logicas:\n");
     for (int i = 0; i < size; i++) {
       tentativa[i] = index[i]->letra;
     }
@@ -316,11 +317,12 @@ int keyFinder (defs def, int size, letras ***lista_cores, tentativas **lista_ten
       else index[size-1] = index[size-1]->next;
     }
     reset(&index,*lista_cores,size-1);
+    gettimeofday(&stop, NULL);
+    *tempo_exec = *tempo_exec + stop.tv_usec-start.tv_usec;
   }
+
   free(tentativa);
   free(index);
-  gettimeofday(&stop, NULL);
-  *tempo_exec = *tempo_exec + stop.tv_usec-start.tv_usec;
   return 0;
 }
 

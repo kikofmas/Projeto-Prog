@@ -256,8 +256,8 @@ void read_hist (char const *argv[], int arg_num, game_reg **registo_jogo, char *
 ******************************************************************************/
 void write_file_raw (tentativas *lista_tentativas, char const *argv[], char *file, int mode, hist_data *last_game, char **nome, int tent, int tempo, defs defs_jogo, int win) {
   tentativas *aux = lista_tentativas;
-  FILE *fptr;
-  char copy[10];
+  FILE *fptr = NULL;
+  char copy[10]="\0";
 
   if (mode != 0) fptr = fopen(argv[mode], "ab");
   else fptr = fopen(file, "ab");
@@ -268,6 +268,7 @@ void write_file_raw (tentativas *lista_tentativas, char const *argv[], char *fil
   }
 
   while (aux->next != NULL) aux=aux->next; //loop para chegar a ultima tentativa efetuada
+
 
   strcpy(copy, aux->tentativa);
   if (win == 0){
