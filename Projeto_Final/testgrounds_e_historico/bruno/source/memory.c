@@ -17,7 +17,7 @@
 *            o registo de jogo
 *
 ******************************************************************************/
-void free_game_registry(game_reg *reg){
+void free_game_registry (game_reg *reg) {
   if (reg->next != NULL) {
     free_game_registry(reg->next);
   }
@@ -41,7 +41,7 @@ void free_game_registry(game_reg *reg){
 *            as tentativas, dentro do registo de jogo
 *
 ******************************************************************************/
-void free_guess_list(tentativas *current){
+void free_guess_list (tentativas *current) {
   if (current->next != NULL) {
     free_guess_list(current->next);
   }
@@ -67,7 +67,7 @@ void free_guess_list(tentativas *current){
 * Descricao: faz free da memoria alocada pelo projeto intermedio
 *
 ******************************************************************************/
-void clear_memory(char **nome, int num_jogadores, dados **ptr_dados, float *tempo, int *vitorias, game_reg *registo_jogo){
+void clear_memory (char **nome, int num_jogadores, dados **ptr_dados, float *tempo, int *vitorias, game_reg *registo_jogo) {
   for (int i = 0; i < num_jogadores; i++) {
     free(nome[i]);
   }
@@ -97,21 +97,21 @@ void clear_memory(char **nome, int num_jogadores, dados **ptr_dados, float *temp
 *            que descobre a chave
 *
 ******************************************************************************/
-void clear_keyFinder(int size, tentativas **lista_tentativas, letras ***lista_cores){
-  tentativas *aux_tenta;
-  letras *aux_letras;
+void clear_keyFinder (int size, tentativas **lista_tentativas, letras ***lista_cores) {
+  tentativas *aux_tenta = NULL;
+  letras *aux_letras = NULL;
 
-  for(int i=0;i<size;i++){
-    while((*lista_cores)[i]!=NULL){
+  for(int i = 0; i < size; i++) {
+    while ((*lista_cores)[i] != NULL) {
       aux_letras = (*lista_cores)[i];
-      (*lista_cores)[i]=(*lista_cores)[i]->next;
+      (*lista_cores)[i] = (*lista_cores)[i]->next;
       free(aux_letras);
     }
   }
 
-  while (*lista_tentativas!=NULL) {
-    aux_tenta=(*lista_tentativas);
-    (*lista_tentativas)=(*lista_tentativas)->next;
+  while (*lista_tentativas != NULL) {
+    aux_tenta = (*lista_tentativas);
+    (*lista_tentativas) = (*lista_tentativas)->next;
     free(aux_tenta->tentativa);
     free(aux_tenta);
   }
