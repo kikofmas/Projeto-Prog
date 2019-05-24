@@ -269,7 +269,7 @@ void read_hist (char const *argv[], int arg_num, game_reg **registo_jogo, char *
 * Descricao: escreve os dados de jogo no ficheiro de historico
 *
 ******************************************************************************/
-void write_file_raw (tentativas *lista_tentativas, char const *argv[], char *file, int mode, hist_data *last_game, char **nome, int tent, unsigned int tempo, defs defs_jogo, int win) {
+void write_file_raw (tentativas *lista_tentativas, char const *argv[], char *file, int mode, hist_data *last_game, char **nome, int tent, double tempo, defs defs_jogo, int win) {
   tentativas *aux = lista_tentativas;
   FILE *fptr = NULL;
   char copy[10]="\0";
@@ -291,7 +291,7 @@ void write_file_raw (tentativas *lista_tentativas, char const *argv[], char *fil
   }
 
   fprintf(fptr, "%d J%03d %s %d %d %c %s %d %.3lf\n", ++(last_game->ID), last_game->player_ID, nome[0], defs_jogo.num_cores,
-                                                   defs_jogo.tamanho_chave, defs_jogo.repeticao_cores, aux->tentativa, tent, (double)tempo/1000000);
+                                                   defs_jogo.tamanho_chave, defs_jogo.repeticao_cores, aux->tentativa, tent, tempo);
 
   strcpy(aux->tentativa, copy);
   aux = lista_tentativas;

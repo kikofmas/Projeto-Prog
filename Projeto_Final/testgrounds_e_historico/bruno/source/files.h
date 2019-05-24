@@ -11,7 +11,7 @@ void hist_max_values (char const *argv[], int arg_num, hist_data *last_game, cha
 void read_hist (char const *argv[], int arg_num, game_reg **registo_jogo, char *file, int mode);
 
 //Escreve os dados de jogo no ficheiro de historico
-void write_file_raw (tentativas *lista_tentativas, char const *argv[], char *file, int mode, hist_data *last_game, char **nome, int tent, unsigned int tempo, defs defs_jogo, int win);
+void write_file_raw (tentativas *lista_tentativas, char const *argv[], char *file, int mode, hist_data *last_game, char **nome, int tent, double tempo, defs defs_jogo, int win);
 
 //Escreve os dados de jogo no ficheiro de historico
 void write_file (game_reg *reg, char const *argv[], char *file, int mode);

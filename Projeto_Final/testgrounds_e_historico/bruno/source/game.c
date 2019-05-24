@@ -142,7 +142,7 @@ void modo_auto (char const *argv[], flags cmd_flag, char *file) {
   tentativas *lista_tentativas = NULL;
   char **nome_jogadores = NULL;
   int rep = 0, win = 0, num_total_tent = 0;
-  unsigned int tempo = 0;
+  double tempo = 0;
 
   read_init(argv[cmd_flag.init], &defs_jogo, &nome_jogadores);
 
@@ -165,9 +165,6 @@ void modo_auto (char const *argv[], flags cmd_flag, char *file) {
     lista_tentativas = tentativasAlea(defs_jogo, &num_total_tent, &lista_cores, &win, &tempo, 1);
 
     if (win == 0) win = keyFinder(defs_jogo, defs_jogo.tamanho_chave, &lista_cores, &lista_tentativas, &num_total_tent, &tempo, 1);
-
-    printf("\n\n%u\n\n", tempo);
-    printf("\n\n%lf\n\n", (double)tempo/1000000);
 
     printf("\nNumero de tentativas: %d\n", num_total_tent);
 
@@ -205,7 +202,7 @@ void modo_inter_pc (char const *argv[], flags cmd_flag, char *file) {
   tentativas *lista_tentativas = NULL;
   char **nome_jogadores = NULL;
   int combo_possivel = 0, rep = 0, win = 0, num_total_tent = 0;
-  unsigned int tempo = 0;
+  double tempo = 0;
 
   hist_max_values(argv, cmd_flag.hist, &last_game, file);
   last_game.player_ID++;
