@@ -144,6 +144,7 @@ void modo_auto (char const *argv[], flags cmd_flag, char *file) {
   int rep = 0, win = 0, tempo = 0, num_total_tent = 0;
 
   read_init(argv[cmd_flag.init], &defs_jogo, &nome_jogadores);
+
   hist_max_values(argv, cmd_flag.hist, &last_game, file);
   last_game.player_ID++;
 
