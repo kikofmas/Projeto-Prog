@@ -5,7 +5,7 @@
 letras ** listaCores (int size, int colors);
 
 //Cria uma lista com as tentativas aleatorias efetuadas
-tentativas * tentativasAlea (defs def, int *count, letras ***lista_cores, int *win, int *tempo_exec, int modo_jogo);
+tentativas * tentativasAlea (defs def, int *count, letras ***lista_cores, int *win, unsigned int *tempo_exec, int modo_jogo);
 
 //Gera uma tentativa aleatoria, faz a avaliacao da mesma (P_B_) e insere a tentativa na lista
 void fillAlea (tentativas *ptr, int size, int colors, int *count, tentativas *prev, int modo_jogo);
@@ -14,7 +14,7 @@ void fillAlea (tentativas *ptr, int size, int colors, int *count, tentativas *pr
 int verificaResultAlea (tentativas *ptr, letras ***lista_cores, int size);
 
 //Percorre as diversas combinacoes, com base na lista de cores, para descobrir a chave de jogo
-int keyFinder (defs def, int size, letras ***lista_cores, tentativas **lista_tentativas, int *count,  int *tempo_exec, int modo_jogo);
+int keyFinder (defs def, int size, letras ***lista_cores, tentativas **lista_tentativas, int *count, unsigned int *tempo_exec, int modo_jogo);
 
 //Faz a avaliacao da tentativa (P_B_) e insere a mesma na lista
 void fillLogic (int size, int *count, char *tentativa, tentativas **ptr, tentativas *prev, int modo_jogo);

@@ -62,9 +62,9 @@ letras ** listaCores (int size, int colors) {
 * Descricao: cria uma lista com as tentativas aleatorias efetuadas
 *
 ******************************************************************************/
-tentativas * tentativasAlea (defs def, int *count, letras ***lista_cores, int *win, int *tempo_exec, int modo_jogo) {
+tentativas * tentativasAlea (defs def, int *count, letras ***lista_cores, int *win, unsigned int *tempo_exec, int modo_jogo) {
   tentativas *lista_tentativas = NULL, *aux = NULL;
-  struct timeval stop, start;
+  struct timeval stop={0}, start={0};
   if (def.tentativas_alea > 0) {
     printf("Tentativas aleatorias:\n");
 
@@ -239,11 +239,11 @@ int verificaResultAlea (tentativas *ptr, letras ***lista_cores, int size) {
 * Descricao: funcao que percorre as diversas combinacoes para descobrir a chave de jogo
 *
 ******************************************************************************/
-int keyFinder (defs def, int size, letras ***lista_cores, tentativas **lista_tentativas, int *count, int *tempo_exec, int modo_jogo) {
+int keyFinder (defs def, int size, letras ***lista_cores, tentativas **lista_tentativas, int *count, unsigned int *tempo_exec, int modo_jogo) {
   reply *answer;
   int valid = 0, pretas = 0, brancas = 0, tentativa_atual = 0;
   tentativas *aux = NULL;
-  struct timeval stop, start;
+  struct timeval stop={0}, start={0};
   letras **index = (letras **) calloc(size,sizeof(letras*));
   if (index == NULL) exit(-1); //confirma a correta alocacao de memoria
   char *tentativa = (char *) calloc(size+1,sizeof(char));
@@ -258,12 +258,11 @@ int keyFinder (defs def, int size, letras ***lista_cores, tentativas **lista_ten
   }
 
   while (index[0] != NULL  &&  tentativa_atual < def.tentativas-def.tentativas_alea) {
+    gettimeofday(&start, NULL);
     for (int i = 0; i < size; i++) {
       tentativa[i] = index[i]->letra;
     }
     valid = 0;
-    gettimeofday(&start, NULL);
-
 
     if (*lista_tentativas == NULL) {
 
@@ -281,7 +280,8 @@ int keyFinder (defs def, int size, letras ***lista_cores, tentativas **lista_ten
         *tempo_exec = *tempo_exec + stop.tv_usec-start.tv_usec;
         return 1;
       }
-      tentativa_atual++;
+      gettimeofday(&stop, NULL);
+      *tempo_exec = *tempo_exec + stop.tv_usec-start.tv_usec;
     } else {
         aux = *lista_tentativas;
         while(aux->next != NULL) {
@@ -315,10 +315,10 @@ int keyFinder (defs def, int size, letras ***lista_cores, tentativas **lista_ten
         }
       }
       else index[size-1] = index[size-1]->next;
+      gettimeofday(&stop, NULL);
+      *tempo_exec = *tempo_exec + stop.tv_usec-start.tv_usec;
     }
     reset(&index,*lista_cores,size-1);
-    gettimeofday(&stop, NULL);
-    *tempo_exec = *tempo_exec + stop.tv_usec-start.tv_usec;
   }
 
   free(tentativa);
